@@ -10,9 +10,9 @@ SceneGame = game.Scene.extend({
     backgroundColor: 0xb9bec7,
 
     init: function() {
-        console.log("SCENE STARTED");
+        this.trawler = new Trawler();
     }
-    
+
 });
 
 });
