@@ -2,8 +2,7 @@ game.module(
     'game.objects'
 )
 .require(
-    'engine.sprite',
-    'engine.keyboard'
+    'engine.sprite'
 )
 .body(function() {
 
@@ -30,20 +29,7 @@ Trawler = game.Class.extend({
 	},
 
     update: function() {
-    	if (game.keyboard.keysDown['SPACE'] ) {
-    		if( this.canChange ){
-    			if (this.spriteUp.visible){
-    				this.spriteUp.visible = false;
-    				this.spriteDown.visible = true;
-    			} else {
-	    			this.spriteUp.visible = true;
-    				this.spriteDown.visible = false;
-   				}
-   				this.canChange = false;
-   			}
-    	} else {
-    		this.canChange = true;
-    	}
+    	// UPDATE WITH BESIER HERE
     }
 
 });
