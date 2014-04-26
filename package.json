@@ -24,7 +24,8 @@
   "main": "./src/js/main.js",
   
   "browser": {
-    "PIXI": "./src/js/vendors/pixijs/pixi.js"
+    "PIXI": "./src/js/vendors/pixijs/pixi.js",
+    "CES": "./node_modules/ces/dist/ces-browser.js"
   },
 
   "browserify-shim": {
@@ -32,7 +33,7 @@
       "exports": "PIXI"
     },
 
-    "./node_modules/ces/dist/ces-browser" : {
+    "./node_modules/ces/dist/ces-browser.js" : {
       "exports": "CES"
     }
   },

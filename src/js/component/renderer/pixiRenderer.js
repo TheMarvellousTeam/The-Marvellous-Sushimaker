@@ -1,14 +1,14 @@
-var PIXI = require('PIXI');
-var CES = require('CES');
 
-var PixiRenderer = CES.Component.extend({
+var components = components || {};
+
+components.PixiRenderer = CES.Component.extend({
     name: 'pixiRenderer',
     init:function( stage ){
     	this.stage = stage;
 
         //TODO consider sharing the textures
-        var texture = PIXI.Texture.fromImage("src/img/boat.png");
-        this.sprite = new PIXI.Sprite( texture ); 
+        var texture = PIXI.Texture.fromImage("src/img/bg-mid.png");
+        this.sprite = new PIXI.TilingSprite( texture ); 
         this.sprite.position.x = 250;
         this.sprite.position.y = 250;
         this.prepare();
@@ -21,5 +21,3 @@ var PixiRenderer = CES.Component.extend({
     },
 });
 
-
-exports.comp = PixiRenderer;

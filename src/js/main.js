@@ -1,10 +1,9 @@
 
-var PIXI = require('PIXI');
-var CES = require('CES');
+/*
 var RendererComponenet = require('./component/renderer/pixiRenderer');
 var GeometryComponenet = require('./component/physic/geometry');
 var DynamicComponenet = require('./component/physic/dynamic');
-
+*/
 
 
 var stages = {
@@ -12,9 +11,9 @@ var stages = {
 }
 
 
-
+/*
 var canvas = document.getElementById("game-canvas");
-renderer = PIXI.autoDetectRenderer(
+var renderer = PIXI.autoDetectRenderer(
     canvas.width,
     canvas.height,
     canvas
@@ -24,6 +23,11 @@ renderer = PIXI.autoDetectRenderer(
 var boat = new CES.Entity();
 boat.addComponent( new RendererComponenet.comp( stages.ocean ) );
 
+var midTexture = PIXI.Texture.fromImage("src/img/bg-mid.png");
+  mid = new PIXI.Sprite(midTexture);
+  mid.position.x = 0;
+  mid.position.y = 128;
+  stages.ocean.addChild(mid);
 
 (function cycle() {
 
@@ -33,7 +37,31 @@ boat.addComponent( new RendererComponenet.comp( stages.ocean ) );
   	requestAnimFrame( cycle );
 })();
 
+*/
 
+var stage = new PIXI.Stage(0x66FF99);
+
+var boat = new CES.Entity();
+boat.addComponent( new components.PixiRenderer( stage ) );
+
+
+
+   				renderer = new PIXI.autoDetectRenderer(
+   					512,
+   					384,
+   					document.getElementById("game-canvas")
+   				);
+
+   				
+	
+   				requestAnimFrame(update);
+   				
+         function update() {
+
+            renderer.render(stage);
+
+            requestAnimFrame(update);
+         }
 
 
 
