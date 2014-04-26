@@ -8,6 +8,7 @@
     "browserify": "~3.36.0",
     "connect": "~2.14.3",
     "gulp-changed": "~0.3.0",
+    "gulp-watch" : "*",
     "gulp-livereload": "~1.2.0",
     "gulp-notify": "~1.2.4",
     "gulp-open": "~0.2.8",
@@ -18,5 +19,28 @@
   },
   "engines": {
     "node": ">=0.8.0"
+  },
+
+  "main": "./src/js/main.js",
+  
+  "browser": {
+    "PIXI": "./src/js/vendors/pixijs/pixi.js",
+    "Phaser": "./src/js/vendors/phaser/phaser.js"
+  },
+
+  "browserify-shim": {
+    "./src/js/vendors/pixijs/pixi.js" : {
+      "exports": "PIXI"
+    },
+
+    "./src/js/vendors/phaser/phaser.js" : {
+      "exports" : "Phaser",
+      "depends" : [
+        "./src/js/vendors/pixijs/pixi.js"
+      ]
+    }
+  },
+  "browserify": {
+    "transform": [ "browserify-shim" ]
   }
 }
