@@ -35,6 +35,10 @@ SceneGame = game.Scene.extend({
     },
 
     update: function() {
+
+        // super call
+        game.Scene.prototype.update.call( this );
+
     	// whale spawn
     	this.whaleAcc += game.system.delta ;
     	if ( this.whaleAcc > this.whalePop && this.whales.length < this.whaleMax ) {
