@@ -25,6 +25,7 @@ pip-log.txt
 ehthumbs.db
 Thumbs.db
 vendor
+ex
 *.sublime-*
 .tmp
 .sass-cache

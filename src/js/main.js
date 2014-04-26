@@ -6,6 +6,9 @@ function preload() {
 
 function create() {
   var logo = game.add.sprite(0,0,'logo');
+
+  new components.PathEditable().init();
+
 };
 
 function update() {
