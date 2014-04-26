@@ -8,10 +8,9 @@ var source       = require('vinyl-source-stream');
 
 gulp.task('bundle', function(){
   return browserify()
-    .add('./src/js/main.js')
     //.require('backbone/node_modules/underscore', { expose: 'underscore' })
     .bundle({debug: true})
-    .pipe(source('bundle.js'))
+    .pipe(source('./src/js/main.js'))
     .pipe(gulp.dest('./build/'))
     //.pipe(livereload());
 });
@@ -30,6 +29,6 @@ gulp.task('bower', function() {
 });
 
 gulp.task('watch', function(){
-  gulp.watch(['./src/js/**','./package.json'], ['bundle']);
-  //livereload();
+  gulp.watch('src/js/**', ['bundle']);
+  livereload();
 });

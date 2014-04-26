@@ -2,8 +2,7 @@
   "name": "The marvellous sushiMaker",
   "version": "0.0.1",
   "dependencies": {
-    "phaser" : "2.x",
-    "pixijs" : "*"
+    "phaser" : "2.x"
   },
   "devDependencies": {},
   "ignore": [

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // bootstrap Phaser
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
@@ -14,3 +15,6 @@ function create() {
  
 function update() {
 }
+=======
+console.log('hello word');
+>>>>>>> parent of af0d327... bowersify
