@@ -1,13 +1,17 @@
-var game = new Phaser.Game(1200, 900, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1024, 768, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
-var preload = function() {
+function preload() {
   game.load.image('logo', 'src/assets/logo.png');
 };
 
-var create = function() {
-  var logo = game.add.sprite('logo');
+function create() {
+  var logo = game.add.sprite(0,0,'logo');
 };
 
-var update = function() {
+function update() {
+
+};
+
+function render() {
 
 };
