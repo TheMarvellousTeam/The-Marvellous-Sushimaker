@@ -1,23 +1,13 @@
 game.module(
     'game.main'
 )
+.require(
+	'game.assets',
+	'game.objects',
+	'game.scene'
+)
 .body(function() {
 
-//game.addAsset('logo.png');
-game.addAsset('');
-
-SceneGame = game.Scene.extend({
-    backgroundColor: 0xb9bec7,
-
-    init: function() {
-        var logo = new game.Sprite('logo.png');
-        logo.anchor.set(0.5, 0.5);
-        logo.position.set(game.system.width / 2, game.system.height / 2);
-        this.stage.addChild(logo);
-        console.log("logo added");
-    }
-});
-
-game.start();
+game.start(SceneGame, 1200, 900);
 
 });
