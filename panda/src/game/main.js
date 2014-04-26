@@ -5,6 +5,7 @@ game.module(
 
 game.addAsset('logo.png');
 
+
 SceneGame = game.Scene.extend({
     backgroundColor: 0xb9bec7,
 
@@ -13,6 +14,7 @@ SceneGame = game.Scene.extend({
         logo.anchor.set(0.5, 0.5);
         logo.position.set(game.system.width / 2, game.system.height / 2);
         this.stage.addChild(logo);
+        console.log("logo added");
     }
 });
 
