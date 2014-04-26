@@ -2,6 +2,7 @@
   "name": "the-marvellous-sushmaker",
   "version": "0.0.1",
   "dependencies": {
+    "ces" : "*"
   },
   "devDependencies": {
     "browserify-shim": "~3.4.1",
@@ -18,5 +19,24 @@
   },
   "engines": {
     "node": ">=0.8.0"
-  }
+  },
+
+  "main": "./src/js/main.js",
+  
+  "browser": {
+    "PIXI": "./src/js/vendors/pixijs/pixi.js"
+  },
+
+  "browserify-shim": {
+    "./src/js/vendors/pixijs/pixi.js" : {
+      "exports": "PIXI"
+    },
+
+    "./node_modules/ces/dist/ces-browser" : {
+      "exports": "CES"
+    }
+  },
+  "browserify": {
+    "transform": [ "browserify-shim" ]
+   }
 }

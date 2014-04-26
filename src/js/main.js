@@ -1,20 +1,10 @@
-<<<<<<< HEAD
 
-// bootstrap Phaser
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
- 
-function preload() {
-	game.load.image('boat', 'src/img/boat.png');
-}
- 
-function create() {
+var PIXI = require('PIXI');
 
-	game.add.sprite(0, 0, 'boat');
+var canvas = document.getElementById("game-canvas");
+renderer = PIXI.autoDetectRenderer(
+    canvas.width,
+    canvas.height,
+    canvas
+);
 
-}
- 
-function update() {
-}
-=======
-console.log('hello word');
->>>>>>> parent of af0d327... bowersify
