@@ -3,8 +3,8 @@ game.module(
 )
 .body(function() {
 
-game.addAsset('logo.png');
-
+//game.addAsset('logo.png');
+game.addAsset('');
 
 SceneGame = game.Scene.extend({
     backgroundColor: 0xb9bec7,
