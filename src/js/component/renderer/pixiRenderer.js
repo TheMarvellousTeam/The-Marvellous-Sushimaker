@@ -8,9 +8,9 @@ components.PixiRenderer = CES.Component.extend({
 
         //TODO consider sharing the textures
         var texture = PIXI.Texture.fromImage("src/img/bg-mid.png");
-        this.sprite = new PIXI.TilingSprite( texture ); 
-        this.sprite.position.x = 250;
-        this.sprite.position.y = 250;
+        this.sprite = new PIXI.TilingSprite( texture , 512 , 512 ); 
+        this.sprite.position.x = 0;
+        this.sprite.position.y = 128;
         this.prepare();
     },
     prepare: function ( ) {
