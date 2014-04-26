@@ -41,6 +41,10 @@ SceneGame = game.Scene.extend({
     		this.whales.push(new Whale());
     		this.whaleAcc = 0 ;
     	}
+
+    	for(var i=0; i<this.whales.length;i++){
+    		this.whales[i].sprite.position.x += 50 ;
+    	}
     }
 
 });

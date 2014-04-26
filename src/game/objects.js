@@ -2,8 +2,7 @@ game.module(
     'game.objects'
 )
 .require(
-    'engine.sprite',
-    'engine.tween'
+    'engine.sprite'
 )
 .body(function() {
 
@@ -28,7 +27,7 @@ Trawler = game.Class.extend({
 
         game.scene.stage.addChild(this.spriteUp);
         game.scene.stage.addChild(this.spriteDown);
-        game.scene.addObject(this);
+        //game.scene.addObject(this);
 	},
 
     update: function() {
@@ -47,7 +46,7 @@ Whale = game.Class.extend({
 		this.sprite.rotation = 2.3;
 
 		game.scene.stage.addChild(this.sprite);
-		game.scene.addObject(this);
+		//game.scene.addObject(this);
 	},
 
 	update: function() {
