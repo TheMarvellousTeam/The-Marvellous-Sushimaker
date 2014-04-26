@@ -9,6 +9,10 @@ game.module(
 
 SceneGame = game.Scene.extend({
     backgroundColor: 0xb9bec7,
+    whaleAcc: 0,
+    whalePop: 1.5,
+    whaleMax: 3,
+    whales: [],
 
     init: function() {
         this.trawler = new Trawler();
@@ -26,10 +30,18 @@ SceneGame = game.Scene.extend({
     	}
     },
 
-    click: function() {
-    	console.log('clic');
-    	console.log(e);
+    click: function(e) {
+    	
     },
+
+    update: function() {
+    	// whale spawn
+    	this.whaleAcc += game.system.delta ;
+    	if ( this.whaleAcc > this.whalePop && this.whales.length < this.whaleMax ) {
+    		this.whales.push(new Whale());
+    		this.whaleAcc = 0 ;
+    	}
+    }
 
 });
 
