@@ -27,7 +27,7 @@ Trawler = game.Class.extend({
 
         game.scene.stage.addChild(this.spriteUp);
         game.scene.stage.addChild(this.spriteDown);
-        //game.scene.addObject(this);
+        game.scene.addObject(this);
 	},
 
     update: function() {

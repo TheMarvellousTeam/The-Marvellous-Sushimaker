@@ -43,7 +43,11 @@ SceneGame = game.Scene.extend({
     	}
 
     	for(var i=0; i<this.whales.length;i++){
-    		this.whales[i].sprite.position.x += 50 ;
+    		this.whales[i].sprite.position.x += 10 ;
+    		if ( this.whales[i].sprite.position.x > game.system.width + 100 ) {
+    			game.scene.stage.remove(this.whales[i].sprite);
+    			// whales[i];
+    		}
     	}
     }
 
