@@ -25,7 +25,9 @@ var GameState = GameState || {};
 	};
 
   var chalutier = new entities.Boat();
-  var fishes = new entities.Fishes();
+  var fishes = new entities.Animal();
+  var whales = new entities.Animal();
+  var dolphins = new entities.Animal();
 
 	var MainState = new Phaser.State();
 	MainState.create = function() {
@@ -35,9 +37,24 @@ var GameState = GameState || {};
 
 
     fishes.init({
-      nbFish: 15,
+      count: 25,
       texture: 'banc_poissons',
-      scale: 0.2,
+      scale: 0.1,
+      speed: 100
+    });
+
+    whales.init({
+      count: 10,
+      texture: 'baleine',
+      scale:0.25,
+      speed: 200
+    });
+
+    dolphins.init({
+      count: 15,
+      texture: 'dauphin',
+      scale:0.1,
+      speed: 300
     });
 
     chalutier.init({
@@ -64,7 +81,7 @@ var GameState = GameState || {};
       if ( this.time.now > timer ) {
         var load = chalutier.actionFilet();
         this.sushi.text = ''+(parseInt(this.sushi.text)+load);
-        timer = this.time.now + 2500 ;
+        timer = this.time.now + 5000 ;
       }
   	}, this);
     
@@ -75,6 +92,8 @@ var GameState = GameState || {};
 
     chalutier.update(); 
     fishes.update();
+    whales.update();
+    dolphins.update();
 	};
 
 	exposure.BootState = BootState;

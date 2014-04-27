@@ -2,13 +2,14 @@ var entities = entities || {};
 
 (function( exposure ){
 
-
-	var E = function Fishes () {}
+	var E = function Animal () {}
 	E.prototype = {
 
 		// Base API exposure
 
 		group: null,
+
+		speed: null,
 
 		init : function( params ){
 
@@ -18,7 +19,9 @@ var entities = entities || {};
 			this.group.enableBody = true;
 			this.group.physicsBodyType = Phaser.Physics.ARCADES ;
 
-			for(var i=0; i< (params.nbFish || 10); i++){
+			this.speed = params.speed || 50 ;
+
+			for(var i=0; i< (params.count || 10); i++){
 				var fish = this.group.create(game.world.randomX, game.world.randomY, params.texture);
 				fish.angle = Math.floor(360 * Math.random());
 				fish.anchor.setTo(0.5, 0.5);
@@ -34,7 +37,8 @@ var entities = entities || {};
 
 		update : function(){
 			this.group.forEachAlive(function(fish){
-				game.physics.arcade.velocityFromAngle(fish.angle, 30+Math.random()*50, fish.body.velocity);
+				//this.speed+Math.floor(Math.random()*this.speed/2)
+				game.physics.arcade.velocityFromAngle(fish.angle, this.speed , fish.body.velocity);
 			});
 			this.group.forEachDead(function(fish){
 				fish.reset(game.world.randomX, game.world.randomY, 1);
@@ -49,6 +53,6 @@ var entities = entities || {};
 
 	};
 
-	exposure.Fishes = E;
+	exposure.Animal = E;
 
 })( entities );
