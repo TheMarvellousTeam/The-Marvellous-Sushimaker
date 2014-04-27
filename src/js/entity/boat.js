@@ -33,11 +33,17 @@ var entities = entities || {};
 				this.sprite.scale.setTo( params.scale || 1 , params.scale || 1 );
 			}
 
+			this.shadowSprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , params.texture );
+			this.shadowSprite.anchor.setTo(0.5, 0.5);
+			this.shadowSprite.scale.setTo( params.scale || 1 , params.scale || 1 );
+
 			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
 
-			this.layer = params.layer || game.world;
 
-			this.layer.addChild( this.sprite );
+
+			( params.layer || game.world ).addChild( this.sprite );
+
+			( params.shadowLayer || params.layer || game.world ).addChild( this.shadowSprite );
 
 			this.emitter = game.add.emitter(params.x, params.y, 75);
 			this.emitter.makeParticles('particle');
@@ -68,11 +74,15 @@ var entities = entities || {};
 
 		setDirection : function( x,y ){
 			this.sprite.angle = Math.atan2( y , x )/Math.PI*180;
+			this.shadowSprite.angle = this.sprite.angle;
 		},
 
 		setPosition : function(x,y){
 			this.sprite.position.x=x;
 			this.sprite.position.y=y;
+
+			this.shadowSprite.position.x=x + 20;
+			this.shadowSprite.position.y=y + 35;
 		},
 
 		getPosition : function(){
