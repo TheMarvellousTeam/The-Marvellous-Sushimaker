@@ -44,7 +44,7 @@ var GameState = GameState || {};
       scale : 0.3
     });
 
-    //components.PathEditable.attach( chalutier )
+    components.PathEditable.attach( chalutier )
 
     //this.camera.follow( chalutier.sprite );
 

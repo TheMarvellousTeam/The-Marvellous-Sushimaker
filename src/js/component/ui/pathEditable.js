@@ -31,6 +31,28 @@ var components = components || {};
 		return min;
 	}
 
+	Phaser.Line.prototype.intersectsCircle = function( x,y ,r , segment ){
+		var A = this.end;
+		var B = this.start;
+
+		var AM = new Point(x-A.x,y-A.y);
+		var AB = new Point(B.x-A.x,B.y-A.y);
+		var l = A.distance( B );
+
+		AB.normalize();
+
+		var s = AM.dot( AB );
+
+		if( segment && ( s<-r || l+r<s ) )
+			return null;
+
+		return AB.dot( new Point( AM.y , -AM.x ) ) < r;
+	}
+
+	Phaser.Point.prototype.dot = function( A ){
+		return this.x*A.x + this.y*A.y;
+	}
+
 	var AtomicBezierCurve = function AtomicBezierCurve () {};
 	AtomicBezierCurve.prototype={
 
@@ -376,12 +398,26 @@ var components = components || {};
 			if( t < 1 )
 				return this.bc.getPoint( t );
 			else{
-				var B = this.bc._atomic[ this.bc._atomic.length-1 ].pts[2];
+				var B = this.ctrlPoints[ this.ctrlPoints.length-1 ];
 				return ( resultat || new Point() ).set( (t-1)*this.lastTangent.x*500 + B.x , (t-1)*this.lastTangent.y*500 + B.y  );
 			}
 		},
 
 		collide : function( x , y ){
+
+			var B = this.ctrlPoints[ this.ctrlPoints.length-1 ];
+			var ray = new Phaser.Line( B.x , B.y , B.x + this.lastTangent.x * 9000 , B.y + this.lastTangent.y * 9000 )
+
+			if( ray.intersectsCircle( x,y  , 50 , true ) )
+				return {
+					p : new Point(
+						B.x + this.lastTangent.x*10,
+						B.y + this.lastTangent.y*10
+					),
+					t : 1.2,
+				}
+
+
 			return this.bc.collide( x , y );
 		},
 	}
@@ -451,11 +487,16 @@ var components = components || {};
 
 			this._graphic.clear();
 
+			var toWorld = function( p ){
+				p.x -= camera.x;
+				p.y -= camera.y;
+				return p;
+			}
 
-			var p = tmp;
+			var p = new Point();
 			for( var k=0;k<5;k+=0.01 ){
 
-				p = c.getPoint( k , p );
+				p = toWorld( c.getPoint( k , p ) );
 
 				this._graphic.beginFill(0xFFFF0B, 0.8);
     			this._graphic.drawCircle( p.x , p.y , 2 );
@@ -464,13 +505,14 @@ var components = components || {};
 
     		for( var k=0;k<c.ctrlPoints.length;k++ ){
 
-				p = c.ctrlPoints[k];
+    			p.set( c.ctrlPoints[k].x , c.ctrlPoints[k].y )
+				p = toWorld( p );
 
 				this._graphic.beginFill(0xFFFF0B, 0.5);
     			this._graphic.drawCircle( p.x , p.y , 4 );
     			this._graphic.endFill();
     		}
-
+    		/*
     		for( var k=0;k<c.bc._atomic.length;k++ ){
 
 
@@ -480,7 +522,7 @@ var components = components || {};
 	    		this._graphic.lineTo( c.bc._atomic[k].pts[2].x , c.bc._atomic[k].pts[2].y );
 
 
-    		}
+    		}*/
 
     		if( !this.picked )
     			return 
@@ -493,6 +535,8 @@ var components = components || {};
 		update:function(){
 
 			this.onMouseMove();
+
+			this.drawPath( this.rm , this.target.sprite.parent.camera );
 		},
 
 		onMouseMove:function(){
@@ -503,12 +547,12 @@ var components = components || {};
 			// DO something
 			//this.onMouseDown();
 			this.rm = new RoadMap().init().setControlPoints( 
-				new Point(0 , 1),
+				this.rm.firstTangent,
 			[
-				new Point(100 , 100),
+				this.rm.ctrlPoints[0],
 				new Point( game.input.worldX , game.input.worldY )
 			]) 
-			this.drawPath( this.rm );
+			this.drawPath( this.rm , this.target.sprite.parent.camera );
 
 		},
 
