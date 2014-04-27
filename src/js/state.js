@@ -25,6 +25,7 @@ var GameState = GameState || {};
 	};
 
   var chalutier = new entities.Boat();
+  var fishes = new entities.Fishes();
 
 	var MainState = new Phaser.State();
 	MainState.create = function() {
@@ -32,10 +33,19 @@ var GameState = GameState || {};
 
 		this.world.setBounds(0, 0, 5000, 5000);
 
+    this.physics.startSystem(Phaser.Physics.P2JS);
+    /*
 		this.fish = [];
   	for(var i=0; i<10; i++){
   		this.createFish();
   	}
+    */
+
+    fishes.init({
+      nbFish: 15,
+      texture: 'banc_poissons',
+      scale: 0.2,
+    });
 
     chalutier.init({
       x: this.world.width/2,
@@ -122,6 +132,7 @@ var GameState = GameState || {};
  		}*/ 
 
     chalutier.update(); 
+    fishes.update();
 	};
 
 	var onCollideFish = function(obj1, obj2) {

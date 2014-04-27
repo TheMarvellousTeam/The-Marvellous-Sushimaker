@@ -447,7 +447,7 @@ var components = components || {};
 
 			//this.rm.bc = this.rm.bc.subCurve( 0.2 , 1 )
 			
-			this.drawPath( this.rm , this.target.sprite.parent.camera );
+			this.drawPath( this.rm , game.camera );
 
 			return this.listen( true ).bind( true );
 		},
@@ -536,7 +536,8 @@ var components = components || {};
 
 			this.onMouseMove();
 
-			this.drawPath( this.rm , this.target.sprite.parent.camera );
+			this.drawPath( this.rm , game.camera );
+
 		},
 
 		onMouseMove:function(){
@@ -552,7 +553,8 @@ var components = components || {};
 				this.rm.ctrlPoints[0],
 				new Point( game.input.worldX , game.input.worldY )
 			]) 
-			this.drawPath( this.rm , this.target.sprite.parent.camera );
+
+			this.drawPath( this.rm , game.camera );
 
 		},
 
@@ -563,7 +565,7 @@ var components = components || {};
 			var c
 			if( (c=this.rm.collide( game.input.worldX , game.input.worldY ) ) ){
 				this.picked = c.p;
-				this.drawPath( this.rm );
+				this.drawPath( this.rm, game.camera );
 			}
 		},
 	}
