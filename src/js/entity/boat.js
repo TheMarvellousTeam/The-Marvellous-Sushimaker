@@ -132,8 +132,7 @@ var entities = entities || {};
 			}
 		},
 
-		collideSeaShepherd : function(boat, seaShepherd) {
-			//game.state.destroy('game');
+		collideMortel : function(boat, seaShepherd) {
 			game.state.start('boot');
 		}
 

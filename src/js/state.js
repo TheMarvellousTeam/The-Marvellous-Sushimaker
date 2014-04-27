@@ -25,7 +25,6 @@ var GameState = GameState || {};
   	logo.inputEnabled = true ;
   	logo.input.useHandCurse = true;
   	logo.events.onInputDown.add(function(){
-      //his.game.state.destroy('boot');
     	this.game.state.start('game');
   	});
 	};
@@ -135,13 +134,13 @@ var GameState = GameState || {};
     
     components.underSea.update();
 
-    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
-
+    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideMortel, null, this);
+    this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideMortel, null, this);
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
     
-    if ( this.timer1 < game.time.now - 6000 ){
+    if ( this.timer1 < game.time.now - 5000 ){
       var x = chalutier.sprite.x - seaShepherd.sprite.x;
       var y = chalutier.sprite.y - seaShepherd.sprite.y;
 
@@ -151,12 +150,8 @@ var GameState = GameState || {};
 
       this.timer1 = game.time.now  ;
     }
-    if ( this.timer2 < game.time.now - 10000 ) {
+    if ( this.timer2 < game.time.now - 2000 ) {
       icebergs.add();
-      icebergs.move();
-      dolphins.move();
-      fishes.move();
-      whales.move();
       this.timer2 = game.time.now;
     }
 
