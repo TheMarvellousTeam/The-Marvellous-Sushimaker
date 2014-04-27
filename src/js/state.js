@@ -20,11 +20,14 @@ var GameState = GameState || {};
   		logo.inputEnabled = true ;
   		logo.input.useHandCurse = true;
   		logo.events.onInputDown.add(function(){
-    		this.game.state.start('game');
+    		//this.game.state.start('game');
   		});
+
+      pe = ( new components.PathEditable() ).init().listen( true );
 	};
 
 	BootState.update = function() {
+    pe.update();
 	};
 
 

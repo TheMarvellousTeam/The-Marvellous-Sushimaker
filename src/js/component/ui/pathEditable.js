@@ -10,7 +10,8 @@ var components = components || {};
 	var tmp4 = new Point();
 
 	var squareDistance = function( A , B ){
-		var x=A.x-B.x,y=A.y-B.y;
+		var x=A.x-B.x,
+			y=A.y-B.y;
 		return x*x + y*y;
 	}
 
@@ -42,11 +43,13 @@ var components = components || {};
 				this.pts = [a,b,c];
 			}
 
+			this.length = null;
+
 			return this;
 		},
 
 		getLength:function(){
-			if(this.length)
+			if(this.length!=null)
 				return this.length;
 
 			var l = Math.sqrt( 
@@ -72,10 +75,20 @@ var components = components || {};
 
 			var t_ = 1-t;
 
-			var x = t_*t_ * this.pts[0].x + t*t_ * this.pts[1].x + t*t * this.pts[2].x,
-				y = t_*t_ * this.pts[0].y + t*t_ * this.pts[1].y + t*t * this.pts[2].y;
+			var x = t_*t_ * this.pts[0].x + 2*t*t_ * this.pts[1].x + t*t * this.pts[2].x,
+				y = t_*t_ * this.pts[0].y + 2*t*t_ * this.pts[1].y + t*t * this.pts[2].y;
 
 			return resultat ? resultat.set(x,y) : new Point(x,y);
+		},
+
+		getTangent:function( t , resultat ){
+
+			var pas = 0.001;
+			
+			this.getPoint( t+pas , tmp2 )
+			this.getPoint( t-pas , tmp )
+
+			return ( resultat || new Point() ).set( tmp2.x - tmp.x , tmp2.y - tmp.y );
 		},
 
 		getBoundingBox:function(){
@@ -109,53 +122,51 @@ var components = components || {};
 
 		collide:function(x,y,marge){
 
-			marge = marge || 2;
+			marge = marge || 50;
 
 			var bb = this.getBoundingBox();
 
-			if( bb.top.x + marge > x || bb.bottom.x - marge < x || bb.top.y + marge > y || bb.bottom.y - marge < y )
+			if( bb.top.x - marge > x || bb.bottom.x + marge < x || bb.top.y - marge > y || bb.bottom.y + marge < y )
 				return null;
 
 			var l = this.getLength();
 
-			var k = 30;
+			var k = l/0.5;
 
-			var B = tmp2.set( this.pts[0].x , this.pts[0].y );
-			var A = tmp
+			var minDist = marge*marge;
+			var mint = null;
+			var tt;
 
-			var top = tmp3
-			var bot = tmp4
+			var infoMin = Infinity;
 
-			for(var t=1;t<=k;t++){
+			tmp2.set(x,y)
+
+			for(var t=0;t<=k;t++){
 				
-				A = A.set( B.x , B.y );
-				B = this.getPoint( t/k , B );
+				this.getPoint( t/k , tmp );
 
-				bot.x = Math.max( A.x , B.x )+marge;
-				bot.y = Math.max( A.y , B.y )+marge;
-
-				top.x = Math.min( A.x , B.x )-marge;
-				top.y = Math.min( A.y , B.y )-marge;
-
-				if( top.x > x || bot.x < x || top.y > y || bot.y < y )
-					continue;
-
-				//dichotomie
-
-				var a = t/k,
-					b = (t-1)/k
-
-				return {
-					atomic : this,
-					atomic_t : (a+b)/2,
-					p : this.getPoint( (a+b)/2 )
+				if( (tt=squareDistance( tmp , tmp2 )) < minDist ){
+					minDist = tt;
+					mint = t/k;
 				}
-
+				if( tt < infoMin )
+					infoMin = tt;
 			}
 
+			if( mint == null )
+				return;
+
+			return {
+					atomic : this,
+					atomic_t : mint,
+					p : this.getPoint( mint )
+				}
 		},
 
 	};
+	AtomicBezierCurve.Create = function( a , b , c ){
+		return new AtomicBezierCurve().init( a , b , c );
+	}
 
 
 	var BezierCurve = function BezierCurve () {};
@@ -196,6 +207,12 @@ var components = components || {};
 
 		getBoundingBox : function(){
 
+			if( !this._atomic.length )
+				return {
+					top:new Point(),
+					bottom:new Point(),
+				}
+
 			var bb = this._atomic[0].getBoundingBox();
 
 			for( var i=1;i<this._atomic.length;i++){
@@ -224,25 +241,87 @@ var components = components || {};
 				}
 			return null;
 		},
+
+		dispose: function(){
+			//TODO
+		}
 	};
 
-	var GetPointOnQuadraticBezier = function( ){
+	var RoadMap = function RoadMap(){}
+	RoadMap.prototype = {
 
+		ctrlPoints : null,
+
+		firstTangent : null,
+
+		lastTangent : null,
+
+		init : function( ){
+
+			this.bc = new BezierCurve().init();
+
+			return this;
+		},
+
+		setControlPoints : function( firstTangent , pts ){
+
+			this.ctrlPoints = pts ;
+
+			this.firstTangent = firstTangent;
+
+			this.bc.dispose();
+
+			var tangent = new Point( this.firstTangent.x , this.firstTangent.y );
+
+			var atomic = [];
+
+			for( var i=1;i<pts.length;i++){
+
+				var A = pts[i-1].clone(),
+					B = pts[i].clone();
+
+				var E = tmp.set( (A.x+B.x)/2 , (A.y+B.y)/2 );
+
+				var N = tmp2.set( B.y-A.y , A.x-B.x );
+
+				var l1 = new Phaser.Line( A.x - tangent.x*900 , A.y - tangent.y*900 , A.x + tangent.x*900 , A.y + tangent.y*900 )
+				var l2 = new Phaser.Line( E.x - N.x*900 , E.y - N.y*900 , E.x + N.x*900 , E.y + N.y*900 )
+				
+				E = l1.intersects( l2 , false );
+
+				atomic.push( AtomicBezierCurve.Create( A , E , B )  )
+
+				tangent.set( B.x - E.x , B.y - E.y );
+			}
+
+			this.bc._atomic = atomic;
+
+			this.lastTangent = tangent.normalize();
+
+			return this;
+		},
+
+		getPoint : function( t , resultat ){
+			if( t < 1 )
+				return this.bc.getPoint( t );
+			else{
+				var B = this.bc._atomic[ this.bc._atomic.length-1 ].pts[2];
+				return ( resultat || new Point() ).set( (t-1)*this.lastTangent.x*500 + B.x , (t-1)*this.lastTangent.y*500 + B.y  );
+			}
+				
+		},
+
+		collide : function( x , y ){
+			return this.bc.collide( x , y );
+		},
 	}
 
-	var BezierDisplay = function( game ){
 
-		var graphics = game.add.graphics(0, 0);
-
-
-	}
 
 	var C = function PathEditable(){};
 	C.prototype={
 
 		_graphic : null,
-
-		_controlPoints : null,
 
 		init:function( target ){
 			this.target = target;
@@ -253,10 +332,14 @@ var components = components || {};
 			game.stage.addChild( this._graphic );
 
 
-			this.bc = new BezierCurve().init();
-			this.bc._atomic = [ new AtomicBezierCurve().init( new Point(50,50) , new Point(550,250) , new Point(50,450) ) ]
+			this.rm = new RoadMap().init().setControlPoints( 
+				new Point(0 , 1),
+			[
+				new Point(100 , 100),
+				new Point(600 , 600)
+			]) 
 			
-			this.drawPath( this.bc );
+			this.drawPath( this.rm );
 
 			return this;
 		},
@@ -273,20 +356,39 @@ var components = components || {};
 			return this
 		},
 
-		drawPath:function( bc ){
+		drawPath:function( c ){
 
 			this._graphic.clear();
 
-			var pas = 10;
-			var l = bc.getLength();
-			var p = new Point();
-			for( var k=0;k<l;k+=pas ){
 
-				p = bc.getPoint( k/l , p );
+			var p = tmp;
+			for( var k=0;k<5;k+=0.01 ){
 
-				this._graphic.beginFill(0xFFFF0B, 0.5);
+				p = c.getPoint( k , p );
+
+				this._graphic.beginFill(0xFFFF0B, 0.8);
     			this._graphic.drawCircle( p.x , p.y , 2 );
     			this._graphic.endFill();
+    		}
+
+    		for( var k=0;k<c.ctrlPoints.length;k++ ){
+
+				p = c.ctrlPoints[k];
+
+				this._graphic.beginFill(0xFFFF0B, 0.5);
+    			this._graphic.drawCircle( p.x , p.y , 4 );
+    			this._graphic.endFill();
+    		}
+
+    		for( var k=0;k<c.bc._atomic.length;k++ ){
+
+
+				this._graphic.lineStyle(2, 0x888888, 0.8);
+				this._graphic.moveTo( c.bc._atomic[k].pts[0].x , c.bc._atomic[k].pts[0].y );
+	    		this._graphic.lineTo( c.bc._atomic[k].pts[1].x , c.bc._atomic[k].pts[1].y );
+	    		this._graphic.lineTo( c.bc._atomic[k].pts[2].x , c.bc._atomic[k].pts[2].y );
+
+
     		}
 
     		if( !this.picked )
@@ -298,21 +400,35 @@ var components = components || {};
 
 		},
 
-		onMouseDown:function( event ){
+		update:function(){
 
-			if( event.button != 0 )
+			if( !this.picked || (game.input.mouse.button < 0 && (this.picked=null)) || !this.picked  )
 				return;
+
+			// DO something
+			//this.onMouseDown();
+			this.rm = new RoadMap().init().setControlPoints( 
+				new Point(0 , 1),
+			[
+				new Point(100 , 100),
+				new Point( game.input.worldX , game.input.worldY )
+			]) 
+			this.drawPath( this.rm );
+		},
+
+		onMouseDown:function( ){
 
 			this.picked = null;
 
 			var c
-			if( (c=this.bc.collide( event.worldX , event.worldY ) ) ){
-				console.log("collide")
+			if( (c=this.rm.collide( game.input.worldX , game.input.worldY ) ) ){
 				this.picked = c.p;
-				this.drawPath( this.bc );
+				this.drawPath( this.rm );
 			}
 
 		},
+
+
 
 	}
 
