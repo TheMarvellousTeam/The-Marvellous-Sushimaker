@@ -50,9 +50,12 @@ var GameState = GameState || {};
   
     */
 
+    var shadowLayer = new Phaser.Group( game );
+
     components.underSea.create();
 
     this.world.addChild( components.underSea.layer() );
+
 
 		this.world.setBounds(0, 0, 5000, 5000);
 
@@ -62,7 +65,8 @@ var GameState = GameState || {};
       texture: 'banc_poissons',
       scale: 0.1,
       speed: 100,
-      layer: components.underSea.layer()
+      layer: components.underSea.layer(),
+      shadowLayer : components.underSea.shadowLayer(),
     });
 
     whales.init({
@@ -70,7 +74,8 @@ var GameState = GameState || {};
       texture: 'baleine',
       scale:0.25,
       speed: 200,
-      layer: components.underSea.layer()
+      layer: components.underSea.layer(),
+      shadowLayer : components.underSea.shadowLayer(),
     });
 
     dolphins.init({
@@ -78,7 +83,8 @@ var GameState = GameState || {};
       texture: 'dauphin',
       scale:0.1,
       speed: 300,
-      layer: components.underSea.layer()
+      layer: components.underSea.layer(),
+      shadowLayer : components.underSea.shadowLayer(),
     });
 
     chalutier.init({
@@ -86,13 +92,15 @@ var GameState = GameState || {};
       y: this.world.height/2,
       texture : 'chalutier_up',
       scale : 0.3,
+      shadowLayer : components.underSea.shadowLayer(),
     });
 
     seaShepherd. init({
       x: this.world.randomX,
       y: this.world.randomY,
       texture : 'sea_shepherd',
-      scale : 0.3
+      scale : 0.3,
+      shadowLayer : components.underSea.shadowLayer(),
     });
 
 
