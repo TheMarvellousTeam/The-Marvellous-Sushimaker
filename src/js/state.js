@@ -32,6 +32,7 @@ var GameState = GameState || {};
   var whales = new entities.Animal();
   var dolphins = new entities.Animal();
 
+
 	var MainState = new Phaser.State();
 	MainState.create = function() {
     this.stage.backgroundColor='#A5CEF2';
@@ -89,7 +90,7 @@ var GameState = GameState || {};
   	this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
   	this.sushi.fixedToCamera = true;
 
-  	var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
+  	var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     var timer = this.time.now ;
   	filetControl.onDown.add(function() {
       if ( this.time.now > timer ) {
@@ -98,17 +99,29 @@ var GameState = GameState || {};
         timer = this.time.now + 5000 ;
       }
   	}, this);
-    
+
+    this.timer = this.time.now ;
 	};
 
 	MainState.update = function() {
+    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
-    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
+    
+    if ( this.timer + 6000 < game.time.now ){
+      var x = chalutier.sprite.x - seaShepherd.sprite.x;
+      var y = chalutier.sprite.y - seaShepherd.sprite.y;
 
-    chalutier.update(); 
+      game.add.tween(seaShepherd.sprite)
+              .to({angle:Math.atan2(y, x)*180/Math.PI}, 4500, Phaser.Easing.Linear.None)
+              .start();
+
+      this.timer = game.time.now ;
+    };
+
     seaShepherd.update();
+    chalutier.update(); 
     fishes.update();
     whales.update();
     dolphins.update();
