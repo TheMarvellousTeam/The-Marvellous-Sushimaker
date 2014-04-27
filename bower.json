@@ -1,0 +1,16 @@
+{
+  "name": "The marvellous sushiMaker",
+  "version": "0.0.1",
+  "dependencies": {
+    "phaser" : "*"
+  },
+  "devDependencies": {},
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
