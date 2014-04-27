@@ -156,13 +156,14 @@ var GameState = GameState || {};
       var y = chalutier.sprite.y - seaShepherd.sprite.y;
 
       game.add.tween(seaShepherd.sprite)
-              .to({angle:Math.atan2(y, x)*180/Math.PI}, 4500, Phaser.Easing.Linear.None)
+              .to({angle:Math.atan2(-1*y, -1*x)*180/Math.PI}, 4500, Phaser.Easing.Linear.None)
               .start();
 
       this.timer1 = game.time.now  ;
     }
     if ( this.timer2 < game.time.now - 2000 ) {
-      icebergs.add();
+      for(var i=0; i<10; i++)
+        icebergs.add();
       this.timer2 = game.time.now;
     }
 
