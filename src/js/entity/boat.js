@@ -46,8 +46,6 @@ var entities = entities || {};
     		this.emitter.setRotation(0, 0);
     		this.emitter.gravity = 0;
     		this.emitter.alpha = 0.3 ;
-    		//this.emitter.scale.x = 0.5;
-    		//this.emitter.scale.y = 0.5;
 			this.emitter.start(false, 3000, 50);
 		},
 
