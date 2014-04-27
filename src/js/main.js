@@ -21,6 +21,9 @@ BootState.create = function() {
   logo.events.onInputDown.add(function(){
     this.game.state.start('game');
   });
+
+  new components.PathEditable().init().listen(true);
+
 };
 BootState.update = function() {
 };
