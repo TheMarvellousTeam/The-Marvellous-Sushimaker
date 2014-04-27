@@ -167,7 +167,7 @@ var entities = entities || {};
 		},
 
 		update: function() {
-			game.physics.arcade.velocityFromAngle(this.sprite.angle, 65, this.sprite.body.velocity);
+			game.physics.arcade.velocityFromAngle(this.sprite.angle, 50, this.sprite.body.velocity);
 
 			var dir = this.getDirection().normalize();
 			this.emitter.emitX = this.sprite.x-dir.x*200 ;
