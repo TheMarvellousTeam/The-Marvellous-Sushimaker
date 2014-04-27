@@ -12,7 +12,7 @@ var GameState = GameState || {};
     this.load.image('dauphin', 'src/assets/dauphin.png');
   	this.load.image('iceberg', 'src/assets/iceberg.png');
   	this.load.image('mine', 'src/assets/mine.png');
-  	this.load.image('sea_shepher', 'src/assets/sea_shepherd.png');
+  	this.load.image('sea_shepherd', 'src/assets/sea_shepherd.png');
   	this.load.image('sushi', 'src/assets/sushi.png');
     this.load.image('sea', 'src/assets/sea.jpg');
     this.load.image('particle', 'src/assets/particle.png');
@@ -27,6 +27,7 @@ var GameState = GameState || {};
 	};
 
   var chalutier = new entities.Chalutier();
+  var seaShepherd = new entities.SeaShepherd();
   var fishes = new entities.Animal();
   var whales = new entities.Animal();
   var dolphins = new entities.Animal();
@@ -70,6 +71,13 @@ var GameState = GameState || {};
       scale : 0.3
     });
 
+    seaShepherd. init({
+      x: this.world.width/2+150,
+      y: this.world.height/2+150,
+      texture : 'sea_shepherd',
+      scale : 0.3
+    });
+
 
     this.camera.follow( chalutier.sprite );
     components.PathEditable.attach( chalutier )
@@ -94,9 +102,11 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
+    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite);
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
 
     chalutier.update(); 
+    seaShepherd.update();
     fishes.update();
     whales.update();
     dolphins.update();

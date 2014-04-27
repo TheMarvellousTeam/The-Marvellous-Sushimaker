@@ -50,7 +50,7 @@ var entities = entities || {};
 		},
 
 		update : function(){
-			var dir = this.getDirection().clone().normalize();
+			var dir = this.getDirection().normalize();
 			this.emitter.emitX = this.sprite.x-dir.x*100 ;
 			this.emitter.emitY = this.sprite.y-dir.y*100 ;
 		},
@@ -154,11 +154,22 @@ var entities = entities || {};
 		},
 
 		update: function() {
+			game.physics.arcade.velocityFromAngle(this.sprite.angle, 75, this.sprite.body.velocity);
 
+			var dir = this.getDirection().normalize();
+			this.emitter.emitX = this.sprite.x-dir.x*250 ;
+			this.emitter.emitY = this.sprite.y-dir.y*250 ;
 		},
 
 		dispose: function() {
 
+		},
+
+		getDirection : function(){
+			return new Phaser.Point(
+				Math.cos( this.sprite.angle/180*Math.PI ),
+				Math.sin( this.sprite.angle/180*Math.PI )
+			);
 		},
 	}
 
