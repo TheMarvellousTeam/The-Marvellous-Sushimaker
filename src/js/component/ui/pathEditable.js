@@ -706,7 +706,7 @@ var components = components || {};
 
 			this.drawPath( this.rm , game.camera );
 
-			var p = this.rm.marching( 1 );
+			var p = this.rm.marching( 5 );
 
 			var p = p.clone();
 

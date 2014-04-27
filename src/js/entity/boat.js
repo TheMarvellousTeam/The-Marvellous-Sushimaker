@@ -13,6 +13,9 @@ var entities = entities || {};
 
 		direction : null,
 
+		filetUp : true,
+		filetLoad : 0 ,
+
 		init : function( params ){
 
 			params = params || {};
@@ -68,6 +71,18 @@ var entities = entities || {};
 			};
 		},
 
+		actionFilet : function() {
+			var load = 0 ;
+			if (this.filetUp){
+      			this.sprite.loadTexture('chalutier_down');
+			} else {
+        		load = this.filetLoad;
+        		this.filetLoad = 0 ;
+      			this.sprite.loadTexture('chalutier_up');
+      		}
+			this.filetUp = !this.filetUp;
+			return load ;
+		}
 
 		/// internal stuff
 
