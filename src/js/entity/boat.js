@@ -137,6 +137,15 @@ var entities = entities || {};
 
 			this.layer.addChild( this.sprite );
 
+			this.emitter = game.add.emitter(params.x, params.y, 75);
+			this.emitter.makeParticles('particle');
+			this.emitter.setXSpeed(0, 0);
+    		this.emitter.setYSpeed(0, 0);
+    		this.emitter.setRotation(0, 0);
+    		this.emitter.gravity = 0;
+    		this.emitter.alpha = 0.3 ;
+			this.emitter.start(false, 3000, 50);
+
 			game.add.tween(this.sprite)
 					.to({angle:this.sprite.angle+Math.floor(Math.random()*360)-180}, 8000, Phaser.Easing.Linear.None)
 					.to({angle:this.sprite.angle+Math.floor(Math.random()*360)-180}, 8000, Phaser.Easing.Linear.None)
