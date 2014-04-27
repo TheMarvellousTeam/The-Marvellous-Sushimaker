@@ -60,15 +60,8 @@ var GameState = GameState || {};
   		this.physics.arcade.enable(this.fish, Phaser.Physics.ARCADE);
   		for(var i=0; i<this.fish.length; i++){
   			this.fish[i].scale.setTo(0.2, 0.2);
-
-
-  			var tween = this.game.add.tween(this.fish[i].body)
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Sinusoidal.InOut)
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Sinusoidal.InOut)
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Sinusoidal.InOut)
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Sinusoidal.InOut)
-  			.loop()
-  			.start();			
+  			//this.fish[i].body.collideWorldBounds = true;
+  			this.fish[i].addToAngle = Math.random()*3 - Math.random();	
   		}
 
   		this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
@@ -103,6 +96,10 @@ var GameState = GameState || {};
   		}
 
   		this.physics.arcade.overlap(this.chalutier, this.fish, onCollideFish, null, this);
+  		for( var i=0; i<this.fish.length; i++){
+  			this.fish[i].angle += this.fish[i].addToAngle ;
+  			this.physics.arcade.velocityFromAngle(this.fish[i].angle, 150+Math.random()*300, this.fish[i].body.velocity);
+  		}
 	};
 
 	var onCollideFish = function(obj1, obj2) {
