@@ -15,7 +15,7 @@ var GameState = GameState || {};
   	this.load.image('sea_shepherd', 'src/assets/sea_shepherd.png');
   	this.load.image('sushi', 'src/assets/sushi.png');
     this.load.image('sea', 'src/assets/sea.png');
-    this.load.image('particle', 'src/assets/particle.png');
+    this.load.image('particle', 'src/assets/particle2.png');
 
     components.underSea.preload();
 
@@ -106,7 +106,7 @@ var GameState = GameState || {};
 
     this.camera.follow( chalutier.sprite );
     components.PathEditable.attach( chalutier )
-    components.EcumeEmiter.attach( chalutier )
+    components.EcumeEmiter.attach( chalutier , components.underSea.layer() )
 
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
