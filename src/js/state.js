@@ -36,7 +36,7 @@ var GameState = GameState || {};
 	MainState.create = function() {
   		this.stage.backgroundColor='#A5CEF2';
 
-  		this.world.setBounds(0, 0, 5000, 5000);
+		this.world.setBounds(0, 0, 5000, 5000);
 
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   		sushi.anchor.setTo(0.5, 0.5);
@@ -67,6 +67,26 @@ var GameState = GameState || {};
     		this.filetUp = !this.filetUp;
   		}, this);
 
+  		this.fish = [
+  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
+  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
+  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
+  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
+  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
+  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
+  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons')
+  		];
+  		for(var i=0; i<this.fish.length; i++){
+  			this.fish[i].scale.setTo(0.2, 0.2);
+
+  			var tween = this.game.add.tween(this.fish[i])
+  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.Out)
+  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.In)
+  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.Out)
+  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.In)
+  			.loop()
+  			.start();			
+  		}
 	};
 
 	MainState.update = function() {
