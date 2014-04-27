@@ -22,19 +22,20 @@ var entities = entities || {};
 			( params.layer || game.world ).addChild( this.group );
 
 			this.speed = params.speed || 50 ;
-			/*
+			
 			for(var i=0; i< (params.count || 10); i++){
 				
 				var fish = this.group.create(game.world.randomX, game.world.randomY, params.texture);
-				var shadow = ( param.shadowLayer || this.group ).create( fish.x , fish.y , params.texture);
-				
 				fish.angle = Math.floor(360 * Math.random());
 				fish.anchor.setTo(0.5, 0.5);
 				fish.scale.setTo( params.scale || 1 , params.scale || 1 );
 
-				shadow.angle = fish.angle;
+				var shadow = ( params.shadowLayer || this.group ).create( fish.x , fish.y , params.texture);
 				shadow.anchor.set( 0.5, 0.5);
 				shadow.scale.setTo( params.scale || 1 , params.scale || 1 );
+				shadow.angle = fish.angle;
+
+				fish.shadowFish = shadow ;
 
 				game.add.tween(fish)
 						.to({angle:fish.angle+Math.floor(Math.random()*360)}, 8000, Phaser.Easing.Linear.None)
@@ -42,12 +43,16 @@ var entities = entities || {};
 						.loop()
 						.start();
 			}
-			*/
+			
 		},
 
 		update : function(){
 			this.group.forEachAlive(function(fish){
+				fish.shadowFish.angle = fish.angle;
 				game.physics.arcade.velocityFromAngle(fish.angle, this.speed , fish.body.velocity);
+				fish.shadowFish.x = fish.x + 12 ;
+				fish.shadowFish.y = fish.y + 21 ;
+
 			});
 			this.group.forEachDead(function(fish){
 				fish.reset(game.world.randomX, game.world.randomY, 1);
