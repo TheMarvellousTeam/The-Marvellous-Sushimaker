@@ -53,9 +53,9 @@ var components = components || {};
 		var blurY = game.add.filter('BlurY');
 		var gray = game.add.filter('Gray');
 
-		blurX.blur = blurY.blur = 20
+		blurX.blur = blurY.blur = 25
 
-		shadowLayer.filters = [ gray , blurX, blurY ];
+		shadowLayer.filters = [ gray , displacementFilter , blurX, blurY ];
 
 		seaGroup.addChild( shadowLayer );
 

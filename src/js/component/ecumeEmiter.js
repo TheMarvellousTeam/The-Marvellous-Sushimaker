@@ -9,17 +9,29 @@ var components = components || {};
 
 		name : "ecumeEmiter",
 
-		init:function( target ){
+		init:function( target , layer ){
 			this.target = target;
 
-			this.emitter = game.add.emitter( this.target.getPosition().x , this.target.getPosition().y , 75);
-			this.emitter.makeParticles('particle');
-			this.emitter.setXSpeed(0, 0);
-    		this.emitter.setYSpeed(0, 0);
-    		this.emitter.setRotation(0, 0);
-    		this.emitter.gravity = 0;
-    		this.emitter.alpha = 0.3 ;
-			this.emitter.start(false, 3000, 50);
+			var underSea = layer;
+
+			this.ems = [];
+
+			for(var i=0;i<2;i++){
+
+				var em = new Phaser.Particles.Arcade.Emitter( game , this.target.getPosition().x , this.target.getPosition().y , 75);
+				em.makeParticles('particle');
+	    		em.setRotation(0, 0);
+	    		em.setAlpha(0.9, 0.01,800);
+	    		em.gravity = 0;
+				em.start(false, 1000, 50);
+
+				em.maxParticleScale = 0.5;
+				em.minParticleScale = 0.2;
+
+				underSea.addChild( em );
+
+				this.ems[ i ] = em;
+			}
 
 			return this.bind( true );
 		},
@@ -48,14 +60,24 @@ var components = components || {};
 			var dir = this.target.getDirection();
 			var p = this.target.getPosition();
 
-			this.emitter.emitX = p.x - dir.x*100 ;
-			this.emitter.emitY = p.y - dir.y*100 ;
+
+			for(var i=0;i<2;i++){
+
+				var n = i==0 ? new Phaser.Point( dir.y , -dir.x ) : new Phaser.Point( -dir.y , dir.x );
+
+
+				this.ems[i].emitX = p.x - dir.x*80 + n.x *30;
+				this.ems[i].emitY = p.y - dir.y*80 + n.y *30;
+
+				this.ems[i].minParticleSpeed.setTo( n.x * 50 , n.y * 50 );
+	    		this.ems[i].maxParticleSpeed.setTo( n.x * 60 , n.y * 60 );
+	    	}
 		},
 	}
 
-	C.attach = function( entity ){
+	C.attach = function( entity , layer ){
 		var c = new C();
-		c.init( entity );
+		c.init( entity , layer );
 		entity.components = entity.components || {}
 		entity.components[ c.name ] = c
 		return c;
