@@ -14,6 +14,7 @@ var GameState = GameState || {};
   	this.load.image('mine', 'src/assets/mine.png');
   	this.load.image('sea_shepher', 'src/assets/sea_shepherd.png');
   	this.load.image('sushi', 'src/assets/sushi.png');
+    this.load.image('sea', 'src/assets/sea.jpg')
 	};
 	BootState.create = function() {
   	var logo = this.add.sprite(0,0,'logo');
@@ -32,6 +33,10 @@ var GameState = GameState || {};
 	var MainState = new Phaser.State();
 	MainState.create = function() {
     this.stage.backgroundColor='#A5CEF2';
+    var sea = this.add.sprite(0,0, 'sea');
+    sea.width = 5000;
+    sea.height = 5000;
+
 
 		this.world.setBounds(0, 0, 5000, 5000);
 
