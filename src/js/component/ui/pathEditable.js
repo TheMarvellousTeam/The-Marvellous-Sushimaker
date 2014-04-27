@@ -480,6 +480,9 @@ var components = components || {};
 				
 				E = l1.intersects( l2 , false );
 
+				if( !E )
+					continue;
+				
 				atomic.push( AtomicBezierCurve.Create( A.clone() , E.clone() , B.clone() )  )
 
 				tangent.set( B.x - E.x , B.y - E.y ).normalize();

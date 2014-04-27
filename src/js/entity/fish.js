@@ -15,9 +15,11 @@ var entities = entities || {};
 
 			params = params || {};
 				
-			this.group = game.add.group();
+			this.group = new Phaser.Group( game );
 			this.group.enableBody = true;
 			this.group.physicsBodyType = Phaser.Physics.ARCADES ;
+
+			( params.layer || game.world ).addChild( this.group );
 
 			this.speed = params.speed || 50 ;
 

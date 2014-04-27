@@ -14,8 +14,11 @@ var GameState = GameState || {};
   	this.load.image('mine', 'src/assets/mine.png');
   	this.load.image('sea_shepher', 'src/assets/sea_shepherd.png');
   	this.load.image('sushi', 'src/assets/sushi.png');
-    this.load.image('sea', 'src/assets/sea.jpg');
+    this.load.image('sea', 'src/assets/sea.png');
     this.load.image('particle', 'src/assets/particle.png');
+
+    components.underSea.preload();
+
 	};
 	BootState.create = function() {
   	var logo = this.add.sprite(0,0,'logo');
@@ -33,11 +36,21 @@ var GameState = GameState || {};
 
 	var MainState = new Phaser.State();
 	MainState.create = function() {
+
     this.stage.backgroundColor='#A5CEF2';
-    var sea = this.add.sprite(0,0, 'sea');
+
+    /*
+    var sea = this.add.tileSprite(0,0, 128 , 128 , 'sea');
     sea.width = 5000;
     sea.height = 5000;
 
+    components.underSea.create();
+  
+    */
+
+    components.underSea.create();
+
+    this.world.addChild( components.underSea.layer() );
 
 		this.world.setBounds(0, 0, 5000, 5000);
 
@@ -46,28 +59,31 @@ var GameState = GameState || {};
       count: 50,
       texture: 'banc_poissons',
       scale: 0.1,
-      speed: 100
+      speed: 100,
+      layer: components.underSea.layer()
     });
 
     whales.init({
       count: 5,
       texture: 'baleine',
       scale:0.25,
-      speed: 200
+      speed: 200,
+      layer: components.underSea.layer()
     });
 
     dolphins.init({
       count: 10,
       texture: 'dauphin',
       scale:0.1,
-      speed: 300
+      speed: 300,
+      layer: components.underSea.layer()
     });
 
     chalutier.init({
       x: this.world.width/2,
       y: this.world.height/2,
       texture : 'chalutier_up',
-      scale : 0.3
+      scale : 0.3,
     });
 
 
@@ -94,6 +110,9 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
+    
+    components.underSea.update();
+
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
 
     chalutier.update(); 
