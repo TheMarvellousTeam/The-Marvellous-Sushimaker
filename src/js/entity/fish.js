@@ -33,9 +33,11 @@ var entities = entities || {};
 		},
 
 		update : function(){
-
 			this.group.forEachAlive(function(fish){
 				game.physics.arcade.velocityFromAngle(fish.angle, 30+Math.random()*50, fish.body.velocity);
+			});
+			this.group.forEachDead(function(fish){
+				fish.reset(game.world.randomX, game.world.randomY, 1);
 			});
 		},
 
