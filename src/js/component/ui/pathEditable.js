@@ -305,8 +305,13 @@ var components = components || {};
 
 			var l=this.getLength();
 			var s=0;
-			for( var i=0; t<s/l ; i++)
-				s+=this._atomic[i].getLength();
+			for( var i=0; i<this._atomic.length-1 ; i++){
+				var ll=this._atomic[i].getLength();
+				if( t*l < s+ll )
+					break;
+
+				s += ll
+			}
 
 			return{
 					t:( t*l-s )/this._atomic[i].getLength() ,
@@ -354,7 +359,7 @@ var components = components || {};
 				atom.push( this._atomic[ a1.i ].subCurve( a1.t , 1 ) )
 
 				for( var i=a1.i+1 ; i<a2.i ; i++ )
-					atom.push( this._atomic[ a2.i ].clone() )
+					atom.push( this._atomic[ i ].clone() )
 
 				atom.push( this._atomic[ a2.i ].subCurve( 0 , a2.t ) )
 			}
@@ -399,7 +404,7 @@ var components = components || {};
 			for(var k=0; k<i ;k++ )
 				s += this._atomic[k].getLength();
 
-			return t * this._atomic[i].getLength() / this.getLength() +s;
+			return ( t * this._atomic[i].getLength() + s ) / this.getLength();
 		},
 
 		getPointAtFixedDistance : function( distance , from , segment ){
@@ -415,7 +420,7 @@ var components = components || {};
 					s += this._atomic[k].getLength();
 
 
-				var t = this._atomic[i].getPointAtFixedDistance( distance - s , this.tToLocal( from , i ) , true )
+				var t = this._atomic[i].getPointAtFixedDistance( distance , this.tToLocal( from , i ) , true )
 
 				if( t == null )
 					continue;
@@ -465,7 +470,7 @@ var components = components || {};
 				var A = pts[i-1].clone(),
 					B = pts[i].clone();
 
-				var E = tmp.set( (A.x+B.x)/2 , (A.y+B.y)/2 );
+				var E = new Point( (A.x+B.x)/2 , (A.y+B.y)/2 );
 
 				var N = tmp2.set( B.y-A.y , A.x-B.x );
 
@@ -474,9 +479,9 @@ var components = components || {};
 				
 				E = l1.intersects( l2 , false );
 
-				atomic.push( AtomicBezierCurve.Create( A , E , B )  )
+				atomic.push( AtomicBezierCurve.Create( A.clone() , E.clone() , B.clone() )  )
 
-				tangent.set( B.x - E.x , B.y - E.y );
+				tangent.set( B.x - E.x , B.y - E.y ).normalize();
 			}
 
 			this.bc._atomic = atomic;
@@ -556,6 +561,7 @@ var components = components || {};
 					return this.ctrlPoints[0];
 				} else {
 					this.bc._atomic = [];
+					this.ctrlPoints = [this.ctrlPoints[0]];
 				}
 
 			}
@@ -638,7 +644,7 @@ var components = components || {};
 				return p;
 			}
 
-			var max_d = 800;
+			var max_d = 1800;
 
 			var hash_l = 18,
 				hash_L = 18
@@ -671,26 +677,40 @@ var components = components || {};
     		}
 
     		var p = A;
+    		for( var k=0;k<1;k+=0.01 ){
+
+    			toWorld( c.getPoint( k , p ) );
+
+				this._graphic.beginFill(0xFFFF0B, 0.5);
+    			this._graphic.drawCircle( p.x , p.y , 1 );
+    			this._graphic.endFill();
+    		}
+
+    		var p = A;
     		for( var k=0;k<c.ctrlPoints.length;k++ ){
 
     			p.set( c.ctrlPoints[k].x , c.ctrlPoints[k].y )
 				p = toWorld( p );
 
-				this._graphic.beginFill(0xFFFF0B, 0.5);
-    			this._graphic.drawCircle( p.x , p.y , 4 );
+				this._graphic.beginFill( 0xFF00000 , 1);
+    			this._graphic.drawCircle( p.x , p.y , 1 );
     			this._graphic.endFill();
     		}
-    		/*
+    		
     		for( var k=0;k<c.bc._atomic.length;k++ ){
 
 
-				this._graphic.lineStyle(2, 0x888888, 0.8);
-				this._graphic.moveTo( c.bc._atomic[k].pts[0].x , c.bc._atomic[k].pts[0].y );
-	    		this._graphic.lineTo( c.bc._atomic[k].pts[1].x , c.bc._atomic[k].pts[1].y );
-	    		this._graphic.lineTo( c.bc._atomic[k].pts[2].x , c.bc._atomic[k].pts[2].y );
+    			toWorld( A.set( c.bc._atomic[k].pts[0].x , c.bc._atomic[k].pts[0].y ) )
+    			toWorld( B.set( c.bc._atomic[k].pts[1].x , c.bc._atomic[k].pts[1].y ) )
+    			toWorld( C.set( c.bc._atomic[k].pts[2].x , c.bc._atomic[k].pts[2].y ) )
+
+				this._graphic.lineStyle(2, 0xFF00000, 1);
+				this._graphic.moveTo( A.x , A.y );
+	    		this._graphic.lineTo( B.x , B.y );
+	    		this._graphic.lineTo( C.x , C.y );
 
 
-    		}*/
+    		}
 
     		if( !this.picked )
     			return 
@@ -704,9 +724,7 @@ var components = components || {};
 
 			this.onMouseMove();
 
-			this.drawPath( this.rm , game.camera );
-
-			var p = this.rm.marching( 5 );
+			var p = this.rm.marching( 1 );
 
 			var p = p.clone();
 
@@ -721,14 +739,18 @@ var components = components || {};
 			if( !this.picked || (game.input.mouse.button < 0 && (this.picked=null)) || !this.picked  )
 				return;
 
-			// DO something
-			//this.onMouseDown();
+
+			var cursor = new Point( game.input.worldX , game.input.worldY ) 
+
+			if( cursor.distance( this._begining[ this._begining.length-1 ] ) < 1 )
+				return;
+
 			this.rm = new RoadMap().init().setControlPoints( 
 				this.rm.firstTangent,
-			[
-				this.rm.ctrlPoints[0],
-				new Point( game.input.worldX , game.input.worldY )
-			]) 
+
+				this._begining
+				.concat( cursor )
+			) 
 
 			this.drawPath( this.rm , game.camera );
 
@@ -741,7 +763,17 @@ var components = components || {};
 			var c
 			if( (c=this.rm.collide( game.input.worldX , game.input.worldY ) ) ){
 				this.picked = c.p;
-				this.drawPath( this.rm, game.camera );
+
+				
+
+				this._begining = [ this.rm.ctrlPoints[0] ];
+
+				var l=this.rm.bc.getLength();
+				var s=0;
+				for(var k=0 ; s/l<c.t && k<this.rm.bc._atomic.length ; k++ ){
+					this._begining.push( this.rm.ctrlPoints[k+1] )
+					s += this.rm.bc._atomic[k].getLength();
+				}
 			}
 		},
 	}
