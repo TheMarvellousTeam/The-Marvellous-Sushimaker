@@ -50,8 +50,8 @@ var GameState = GameState || {};
   	this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
   	this.sushi.fixedToCamera = true;
 
-  	var spacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-  	spacebar.onDown.add(function() {
+  	var filet = this.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
+  	filet.onDown.add(function() {
       if (this.filetUp){
       	this.chalutier.loadTexture('chalutier_down');
       } else {
