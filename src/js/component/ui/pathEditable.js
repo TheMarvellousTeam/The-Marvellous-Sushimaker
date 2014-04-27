@@ -129,7 +129,7 @@ var components = components || {};
 					t += pas;
 					s+= d;
 
-					if( t > 1 && segment )
+					if( a+t > 1 && segment )
 						return null;
 
 				}else{
@@ -137,7 +137,7 @@ var components = components || {};
 				}
 			}
 
-			t += pas/2;
+			t += a + pas/2;
 
 			if( segment && t>1 )
 				t = 1;
@@ -281,20 +281,23 @@ var components = components || {};
 
 		getPoint:function( t , resultat ){
 
-			var a = this._toAtomic( t )
+			if( !this._atomic.length )
+				return ( resultat || new Point() ).set( 0,0,0,0 );
+
+			var a = this._toAtomic( t , resultat )
 
 			return this._atomic[a.i].getPoint( a.t , resultat );
 		},
 
 		_toAtomic : function( t ){
 
-			if( t==0 )
+			if( t<=0 )
 				return{
 					t:0,
 					i:0
 				}
 
-			if( t==1 )
+			if( t>=1 )
 				return{
 					t:1,
 					i:this._atomic.length-1
@@ -373,24 +376,51 @@ var components = components || {};
 		},
 
 		getTangent : function( t  , resultat ){
+
+			if( !this._atomic.length )
+				return ( resultat || new Point() ).set( 0,0,0,0 );
+
 			var a = this._toAtomic( t );
 			return this._atomic[ a.i ].getTangent( a.t , resultat );
+		},
+
+		tToLocal : function( t ,i ){
+
+			var s=0;
+			for(var k=0; k<i ;k++ )
+				s += this._atomic[k].getLength();
+
+			return ( t * this.getLength() - s )/this._atomic[i].getLength();
+		},
+
+		tToGlobal : function( t ,i ){
+
+			var s=0;
+			for(var k=0; k<i ;k++ )
+				s += this._atomic[k].getLength();
+
+			return t * this._atomic[i].getLength() / this.getLength() +s;
 		},
 
 		getPointAtFixedDistance : function( distance , from , segment ){
 
 			var a = this._toAtomic( from || 0 );
 			var l = this.getLength();
+
+
 			for( var i=a.i ; i<this._atomic.length ; i++ ){
 
-				var t_ = ( from - a.i ) * l / this._atomic[i];
+				var s=0;
+				for(var k=0; k<i ;k++ )
+					s += this._atomic[k].getLength();
 
-				var t = this._atomic[i].getPointAtFixedDistance( distance , t_ , true )
+
+				var t = this._atomic[i].getPointAtFixedDistance( distance - s , this.tToLocal( from , i ) , true )
 
 				if( t == null )
 					continue;
 
-				return t;
+				return this.tToGlobal( t , i ) ;
 			}
 
 			return null;
@@ -462,10 +492,10 @@ var components = components || {};
 				t=t+1;
 
 			if( t < 1 )
-				return this.bc.getPoint( t );
+				return this.bc.getPoint( t , resultat );
 			else{
 				var B = this.ctrlPoints[ this.ctrlPoints.length-1 ];
-				return ( resultat || new Point() ).set( (t-1)*this.lastTangent.x*500 + B.x , (t-1)*this.lastTangent.y*500 + B.y  );
+				return ( resultat || new Point() ).set( (t-1)*this.lastTangent.x + B.x , (t-1)*this.lastTangent.y + B.y  );
 			}
 		},
 
@@ -487,6 +517,27 @@ var components = components || {};
 			return this.bc.collide( x , y );
 		},
 
+		getPointAtFixedDistance : function( distance , from , segment ){
+
+			var l = this.bc.getLength();
+
+			if( from > 1 || l == 0 )
+				return from + distance;
+
+			if( from * l + distance > l )
+
+				return  1 + from * l + distance - l;
+
+
+			if( this.bc.getLength() > 0 ){
+
+				var t = this.bc.getPointAtFixedDistance( distance , from , true );
+
+				if( t != null )
+					return t;
+			}
+		},
+
 		marching : function( distance ){
 
 			if( this.bc.getLength() > 0 ){
@@ -503,6 +554,8 @@ var components = components || {};
 					this.ctrlPoints[0].y = this.bc._atomic[0].pts[0].y;
 
 					return this.ctrlPoints[0];
+				} else {
+					this.bc._atomic = [];
 				}
 
 			}
@@ -585,16 +638,39 @@ var components = components || {};
 				return p;
 			}
 
-			var p = new Point();
-			for( var k=0;k<5;k+=0.01 ){
+			var max_d = 800;
 
-				p = toWorld( c.getPoint( k , p ) );
+			var hash_l = 18,
+				hash_L = 18
 
-				this._graphic.beginFill(0xFFFF0B, 0.8);
-    			this._graphic.drawCircle( p.x , p.y , 2 );
-    			this._graphic.endFill();
+			var t=0;
+			var l=0;
+
+			var A = new Point();
+			var B = new Point();
+			var C = toWorld( c.getPoint( 0 ) );
+			while( l < max_d ){
+
+				A.set(C.x,C.y);
+
+				t = c.getPointAtFixedDistance( hash_l , t );
+				c.getPoint( t , B );
+
+				t = c.getPointAtFixedDistance( hash_L , t );
+				c.getPoint( t , C );
+
+				l += hash_l + hash_L;
+
+				toWorld( C );
+				toWorld( B );
+
+				this._graphic.lineStyle( 5 , 0x888888, 1-l/max_d );
+				this._graphic.moveTo( A.x , A.y );
+				this._graphic.lineTo( B.x , B.y );
+
     		}
 
+    		var p = A;
     		for( var k=0;k<c.ctrlPoints.length;k++ ){
 
     			p.set( c.ctrlPoints[k].x , c.ctrlPoints[k].y )
