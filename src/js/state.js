@@ -51,8 +51,6 @@ var GameState = GameState || {};
   
     */
 
-    var shadowLayer = new Phaser.Group( game );
-
     components.underSea.create();
 
     this.world.addChild( components.underSea.layer() );
