@@ -369,13 +369,16 @@ var components = components || {};
 		},
 
 		getPoint : function( t , resultat ){
+			
+			if( this.bc.getLength() == 0)
+				t=t+1;
+
 			if( t < 1 )
 				return this.bc.getPoint( t );
 			else{
 				var B = this.bc._atomic[ this.bc._atomic.length-1 ].pts[2];
 				return ( resultat || new Point() ).set( (t-1)*this.lastTangent.x*500 + B.x , (t-1)*this.lastTangent.y*500 + B.y  );
 			}
-				
 		},
 
 		collide : function( x , y ){
@@ -390,25 +393,44 @@ var components = components || {};
 
 		_graphic : null,
 
+		name : "pathEditable",
+
 		init:function( target ){
 			this.target = target;
 
 			this._graphic = new Phaser.Graphics( game , 0, 0);
 
-			game.world
 			game.stage.addChild( this._graphic );
 
 
 			this.rm = new RoadMap().init().setControlPoints( 
-				new Point(0 , 1),
+				target.getDirection().clone() ,
 			[
-				new Point(100 , 100),
-				new Point(600 , 600)
+				target.getPosition().clone()
 			])
 
-			this.rm.bc = this.rm.bc.subCurve( 0.2 , 1 )
+			//this.rm.bc = this.rm.bc.subCurve( 0.2 , 1 )
 			
-			this.drawPath( this.rm );
+			this.drawPath( this.rm , this.target.sprite.parent.camera );
+
+			return this.listen( true ).bind( true );
+		},
+
+		bind : function( enable ){
+
+			// TODO unbind when enable is false
+
+			var that = this
+			var target = this.target
+
+			var update = target.update;
+
+			target.update = function(){
+
+				update.call( target );
+
+				that.update.call( that );
+			};
 
 			return this;
 		},
@@ -425,7 +447,7 @@ var components = components || {};
 			return this
 		},
 
-		drawPath:function( c ){
+		drawPath:function( c , camera ){
 
 			this._graphic.clear();
 
@@ -466,10 +488,14 @@ var components = components || {};
     		this._graphic.beginFill(0xFFFF0B, 0.5);
     		this._graphic.drawCircle( this.picked.x , this.picked.y , 5 );
     		this._graphic.endFill();
-
 		},
 
 		update:function(){
+
+			this.onMouseMove();
+		},
+
+		onMouseMove:function(){
 
 			if( !this.picked || (game.input.mouse.button < 0 && (this.picked=null)) || !this.picked  )
 				return;
@@ -483,6 +509,7 @@ var components = components || {};
 				new Point( game.input.worldX , game.input.worldY )
 			]) 
 			this.drawPath( this.rm );
+
 		},
 
 		onMouseDown:function( ){
@@ -494,13 +521,16 @@ var components = components || {};
 				this.picked = c.p;
 				this.drawPath( this.rm );
 			}
-
 		},
-
-
-
 	}
 
+	C.attach = function( entity ){
+		var c = new C();
+		c.init( entity );
+		entity.components = entity.components || {}
+		entity.components[ c.name ] = c
+		return c;
+	};
 
 	exposure.PathEditable = C;
 

@@ -24,6 +24,8 @@ var GameState = GameState || {};
   	});
 	};
 
+  var chalutier = new entities.Boat();
+
 	var MainState = new Phaser.State();
 	MainState.create = function() {
     this.stage.backgroundColor='#A5CEF2';
@@ -35,6 +37,20 @@ var GameState = GameState || {};
   		this.createFish();
   	}
 
+    chalutier.init({
+      x: this.world.width/2,
+      y: this.world.height/2,
+      texture : 'chalutier_up',
+      scale : 0.3
+    });
+
+    //components.PathEditable.attach( chalutier )
+
+    //this.camera.follow( chalutier.sprite );
+
+    this.camera.setPosition( this.world.width/2 - 200 , this.world.height/2 -200 )
+
+    /*
   	this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
   	this.chalutier.anchor.setTo(0.5, 0.5);
   	this.chalutier.scale.setTo(0.3, 0.3);
@@ -43,6 +59,7 @@ var GameState = GameState || {};
   	this.speed = 0 ;
     this.filetLoad = 0 ;
 		this.camera.follow(this.chalutier);
+    */
 
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
@@ -51,6 +68,7 @@ var GameState = GameState || {};
   	this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
   	this.sushi.fixedToCamera = true;
 
+    /*
   	var filet = this.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
   	filet.onDown.add(function() {
       if (this.filetUp){
@@ -62,8 +80,7 @@ var GameState = GameState || {};
       }
       this.filetUp = !this.filetUp;
   	}, this);
-
-    pe = ( new components.PathEditable() ).init().listen( true );
+    */
 	};
 
 	MainState.createFish = function() {
@@ -75,8 +92,8 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
-    pe.update();
 
+    /*
   	if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
     	this.chalutier.angle -= 2;
   	} else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
@@ -102,7 +119,9 @@ var GameState = GameState || {};
         this.fish[i].reset(Math.random()*this.world.width, Math.random()*this.world.height, 1);
         this.fish[i].addToAngle = Math.random()*3 - Math.random();
       }
- 		}      
+ 		}*/ 
+
+    chalutier.update(); 
 	};
 
 	var onCollideFish = function(obj1, obj2) {
