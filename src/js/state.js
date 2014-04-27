@@ -60,7 +60,7 @@ var GameState = GameState || {};
 
 		this.world.setBounds(0, 0, 5000, 5000);
 
-
+    
     fishes.init({
       count: 50,
       texture: 'banc_poissons',
@@ -87,7 +87,7 @@ var GameState = GameState || {};
       layer: components.underSea.layer(),
       shadowLayer : components.underSea.shadowLayer(),
     });
-
+    
     chalutier.init({
       x: this.world.width/2,
       y: this.world.height/2,
@@ -108,6 +108,7 @@ var GameState = GameState || {};
 
     this.camera.follow( chalutier.sprite );
     components.PathEditable.attach( chalutier )
+    components.EcumeEmiter.attach( chalutier )
 
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);

@@ -22,19 +22,27 @@ var entities = entities || {};
 			( params.layer || game.world ).addChild( this.group );
 
 			this.speed = params.speed || 50 ;
-
+			/*
 			for(var i=0; i< (params.count || 10); i++){
+				
 				var fish = this.group.create(game.world.randomX, game.world.randomY, params.texture);
+				var shadow = ( param.shadowLayer || this.group ).create( fish.x , fish.y , params.texture);
+				
 				fish.angle = Math.floor(360 * Math.random());
 				fish.anchor.setTo(0.5, 0.5);
 				fish.scale.setTo( params.scale || 1 , params.scale || 1 );
+
+				shadow.angle = fish.angle;
+				shadow.anchor.set( 0.5, 0.5);
+				shadow.scale.setTo( params.scale || 1 , params.scale || 1 );
+
 				game.add.tween(fish)
 						.to({angle:fish.angle+Math.floor(Math.random()*360)}, 8000, Phaser.Easing.Linear.None)
 						.to({angle:fish.angle+Math.floor(Math.random()*360)}, 8000, Phaser.Easing.Linear.None)
 						.loop()
 						.start();
 			}
-
+			*/
 		},
 
 		update : function(){

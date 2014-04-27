@@ -44,21 +44,10 @@ var entities = entities || {};
 			( params.layer || game.world ).addChild( this.sprite );
 
 			( params.shadowLayer || params.layer || game.world ).addChild( this.shadowSprite );
-
-			this.emitter = game.add.emitter(params.x, params.y, 75);
-			this.emitter.makeParticles('particle');
-			this.emitter.setXSpeed(0, 0);
-    		this.emitter.setYSpeed(0, 0);
-    		this.emitter.setRotation(0, 0);
-    		this.emitter.gravity = 0;
-    		this.emitter.alpha = 0.3 ;
-			this.emitter.start(false, 3000, 50);
 		},
 
 		update : function(){
-			var dir = this.getDirection().normalize();
-			this.emitter.emitX = this.sprite.x-dir.x*100 ;
-			this.emitter.emitY = this.sprite.y-dir.y*100 ;
+			
 		},
 
 		dispose : function(){
