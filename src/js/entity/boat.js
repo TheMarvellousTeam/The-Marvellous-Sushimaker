@@ -3,7 +3,7 @@ var entities = entities || {};
 (function( exposure ){
 
 
-	var E = function Boat () {};
+	var E = function Chalutier () {};
 	E.prototype = {
 
 
@@ -100,7 +100,7 @@ var entities = entities || {};
 	};
 
 	var F = function SeaShepherd() { };
-	F.prototype = function() {
+	F.prototype = {
 		sprite : null,
 
 		init : function( params ){
