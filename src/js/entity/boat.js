@@ -50,7 +50,7 @@ var entities = entities || {};
 		},
 
 		update : function(){
-			var dir = this.getDirection().clone().normalize();
+			var dir = this.getDirection().normalize();
 			this.emitter.emitX = this.sprite.x-dir.x*100 ;
 			this.emitter.emitY = this.sprite.y-dir.y*100 ;
 		},
@@ -106,6 +106,24 @@ var entities = entities || {};
 				this.filetLoad += 1;
 				fish.kill();
 			}
+		},
+
+		collideDolphin : function(boat, dolphin){
+			if( !this.filetUp ){
+				this.filetLoad += 10;
+				dolphin.kill();
+			}
+		},
+
+		collideWhale : function(boat, whale){
+			if( !this.filetUp ){
+				this.filetLoad += 50;
+				whale.kill();
+			}
+		},
+
+		collideSeaShepherd : function(boat, seaShepherd) {
+			game.state.start('boot');
 		}
 
 		/// internal stuff
@@ -129,6 +147,8 @@ var entities = entities || {};
 				this.sprite.anchor.setTo(0.5, 0.5);
 
 				this.sprite.scale.setTo( params.scale || 1 , params.scale || 1 );
+
+				this.sprite.angle = params.angle || 0;
 			}
 
 			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
@@ -145,20 +165,25 @@ var entities = entities || {};
     		this.emitter.gravity = 0;
     		this.emitter.alpha = 0.3 ;
 			this.emitter.start(false, 3000, 50);
-
-			game.add.tween(this.sprite)
-					.to({angle:this.sprite.angle+Math.floor(Math.random()*360)-180}, 8000, Phaser.Easing.Linear.None)
-					.to({angle:this.sprite.angle+Math.floor(Math.random()*360)-180}, 8000, Phaser.Easing.Linear.None)
-					.loop()
-					.start();
 		},
 
 		update: function() {
+			game.physics.arcade.velocityFromAngle(this.sprite.angle, 65, this.sprite.body.velocity);
 
+			var dir = this.getDirection().normalize();
+			this.emitter.emitX = this.sprite.x-dir.x*200 ;
+			this.emitter.emitY = this.sprite.y-dir.y*200 ;
 		},
 
 		dispose: function() {
 
+		},
+
+		getDirection : function(){
+			return new Phaser.Point(
+				Math.cos( this.sprite.angle/180*Math.PI ),
+				Math.sin( this.sprite.angle/180*Math.PI )
+			);
 		},
 	}
 
