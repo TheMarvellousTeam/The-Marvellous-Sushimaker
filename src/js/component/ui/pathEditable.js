@@ -112,12 +112,13 @@ var components = components || {};
 			var A = this.getPoint( a );
 			var E = new Point();
 
-			var pas = 1/l;
+			var pas = Math.min( 0.1, 2/l );
+			var target = pas /10
 
 			var s = 0;
 			var t = 0;
 
-			while( pas > 1/l/8 ){
+			while( pas > target ){
 
 				this.getPoint( a+t+pas , E );
 
@@ -371,9 +372,9 @@ var components = components || {};
 			return null;
 		},
 
-		getTangent : function( t ){
+		getTangent : function( t  , resultat ){
 			var a = this._toAtomic( t );
-			return this._atomic[ a.i ].getTangent( a.t );
+			return this._atomic[ a.i ].getTangent( a.t , resultat );
 		},
 
 		getPointAtFixedDistance : function( distance , from , segment ){
@@ -633,12 +634,8 @@ var components = components || {};
 
 			var p = p.clone();
 
-			/*
-			p.x -= game.camera.x;
-			p.y -= game.camera.y;
-			*/
-
-			this.target.setPosition( p );
+			this.target.setPosition( p.x , p.y );
+			this.target.setDirection( this.rm.firstTangent.x , this.rm.firstTangent.y );
 
 			this.drawPath( this.rm , game.camera );
 		},

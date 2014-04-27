@@ -43,13 +43,13 @@ var entities = entities || {};
 
 		getDirection : function(){
 			return new Phaser.Point(
-				Math.cos( this.sprite.angle ),
-				Math.sin( this.sprite.angle )
+				Math.cos( this.sprite.angle/180*Math.PI ),
+				Math.sin( this.sprite.angle/180*Math.PI )
 			);
 		},
 
-		setDirection : function( d ){
-			this.sprite.angle = Math.atan2( y , x );
+		setDirection : function( x,y ){
+			this.sprite.angle = Math.atan2( y , x )/Math.PI*180;
 		},
 
 		setPosition : function(x,y){
