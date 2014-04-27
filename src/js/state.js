@@ -28,7 +28,6 @@ var GameState = GameState || {};
 	};
 
 
-
 	var MainState = new Phaser.State();
 	MainState.preload = function() {
 
@@ -38,27 +37,8 @@ var GameState = GameState || {};
 
 		this.world.setBounds(0, 0, 5000, 5000);
 
-		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
-  		sushi.anchor.setTo(0.5, 0.5);
-  		sushi.scale.setTo(0.1, 0.1);
-  		sushi.fixedToCamera = true;
-  		this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
-  		this.sushi.fixedToCamera = true;
-
-		this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
-  		this.chalutier.anchor.setTo(0.5, 0.5);
-  		this.chalutier.scale.setTo(0.3, 0.3);
-  		this.physics.enable(this.chalutier, Phaser.Physics.ARCADE);
-
-  		this.filetUp = true ;
-
-		this.camera.follow(this.chalutier);
-
   		var spacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   		spacebar.onDown.add(function() {
-  			// TO REMOVE
-    		this.sushi.text = ''+(parseInt(this.sushi.text)+1);
-
     		if (this.filetUp){
       			this.chalutier.loadTexture('chalutier_down');
     		} else {
@@ -76,17 +56,28 @@ var GameState = GameState || {};
   			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
   			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons')
   		];
+
+  		this.physics.arcade.enable(this.fish, Phaser.Physics.ARCADE);
   		for(var i=0; i<this.fish.length; i++){
   			this.fish[i].scale.setTo(0.2, 0.2);
-
-  			var tween = this.game.add.tween(this.fish[i])
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.Out)
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.In)
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.Out)
-  			.to({x:Math.random()*this.world.width, y:Math.random()*this.world.height}, 5000 + 3000 * Math.random(), Phaser.Easing.Bounce.In)
-  			.loop()
-  			.start();			
+  			//this.fish[i].body.collideWorldBounds = true;
+  			this.fish[i].addToAngle = Math.random()*3 - Math.random();	
   		}
+
+  		this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
+  		this.chalutier.anchor.setTo(0.5, 0.5);
+  		this.chalutier.scale.setTo(0.3, 0.3);
+  		this.physics.enable(this.chalutier, Phaser.Physics.ARCADE);
+  		this.filetUp = true ;
+		this.camera.follow(this.chalutier);
+
+		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
+  		sushi.anchor.setTo(0.5, 0.5);
+  		sushi.scale.setTo(0.1, 0.1);
+  		sushi.fixedToCamera = true;
+  		this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
+  		this.sushi.fixedToCamera = true;
+
 	};
 
 	MainState.update = function() {
@@ -103,7 +94,20 @@ var GameState = GameState || {};
   		if ( this.chalutier.x > this.world.width || this.chalutier.x < 0 || this.chalutier.y > this.world.height || this.chalutier.y < 0 ){
     		this.game.state.start('boot'); 
   		}
+
+  		this.physics.arcade.overlap(this.chalutier, this.fish, onCollideFish, null, this);
+  		for( var i=0; i<this.fish.length; i++){
+  			this.fish[i].angle += this.fish[i].addToAngle ;
+  			this.physics.arcade.velocityFromAngle(this.fish[i].angle, 150+Math.random()*300, this.fish[i].body.velocity);
+  		}
 	};
+
+	var onCollideFish = function(obj1, obj2) {
+		if ( !this.filetUp){
+  			obj2.kill();
+  			this.sushi.text = ''+(parseInt(this.sushi.text)+1+Math.floor(Math.random()*2));
+  		}
+  	};
 
 	exposure.BootState = BootState;
 	exposure.MainState = MainState;
