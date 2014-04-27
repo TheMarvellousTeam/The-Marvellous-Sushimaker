@@ -106,6 +106,24 @@ var entities = entities || {};
 				this.filetLoad += 1;
 				fish.kill();
 			}
+		},
+
+		collideDolphin : function(boat, dolphin){
+			if( !this.filetUp ){
+				this.filetLoad += 10;
+				dolphin.kill();
+			}
+		},
+
+		collideWhale : function(boat, whale){
+			if( !this.filetUp ){
+				this.filetLoad += 50;
+				whale.kill();
+			}
+		},
+
+		collideSeaShepherd : function(boat, seaShepherd) {
+			game.state.start('boot');
 		}
 
 		/// internal stuff
@@ -129,6 +147,8 @@ var entities = entities || {};
 				this.sprite.anchor.setTo(0.5, 0.5);
 
 				this.sprite.scale.setTo( params.scale || 1 , params.scale || 1 );
+
+				this.sprite.angle = params.angle || 0;
 			}
 
 			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);

@@ -72,8 +72,8 @@ var GameState = GameState || {};
     });
 
     seaShepherd. init({
-      x: this.world.width/2+150,
-      y: this.world.height/2+150,
+      x: this.world.randomX,
+      y: this.world.randomY,
       texture : 'sea_shepherd',
       scale : 0.3
     });
@@ -102,8 +102,10 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
-    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite);
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
+    this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
+    this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
+    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
 
     chalutier.update(); 
     seaShepherd.update();
