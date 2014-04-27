@@ -1,6 +1,5 @@
 var game = new Phaser.Game(1024, 768, Phaser.AUTO, 'phaser-example', { preload: preload, create: create});
 
-
 // BOOT SCREEN
 var BootState = new Phaser.State();
 BootState.preload = function() {
@@ -20,7 +19,7 @@ BootState.create = function() {
   logo.inputEnabled = true ;
   logo.input.useHandCurse = true;
   logo.events.onInputDown.add(function(){
-    game.state.start('game');
+    this.game.state.start('game');
   });
 };
 BootState.update = function() {
@@ -32,14 +31,41 @@ GameState.preload = function() {
 
 };
 GameState.create = function() {
-  var chalutierUp = this.add.sprite(game.width/4, game.height/2, 'chalutier_up');
-  chalutierUp.anchor.setTo(0.5, 0.5);
-  chalutierUp.scale.setTo(0.3, 0.3);
+  this.world.setBounds(0, 0, 5000, 5000);
 
-  var chalutierDown = this.add.sprite(game.width/4, game.height/2, 'chalutier_down');
-  chalutierDown.anchor.setTo(0.5, 0.5);
-  chalutierDown.scale.setTo(0.3, 0.3);
-  chalutierDown.visible = false;
+  this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
+  this.chalutier.anchor.setTo(0.5, 0.5);
+  this.chalutier.scale.setTo(0.3, 0.3);
+
+  this.filetUp = true ;
+
+  this.camera.follow(this.chalutier);
+
+  var spacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  spacebar.onDown.add(function() {
+    if (this.filetUp){
+      this.chalutier.loadTexture('chalutier_down');
+    } else {
+      this.chalutier.loadTexture('chalutier_up');
+    }
+    this.filetUp = !this.filetUp;
+  }, this);
+};
+GameState.update = function() {
+  if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+    this.chalutier.x -= 20;
+  } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+    this.chalutier.x += 20;
+  } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+    this.chalutier.y -= 20;
+  } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+    this.chalutier.y += 20;
+  }
+
+  if ( this.chalutier.x > this.world.width || this.chalutier.x < 0 || this.chalutier.y > this.world.height || this.chalutier.y < 0 ){
+    this.game.state.start('boot'); 
+  }
+
 };
 
 
