@@ -91,6 +91,28 @@ var components = components || {};
 			return ( resultat || new Point() ).set( tmp2.x - tmp.x , tmp2.y - tmp.y );
 		},
 
+		getUnitTangent :function( t , resultat ){
+			return this.getTangent( t , resultat ).normalize();
+		},
+
+		subCurve : function( t1 , t2 ){
+
+			var a = this.getPoint( t1 )
+			var c = this.getPoint( t2 )
+
+			// need to find b
+			// the point at ( t1 + t2 ) /2 for the original curve and the one at 0.5 for the new one are the same
+			// resolve this equation
+
+			// factorise the calculus
+			var E = this.getPoint( ( t1+t2 )/2 );
+
+			E.x = 2 * E.x - ( a.x + c.x ) / 2
+			E.y = 2 * E.y - ( a.y + c.y ) / 2
+
+			return AtomicBezierCurve.Create( a , E , c );
+		},
+
 		getBoundingBox:function(){
 
 			var top = new Point(this.pts[0].x,this.pts[0].y)
@@ -131,7 +153,7 @@ var components = components || {};
 
 			var l = this.getLength();
 
-			var k = l/0.5;
+			var k = l*0.1;
 
 			var minDist = marge*marge;
 			var mint = null;
@@ -163,6 +185,12 @@ var components = components || {};
 				}
 		},
 
+		clone:function(){
+			return AtomicBezierCurve.Create( this.pts );
+		},
+
+		dispose: function(){
+		}
 	};
 	AtomicBezierCurve.Create = function( a , b , c ){
 		return new AtomicBezierCurve().init( a , b , c );
@@ -189,20 +217,34 @@ var components = components || {};
 
 		getPoint:function( t , resultat ){
 
+			var a = this._toAtomic( t )
+
+			return this._atomic[a.i].getPoint( a.t , resultat );
+		},
+
+		_toAtomic : function( t ){
+
 			if( t==0 )
-				return this._atomic[0].getPoint( t , resultat );
+				return{
+					t:0,
+					i:0
+				}
 
 			if( t==1 )
-				return this._atomic[ this._atomic.length-1 ].getPoint( t , resultat );
+				return{
+					t:1,
+					i:this._atomic.length-1
+				}
 
 			var l=this.getLength();
 			var s=0;
 			for( var i=0; t<s/l ; i++)
 				s+=this._atomic[i].getLength();
 
-			var t_ = ( t*l-s )/this._atomic[i].getLength();
-
-			return this._atomic[i].getPoint( t_ , resultat );
+			return{
+					t:( t*l-s )/this._atomic[i].getLength() ,
+					i:i
+				}
 		},
 
 		getBoundingBox : function(){
@@ -233,6 +275,30 @@ var components = components || {};
 			return bb;
 		},
 
+		subCurve:function( t1 , t2 ){
+
+			var a1 = this._toAtomic( t1 )
+			var a2 = this._toAtomic( t2 )
+
+			var atom = [];
+			if( a1.i == a2.i )
+				atom.push( this._atomic[ a1.i ].subCurve( a1.t , a2.t ) )
+			else{
+				atom.push( this._atomic[ a1.i ].subCurve( a1.t , 1 ) )
+
+				for( var i=a1.i+1 ; i<a2.i ; i++ )
+					atom.push( this._atomic[ a2.i ].clone() )
+
+				atom.push( this._atomic[ a2.i ].subCurve( 0 , a2.t ) )
+			}
+
+
+			var n = new BezierCurve().init();
+			n._atomic = atom;
+
+			return n;
+		},
+
 		collide:function( x , y ){
 			var collideInfo;
 			for( var i=this._atomic.length;i--;)
@@ -243,7 +309,8 @@ var components = components || {};
 		},
 
 		dispose: function(){
-			//TODO
+			for( var i=this._atomic.length;i--;)
+				this._atomic[i].dispose();
 		}
 	};
 
@@ -337,7 +404,9 @@ var components = components || {};
 			[
 				new Point(100 , 100),
 				new Point(600 , 600)
-			]) 
+			])
+
+			this.rm.bc = this.rm.bc.subCurve( 0.2 , 1 )
 			
 			this.drawPath( this.rm );
 
