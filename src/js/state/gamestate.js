@@ -80,8 +80,9 @@ var GameState = GameState || {};
     icebergs.init();
 
     this.camera.follow( chalutier.sprite );
-    components.PathEditable.attach( chalutier )
-    components.EcumeEmiter.attach( chalutier , components.underSea.layer() )
+    components.PathEditable.attach( chalutier );
+    components.EcumeEmiter.attach( chalutier , components.underSea.layer() );
+    components.EcumeEmiter.attach( seaShepherd , components.underSea.layer() );
 
 
     var overlay = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_ecume');
@@ -135,12 +136,12 @@ var GameState = GameState || {};
               .start();
 
       this.timer1 = game.time.now  ;
-    }
+    };
     if ( this.timer2 < game.time.now - 2000 ) {
       for(var i=0; i<10; i++)
         icebergs.add();
       this.timer2 = game.time.now;
-    }
+    };
 
 
     seaShepherd.update();

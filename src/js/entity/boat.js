@@ -132,10 +132,6 @@ var entities = entities || {};
 		F.prototype =  E.prototype;
 	F.prototype.update = function() {
 			game.physics.arcade.velocityFromAngle(this.sprite.angle, 50, this.sprite.body.velocity);
-
-			// var dir = this.getDirection().normalize();
-			// this.emitter.emitX = this.sprite.x-dir.x*200 ;
-			// this.emitter.emitY = this.sprite.y-dir.y*200 ;
 		};
 
 	exposure.Chalutier = G;
