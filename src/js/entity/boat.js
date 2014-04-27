@@ -3,7 +3,7 @@ var entities = entities || {};
 (function( exposure ){
 
 
-	var E = function Chalutier () {};
+	var E = function Boat () {};
 	E.prototype = {
 
 
@@ -13,8 +13,6 @@ var entities = entities || {};
 
 		direction : null,
 
-		filetUp : true,
-		filetLoad : 0 ,
 
 		emitter: null,
 
@@ -85,9 +83,16 @@ var entities = entities || {};
 			};
 		},
 
-		timer : null,
+		/// internal stuff
 
-		actionFilet : function() {
+	};
+
+	var G = function Chalutier() {};
+	for (var i in E.prototype)
+		G.prototype[i] = E.prototype[i];
+	G.prototype.filetUp = true;
+	G.prototype.filetLoad =0;
+	G.prototype.actionFilet = function() {
 			var load = 0 ;
 			if (this.filetUp){
 				this.sprite.loadTexture('chalutier_down');
@@ -98,95 +103,42 @@ var entities = entities || {};
       		}
 			this.filetUp = !this.filetUp;
 			return load ;
-		},
-
-		collideFish : function(boat, fish) {
+		};
+	G.prototype.collideFish = function(boat, fish) {
 			if( !this.filetUp ){
 				this.filetLoad += 1;
 				fish.kill();
 			}
-		},
-
-		collideDolphin : function(boat, dolphin){
+		};
+	G.prototype.collideDolphin = function(boat, dolphin){
 			if( !this.filetUp ){
 				this.filetLoad += 10;
 				dolphin.kill();
 			}
-		},
-
-		collideWhale : function(boat, whale){
+		};
+	G.prototype.collideWhale = function(boat, whale){
 			if( !this.filetUp ){
 				this.filetLoad += 50;
 				whale.kill();
 			}
-		},
-
-		collideMortel : function(boat, seaShepherd) {
+		};
+	G.prototype.collideMortel = function(boat, seaShepherd) {
 			game.state.start('boot');
-		}
+		};
 
-		/// internal stuff
-
-	};
 
 	var F = function SeaShepherd() { };
-	F.prototype = {
-		sprite : null,
-
-		init : function( params ){
-
-			params = params || {};
-
-			this.sprite =  params.sprite;
-
-			if( this.sprite == null ){
-
-				this.sprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , params.texture );
-
-				this.sprite.anchor.setTo(0.5, 0.5);
-
-				this.sprite.scale.setTo( params.scale || 1 , params.scale || 1 );
-
-				this.sprite.angle = params.angle || 0;
-			}
-
-			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
-
-			this.layer = params.layer || game.world;
-
-			this.layer.addChild( this.sprite );
-
-			this.emitter = game.add.emitter(params.x, params.y, 75);
-			this.emitter.makeParticles('particle');
-			this.emitter.setXSpeed(0, 0);
-    		this.emitter.setYSpeed(0, 0);
-    		this.emitter.setRotation(0, 0);
-    		this.emitter.gravity = 0;
-    		this.emitter.alpha = 0.3 ;
-			this.emitter.start(false, 3000, 50);
-		},
-
-		update: function() {
+	for (var i in E.prototype)
+		F.prototype =  E.prototype;
+	F.prototype.update = function() {
 			game.physics.arcade.velocityFromAngle(this.sprite.angle, 50, this.sprite.body.velocity);
 
-			var dir = this.getDirection().normalize();
-			this.emitter.emitX = this.sprite.x-dir.x*200 ;
-			this.emitter.emitY = this.sprite.y-dir.y*200 ;
-		},
+			// var dir = this.getDirection().normalize();
+			// this.emitter.emitX = this.sprite.x-dir.x*200 ;
+			// this.emitter.emitY = this.sprite.y-dir.y*200 ;
+		};
 
-		dispose: function() {
-
-		},
-
-		getDirection : function(){
-			return new Phaser.Point(
-				Math.cos( this.sprite.angle/180*Math.PI ),
-				Math.sin( this.sprite.angle/180*Math.PI )
-			);
-		},
-	}
-
-	exposure.Chalutier = E;
+	exposure.Chalutier = G;
 	exposure.SeaShepherd = F;
 
 })( entities );

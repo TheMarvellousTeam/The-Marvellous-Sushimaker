@@ -65,12 +65,11 @@ var components = components || {};
 
 				var n = i==0 ? new Phaser.Point( dir.y , -dir.x ) : new Phaser.Point( -dir.y , dir.x );
 
+				this.ems[i].emitX = p.x - dir.x*95 + n.x *20;
+				this.ems[i].emitY = p.y - dir.y*95 + n.y *20;
 
-				this.ems[i].emitX = p.x - dir.x*50 + n.x *30;
-				this.ems[i].emitY = p.y - dir.y*50 + n.y *30;
-
-				this.ems[i].minParticleSpeed.setTo( n.x * 50 , n.y * 50 );
-	    		this.ems[i].maxParticleSpeed.setTo( n.x * 60 , n.y * 60 );
+				this.ems[i].minParticleSpeed.setTo( n.x * 15 , n.y * 15 );
+	    		this.ems[i].maxParticleSpeed.setTo( n.x * 25 , n.y * 25 );
 	    	}
 		},
 	}

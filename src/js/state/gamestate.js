@@ -2,33 +2,6 @@ var GameState = GameState || {};
 
 (function( exposure ){
 
-	var BootState = new Phaser.State();
-	BootState.preload = function() {
-  	this.load.image('logo', 'src/assets/logo.png');
-  	this.load.image('baleine', 'src/assets/baleine.png');
-  	this.load.image('banc_poissons', 'src/assets/banc_poissons.png');
-  	this.load.image('chalutier_up', 'src/assets/chalutier_up.png');
-  	this.load.image('chalutier_down', 'src/assets/chalutier_down.png');
-    this.load.image('dauphin', 'src/assets/dauphin.png');
-  	this.load.image('iceberg', 'src/assets/iceberg.png');
-  	this.load.image('mine', 'src/assets/mine.png');
-  	this.load.image('sea_shepherd', 'src/assets/sea_shepherd.png');
-  	this.load.image('sushi', 'src/assets/sushi.png');
-    this.load.image('sea', 'src/assets/sea.png');
-    this.load.image('particle', 'src/assets/particle2.png');
-
-    components.underSea.preload();
-
-	};
-	BootState.create = function() {
-  	var logo = this.add.sprite(0,0,'logo');
-  	logo.inputEnabled = true ;
-  	logo.input.useHandCurse = true;
-  	logo.events.onInputDown.add(function(){
-    	this.game.state.start('game');
-  	});
-	};
-
   var chalutier = new entities.Chalutier();
   var seaShepherd = new entities.SeaShepherd();
   var fishes = new entities.Animal();
@@ -95,8 +68,10 @@ var GameState = GameState || {};
     });
 
     seaShepherd. init({
-      x: this.world.randomX,
-      y: this.world.randomY,
+            x: this.world.width/2+200,
+      y: this.world.height/2+200,
+      // x: this.world.randomX,
+      // y: this.world.randomY,
       texture : 'sea_shepherd',
       scale : 0.3,
       shadowLayer : components.underSea.shadowLayer(),
@@ -156,7 +131,7 @@ var GameState = GameState || {};
       var y = chalutier.sprite.y - seaShepherd.sprite.y;
 
       game.add.tween(seaShepherd.sprite)
-              .to({angle:Math.atan2(-1*y, -1*x)*180/Math.PI}, 4500, Phaser.Easing.Linear.None)
+              .to({angle:Math.atan2(y, x)*180/Math.PI}, 4500, Phaser.Easing.Linear.None)
               .start();
 
       this.timer1 = game.time.now  ;
@@ -176,7 +151,6 @@ var GameState = GameState || {};
     icebergs.update();
 	};
 
-	exposure.BootState = BootState;
 	exposure.MainState = MainState;
 
 })(GameState);
