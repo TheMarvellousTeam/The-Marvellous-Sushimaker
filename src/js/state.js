@@ -79,7 +79,7 @@ var GameState = GameState || {};
   	} else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
     	this.chalutier.angle += 2;
   	} else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-      if( this.speed < 100)
+      if( this.speed < 100 )
         this.speed += 10 ;
   	} else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
     	if( this.speed > 0)
@@ -94,7 +94,11 @@ var GameState = GameState || {};
  		this.physics.arcade.overlap(this.chalutier, this.fish, onCollideFish, null, this);
  		for( var i=0; i<this.fish.length; i++){
  			this.fish[i].angle += this.fish[i].addToAngle ;
- 			this.physics.arcade.velocityFromAngle(this.fish[i].angle, 150+Math.random()*300, this.fish[i].body.velocity);
+ 			this.physics.arcade.velocityFromAngle(this.fish[i].angle, 100+Math.random()*300, this.fish[i].body.velocity);
+      if (!this.fish[i].alive){
+        this.fish[i].reset(Math.random()*this.world.width, Math.random()*this.world.height, 1);
+        this.fish[i].addToAngle = Math.random()*3 - Math.random();
+      }
  		}      
 	};
 
@@ -102,7 +106,6 @@ var GameState = GameState || {};
 		if ( !this.filetUp){
   			obj2.kill();
   			this.sushi.text = ''+(parseInt(this.sushi.text)+1+Math.floor(Math.random()*2));
-  			this.createFish();
   		}
   	};
 
