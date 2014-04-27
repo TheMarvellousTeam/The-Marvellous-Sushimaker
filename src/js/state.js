@@ -25,7 +25,7 @@ var GameState = GameState || {};
   	logo.inputEnabled = true ;
   	logo.input.useHandCurse = true;
   	logo.events.onInputDown.add(function(){
-      this.game.state.destroy('boot');
+      //his.game.state.destroy('boot');
     	this.game.state.start('game');
   	});
 	};
