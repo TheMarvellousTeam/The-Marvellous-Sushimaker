@@ -32,12 +32,7 @@ var GameState = GameState || {};
     this.stage.backgroundColor='#A5CEF2';
 
 		this.world.setBounds(0, 0, 5000, 5000);
-    /*
-		this.fish = [];
-  	for(var i=0; i<10; i++){
-  		this.createFish();
-  	}
-    */
+
 
     fishes.init({
       nbFish: 15,
@@ -56,19 +51,6 @@ var GameState = GameState || {};
 
     this.camera.follow( chalutier.sprite );
 
-    //this.camera.setPosition( this.world.width/2 - 200 , this.world.height/2 -200 )
-
-    /*
-  	this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
-  	this.chalutier.anchor.setTo(0.5, 0.5);
-  	this.chalutier.scale.setTo(0.3, 0.3);
-  	this.physics.enable(this.chalutier, Phaser.Physics.ARCADE);
-  	this.filetUp = true ;
-  	this.speed = 0 ;
-    this.filetLoad = 0 ;
-		this.camera.follow(this.chalutier);
-    */
-
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
   	sushi.scale.setTo(0.1, 0.1);
@@ -86,46 +68,11 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
-
-    /*
-  	if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-    	this.chalutier.angle -= 2;
-  	} else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-    	this.chalutier.angle += 2;
-  	} else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-      if( this.speed < 100 )
-        this.speed += 10 ;
-  	} else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-    	if( this.speed > 0)
-        this.speed -= 10;
-  	}
-  	this.physics.arcade.velocityFromAngle(this.chalutier.angle, this.speed, this.chalutier.body.velocity);
-
- 		if ( this.chalutier.x > this.world.width || this.chalutier.x < 0 || this.chalutier.y > this.world.height || this.chalutier.y < 0 ){
-   		this.game.state.start('boot'); 
- 		}
-
- 		this.physics.arcade.overlap(this.chalutier, this.fish, onCollideFish, null, this);
- 		for( var i=0; i<this.fish.length; i++){
- 			this.fish[i].angle += this.fish[i].addToAngle ;
- 			this.physics.arcade.velocityFromAngle(this.fish[i].angle, 100+Math.random()*300, this.fish[i].body.velocity);
-      if (!this.fish[i].alive){
-        this.fish[i].reset(Math.random()*this.world.width, Math.random()*this.world.height, 1);
-        this.fish[i].addToAngle = Math.random()*3 - Math.random();
-      }
- 		}*/ 
+    this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
 
     chalutier.update(); 
     fishes.update();
 	};
-
-	var onCollideFish = function(obj1, obj2) {
-		if ( !this.filetUp){
-  			obj2.kill();
-  			
-        this.filetLoad += 1+Math.floor(Math.random()*2);
-  		}
-  	};
 
 	exposure.BootState = BootState;
 	exposure.MainState = MainState;

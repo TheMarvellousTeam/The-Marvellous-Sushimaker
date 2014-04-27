@@ -31,6 +31,8 @@ var entities = entities || {};
 				this.sprite.scale.setTo( params.scale || 1 , params.scale || 1 );
 			}
 
+			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
+
 			this.layer = params.layer || game.world;
 
 			this.layer.addChild( this.sprite );
@@ -82,6 +84,13 @@ var entities = entities || {};
       		}
 			this.filetUp = !this.filetUp;
 			return load ;
+		},
+
+		collideFish : function(boat, fish) {
+			if( !this.filetUp ){
+				this.filetLoad += 1;
+				fish.kill();
+			}
 		}
 
 		/// internal stuff
