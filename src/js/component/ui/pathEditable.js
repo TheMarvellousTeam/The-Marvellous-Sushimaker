@@ -10,7 +10,8 @@ var components = components || {};
 	var tmp4 = new Point();
 
 	var squareDistance = function( A , B ){
-		var x=A.x-B.x,y=A.y-B.y;
+		var x=A.x-B.x,
+			y=A.y-B.y;
 		return x*x + y*y;
 	}
 
@@ -130,11 +131,13 @@ var components = components || {};
 
 			var l = this.getLength();
 
-			var k = 100;
+			var k = l/0.5;
 
 			var minDist = marge*marge;
 			var mint = null;
 			var tt;
+
+			var infoMin = Infinity;
 
 			tmp2.set(x,y)
 
@@ -146,6 +149,8 @@ var components = components || {};
 					minDist = tt;
 					mint = t/k;
 				}
+				if( tt < infoMin )
+					infoMin = tt;
 			}
 
 			if( mint == null )
@@ -397,15 +402,18 @@ var components = components || {};
 
 		update:function(){
 
-			this.onMouseDown();
-
-			if( (game.input.mouse.button < 0 && (this.picked=null)) || !this.picked  )
+			if( !this.picked || (game.input.mouse.button < 0 && (this.picked=null)) || !this.picked  )
 				return;
 
 			// DO something
 			//this.onMouseDown();
-
-
+			this.rm = new RoadMap().init().setControlPoints( 
+				new Point(0 , 1),
+			[
+				new Point(100 , 100),
+				new Point( game.input.worldX , game.input.worldY )
+			]) 
+			this.drawPath( this.rm );
 		},
 
 		onMouseDown:function( ){
