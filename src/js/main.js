@@ -23,8 +23,8 @@ BootState.create = function() {
     game.state.start('game');
   });
 
-  new components.PathEditable().init();
-  
+  new components.PathEditable().init().listen(true);
+
 };
 BootState.update = function() {
 };

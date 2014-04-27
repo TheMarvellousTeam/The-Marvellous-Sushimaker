@@ -4,6 +4,32 @@ var components = components || {};
 
 	var Point = Phaser.Point;
 
+	var tmp = new Point();
+	var tmp2 = new Point();
+	var tmp3 = new Point();
+	var tmp4 = new Point();
+
+	var squareDistance = function( A , B ){
+		var x=A.x-B.x,y=A.y-B.y;
+		return x*x + y*y;
+	}
+
+	var maximise = function( max , B ){
+		if( B.x > max.x )
+			max.x = B.x
+		if( B.y > max.y )
+			max.y = B.x
+		return max;
+	}
+
+	var minimise = function( min , B ){
+		if( B.x < min.x )
+			min.x = B.x
+		if( B.y < min.y )
+			min.y = B.x
+		return min;
+	}
+
 	var AtomicBezierCurve = function AtomicBezierCurve () {};
 	AtomicBezierCurve.prototype={
 
@@ -80,6 +106,55 @@ var components = components || {};
 				bottom : bottom
 			}
 		},
+
+		collide:function(x,y,marge){
+
+			marge = marge || 2;
+
+			var bb = this.getBoundingBox();
+
+			if( bb.top.x + marge > x || bb.bottom.x - marge < x || bb.top.y + marge > y || bb.bottom.y - marge < y )
+				return null;
+
+			var l = this.getLength();
+
+			var k = 30;
+
+			var B = tmp2.set( this.pts[0].x , this.pts[0].y );
+			var A = tmp
+
+			var top = tmp3
+			var bot = tmp4
+
+			for(var t=1;t<=k;t++){
+				
+				A = A.set( B.x , B.y );
+				B = this.getPoint( t/k , B );
+
+				bot.x = Math.max( A.x , B.x )+marge;
+				bot.y = Math.max( A.y , B.y )+marge;
+
+				top.x = Math.min( A.x , B.x )-marge;
+				top.y = Math.min( A.y , B.y )-marge;
+
+				if( top.x > x || bot.x < x || top.y > y || bot.y < y )
+					continue;
+
+				//dichotomie
+
+				var a = t/k,
+					b = (t-1)/k
+
+				return {
+					atomic : this,
+					atomic_t : (a+b)/2,
+					p : this.getPoint( (a+b)/2 )
+				}
+
+			}
+
+		},
+
 	};
 
 
@@ -114,7 +189,7 @@ var components = components || {};
 			for( var i=0; t<s/l ; i++)
 				s+=this._atomic[i].getLength();
 
-			var t_ = (t-(s/l))/this._atomic[i].getLength();
+			var t_ = ( t*l-s )/this._atomic[i].getLength();
 
 			return this._atomic[i].getPoint( t_ , resultat );
 		},
@@ -140,6 +215,15 @@ var components = components || {};
 
 			return bb;
 		},
+
+		collide:function( x , y ){
+			var collideInfo;
+			for( var i=this._atomic.length;i--;)
+				if( ( collideInfo = this._atomic[i].collide(x,y) ) ){
+					return collideInfo
+				}
+			return null;
+		},
 	};
 
 	var GetPointOnQuadraticBezier = function( ){
@@ -163,21 +247,70 @@ var components = components || {};
 		init:function( target ){
 			this.target = target;
 
-			var game = game;
-
 			this._graphic = new Phaser.Graphics( game , 0, 0);
 
-			this.drawPath();
+			game.world
+			game.stage.addChild( this._graphic );
+
 
 			this.bc = new BezierCurve().init();
-			this.bc._atomic = [ new AtomicBezierCurve().init( new Point(50,50) , new Point(250,150) , new Point(50,450) ) ]
+			this.bc._atomic = [ new AtomicBezierCurve().init( new Point(50,50) , new Point(550,250) , new Point(50,450) ) ]
 			
-			this.bc.getBoundingBox();
+			this.drawPath( this.bc );
+
+			return this;
 		},
 
-		drawPath:function(){
+		listen : function( enable ){
+
+			game.input.onDown.remove( this.onMouseDown , this )
+
+			if( !enable )
+				return this
+
+			game.input.onDown.add( this.onMouseDown , this )
+
+			return this
+		},
+
+		drawPath:function( bc ){
 
 			this._graphic.clear();
+
+			var pas = 10;
+			var l = bc.getLength();
+			var p = new Point();
+			for( var k=0;k<l;k+=pas ){
+
+				p = bc.getPoint( k/l , p );
+
+				this._graphic.beginFill(0xFFFF0B, 0.5);
+    			this._graphic.drawCircle( p.x , p.y , 2 );
+    			this._graphic.endFill();
+    		}
+
+    		if( !this.picked )
+    			return 
+
+    		this._graphic.beginFill(0xFFFF0B, 0.5);
+    		this._graphic.drawCircle( this.picked.x , this.picked.y , 5 );
+    		this._graphic.endFill();
+
+		},
+
+		onMouseDown:function( event ){
+
+			if( event.button != 0 )
+				return;
+
+			this.picked = null;
+
+			var c
+			if( (c=this.bc.collide( event.worldX , event.worldY ) ) ){
+				console.log("collide")
+				this.picked = c.p;
+				this.drawPath( this.bc );
+			}
 
 		},
 
