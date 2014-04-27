@@ -14,6 +14,8 @@ var GameState = GameState || {};
   	this.load.image('mine', 'src/assets/mine.png');
   	this.load.image('sea_shepher', 'src/assets/sea_shepherd.png');
   	this.load.image('sushi', 'src/assets/sushi.png');
+    this.load.image('sea', 'src/assets/sea.jpg');
+    this.load.image('particle', 'src/assets/particle.png');
 	};
 	BootState.create = function() {
   	var logo = this.add.sprite(0,0,'logo');
@@ -32,26 +34,30 @@ var GameState = GameState || {};
 	var MainState = new Phaser.State();
 	MainState.create = function() {
     this.stage.backgroundColor='#A5CEF2';
+    var sea = this.add.sprite(0,0, 'sea');
+    sea.width = 5000;
+    sea.height = 5000;
+
 
 		this.world.setBounds(0, 0, 5000, 5000);
 
 
     fishes.init({
-      count: 25,
+      count: 50,
       texture: 'banc_poissons',
       scale: 0.1,
       speed: 100
     });
 
     whales.init({
-      count: 10,
+      count: 5,
       texture: 'baleine',
       scale:0.25,
       speed: 200
     });
 
     dolphins.init({
-      count: 15,
+      count: 10,
       texture: 'dauphin',
       scale:0.1,
       speed: 300
@@ -64,11 +70,9 @@ var GameState = GameState || {};
       scale : 0.3
     });
 
+
+    this.camera.follow( chalutier.sprite );
     components.PathEditable.attach( chalutier )
-
-    //this.camera.follow( chalutier.sprite );
-
-    this.camera.setPosition( this.world.width/2 - 200 , this.world.height/2 -200 )
 
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);

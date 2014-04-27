@@ -725,7 +725,7 @@ var components = components || {};
 
 			this.onMouseMove();
 
-			var p = this.rm.marching( 1 );
+			var p = this.rm.marching( 3 );
 
 			var p = p.clone();
 

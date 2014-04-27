@@ -16,6 +16,8 @@ var entities = entities || {};
 		filetUp : true,
 		filetLoad : 0 ,
 
+		emitter: null,
+
 		init : function( params ){
 
 			params = params || {};
@@ -36,10 +38,23 @@ var entities = entities || {};
 			this.layer = params.layer || game.world;
 
 			this.layer.addChild( this.sprite );
+
+			this.emitter = game.add.emitter(params.x, params.y, 75);
+			this.emitter.makeParticles('particle');
+			this.emitter.setXSpeed(0, 0);
+    		this.emitter.setYSpeed(0, 0);
+    		this.emitter.setRotation(0, 0);
+    		this.emitter.gravity = 0;
+    		this.emitter.alpha = 0.3 ;
+    		//this.emitter.scale.x = 0.5;
+    		//this.emitter.scale.y = 0.5;
+			this.emitter.start(false, 3000, 50);
 		},
 
 		update : function(){
-
+			var dir = this.getDirection().clone().normalize();
+			this.emitter.emitX = this.sprite.x-dir.x*100 ;
+			this.emitter.emitY = this.sprite.y-dir.y*100 ;
 		},
 
 		dispose : function(){
@@ -123,6 +138,12 @@ var entities = entities || {};
 			this.layer = params.layer || game.world;
 
 			this.layer.addChild( this.sprite );
+
+			game.add.tween(this.sprite)
+					.to({angle:this.sprite.angle+Math.floor(Math.random()*360)-180}, 8000, Phaser.Easing.Linear.None)
+					.to({angle:this.sprite.angle+Math.floor(Math.random()*360)-180}, 8000, Phaser.Easing.Linear.None)
+					.loop()
+					.start();
 		},
 
 		update: function() {
