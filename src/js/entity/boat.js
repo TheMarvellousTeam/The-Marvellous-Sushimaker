@@ -90,49 +90,59 @@ var entities = entities || {};
 	var G = function Chalutier() {};
 	for (var i in E.prototype)
 		G.prototype[i] = E.prototype[i];
+
 	G.prototype.filetUp = true;
+
 	G.prototype.filetLoad =0;
+
 	G.prototype.actionFilet = function() {
-			var load = 0 ;
-			if (this.filetUp){
-				this.sprite.loadTexture('chalutier_down');
-			} else {
-        		load = this.filetLoad;
-        		this.filetLoad = 0 ;
-      			this.sprite.loadTexture('chalutier_up');
-      		}
-			this.filetUp = !this.filetUp;
-			return load ;
-		};
+		var load = 0 ;
+		if (this.filetUp){
+			this.sprite.loadTexture('chalutier_down');
+		} else {
+       		load = this.filetLoad;
+       		this.filetLoad = 0 ;
+    		this.sprite.loadTexture('chalutier_up');
+    	}
+		this.filetUp = !this.filetUp;
+		return load ;
+	};
+
 	G.prototype.collideFish = function(boat, fish) {
-			if( !this.filetUp ){
-				this.filetLoad += 1;
-				fish.kill();
-			}
-		};
+		if( !this.filetUp ){
+			this.filetLoad += 1;
+			fish.kill();
+		}
+	};
+
 	G.prototype.collideDolphin = function(boat, dolphin){
-			if( !this.filetUp ){
-				this.filetLoad += 10;
-				dolphin.kill();
-			}
-		};
+		if( !this.filetUp ){
+			this.filetLoad += 10;
+			dolphin.kill();
+		}
+	};
+
 	G.prototype.collideWhale = function(boat, whale){
-			if( !this.filetUp ){
-				this.filetLoad += 50;
-				whale.kill();
-			}
-		};
+		if( !this.filetUp ){
+			this.filetLoad += 50;
+			whale.kill();
+		}
+	};
+
 	G.prototype.collideMortel = function(boat, seaShepherd) {
-			game.state.start('boot');
-		};
+		game.state.start('boot');
+	};
 
 
 	var F = function SeaShepherd() { };
 	for (var i in E.prototype)
 		F.prototype =  E.prototype;
 	F.prototype.update = function() {
-			game.physics.arcade.velocityFromAngle(this.sprite.angle, 50, this.sprite.body.velocity);
-		};
+		this.shadowSprite.angle = this.sprite.angle ;
+		game.physics.arcade.velocityFromAngle(this.sprite.angle, 50, this.sprite.body.velocity);
+		this.shadowSprite.x=this.sprite.x + 20;
+		this.shadowSprite.y=this.sprite.y + 35;
+	};
 
 	exposure.Chalutier = G;
 	exposure.SeaShepherd = F;

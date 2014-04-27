@@ -68,10 +68,8 @@ var GameState = GameState || {};
     });
 
     seaShepherd. init({
-            x: this.world.width/2+200,
-      y: this.world.height/2+200,
-      // x: this.world.randomX,
-      // y: this.world.randomY,
+      x: this.world.randomX,
+      y: this.world.randomY,
       texture : 'sea_shepherd',
       scale : 0.3,
       shadowLayer : components.underSea.shadowLayer(),
@@ -122,6 +120,7 @@ var GameState = GameState || {};
     components.underSea.update();
 
     this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
+    this.physics.arcade.collide(icebergs.group, icebergs.group);
     this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideMortel, null, chalutier);
     this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideMortel, null, chalutier);
 
