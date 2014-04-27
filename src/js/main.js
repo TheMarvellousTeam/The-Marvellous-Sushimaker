@@ -33,6 +33,13 @@ GameState.preload = function() {
 GameState.create = function() {
   this.world.setBounds(0, 0, 5000, 5000);
 
+  var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
+  sushi.anchor.setTo(0.5, 0.5);
+  sushi.scale.setTo(0.1, 0.1);
+  sushi.fixedToCamera = true;
+  this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#FFFFFF"});
+  this.sushi.fixedToCamera = true;
+
   this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
   this.chalutier.anchor.setTo(0.5, 0.5);
   this.chalutier.scale.setTo(0.3, 0.3);
@@ -43,6 +50,8 @@ GameState.create = function() {
 
   var spacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   spacebar.onDown.add(function() {
+    this.sushi.text = ''+(parseInt(this.sushi.text)+1);
+
     if (this.filetUp){
       this.chalutier.loadTexture('chalutier_down');
     } else {
@@ -67,6 +76,8 @@ GameState.update = function() {
   }
 
 };
+
+
 
 
 function preload() {
