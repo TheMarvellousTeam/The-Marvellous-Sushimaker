@@ -121,8 +121,10 @@ var GameState = GameState || {};
     
     components.underSea.update();
 
-    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideMortel, null, this);
-    this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideMortel, null, this);
+    this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
+    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideMortel, null, chalutier);
+    this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideMortel, null, chalutier);
+
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
@@ -137,8 +139,8 @@ var GameState = GameState || {};
 
       this.timer1 = game.time.now  ;
     };
-    if ( this.timer2 < game.time.now - 2000 ) {
-      for(var i=0; i<10; i++)
+    if ( this.timer2 < game.time.now - 3000 ) {
+      for(var i=0; i<3; i++)
         icebergs.add();
       this.timer2 = game.time.now;
     };

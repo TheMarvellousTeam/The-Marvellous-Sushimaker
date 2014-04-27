@@ -19,9 +19,10 @@ var entities = entities || {};
 
 		add : function(){
 			var iceberg = this.group.create(game.world.randomX, game.world.randomY, 'iceberg');
-			iceberg.scale = 0.2;
+			var scale = Math.random()/2;
+			iceberg.scale.setTo(scale, scale);
 			iceberg.angle = Math.floor(360 * Math.random());
-			iceberg.speed = Math.floor(75 + Math.random()*150);
+			iceberg.speed = Math.floor(25 + Math.random()*100);
 		},
 
 		move : function() {
