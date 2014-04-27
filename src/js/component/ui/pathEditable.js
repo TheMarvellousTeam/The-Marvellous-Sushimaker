@@ -375,6 +375,7 @@ var components = components || {};
 			var collideInfo;
 			for( var i=this._atomic.length;i--;)
 				if( ( collideInfo = this._atomic[i].collide(x,y) ) ){
+					collideInfo.t = this.tToGlobal( collideInfo.atomic_t , i );
 					return collideInfo
 				}
 			return null;
@@ -770,9 +771,15 @@ var components = components || {};
 
 				var l=this.rm.bc.getLength();
 				var s=0;
-				for(var k=0 ; s/l<c.t && k<this.rm.bc._atomic.length ; k++ ){
+				for(var k=0 ; k<this.rm.bc._atomic.length ; k++ ){
+					
+					var ll = this.rm.bc._atomic[k].getLength();
+
+					if( c.t*l < s+ll )
+						break
+
 					this._begining.push( this.rm.ctrlPoints[k+1] )
-					s += this.rm.bc._atomic[k].getLength();
+					s += ll;
 				}
 			}
 		},
