@@ -32,8 +32,6 @@ var GameState = GameState || {};
     this.stage.backgroundColor='#A5CEF2';
 
 		this.world.setBounds(0, 0, 5000, 5000);
-
-    this.physics.startSystem(Phaser.Physics.P2JS);
     /*
 		this.fish = [];
   	for(var i=0; i<10; i++){
@@ -56,9 +54,9 @@ var GameState = GameState || {};
 
     components.PathEditable.attach( chalutier )
 
-    //this.camera.follow( chalutier.sprite );
+    this.camera.follow( chalutier.sprite );
 
-    this.camera.setPosition( this.world.width/2 - 200 , this.world.height/2 -200 )
+    //this.camera.setPosition( this.world.width/2 - 200 , this.world.height/2 -200 )
 
     /*
   	this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
@@ -91,14 +89,6 @@ var GameState = GameState || {};
       this.filetUp = !this.filetUp;
   	}, this);
     */
-	};
-
-	MainState.createFish = function() {
-		var afish = this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons');
-		afish.scale.setTo(0.2, 0.2);
-		afish.addToAngle = Math.random()*3 - Math.random();
-		this.physics.arcade.enable(afish, Phaser.Physics.ARCADE);
-		this.fish.push(afish);
 	};
 
 	MainState.update = function() {
