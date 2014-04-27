@@ -32,10 +32,31 @@ var GameState = GameState || {};
 	MainState.preload = function() {
 
 	};
+
 	MainState.create = function() {
   		this.stage.backgroundColor='#A5CEF2';
 
 		this.world.setBounds(0, 0, 5000, 5000);
+
+		this.fish = [];
+  		for(var i=0; i<10; i++){
+  			this.createFish();
+  		}
+
+  		this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
+  		this.chalutier.anchor.setTo(0.5, 0.5);
+  		this.chalutier.scale.setTo(0.3, 0.3);
+  		this.physics.enable(this.chalutier, Phaser.Physics.ARCADE);
+  		this.filetUp = true ;
+  		this.speed = 0 ;
+		this.camera.follow(this.chalutier);
+
+		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
+  		sushi.anchor.setTo(0.5, 0.5);
+  		sushi.scale.setTo(0.1, 0.1);
+  		sushi.fixedToCamera = true;
+  		this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
+  		this.sushi.fixedToCamera = true;
 
   		var spacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   		spacebar.onDown.add(function() {
@@ -46,50 +67,28 @@ var GameState = GameState || {};
     		}
     		this.filetUp = !this.filetUp;
   		}, this);
+	};
 
-  		this.fish = [
-  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
-  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
-  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
-  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
-  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
-  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons'),
-  			this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons')
-  		];
-
-  		this.physics.arcade.enable(this.fish, Phaser.Physics.ARCADE);
-  		for(var i=0; i<this.fish.length; i++){
-  			this.fish[i].scale.setTo(0.2, 0.2);
-  			//this.fish[i].body.collideWorldBounds = true;
-  			this.fish[i].addToAngle = Math.random()*3 - Math.random();	
-  		}
-
-  		this.chalutier = this.add.sprite(this.world.width/2, this.world.height/2, 'chalutier_up');
-  		this.chalutier.anchor.setTo(0.5, 0.5);
-  		this.chalutier.scale.setTo(0.3, 0.3);
-  		this.physics.enable(this.chalutier, Phaser.Physics.ARCADE);
-  		this.filetUp = true ;
-		this.camera.follow(this.chalutier);
-
-		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
-  		sushi.anchor.setTo(0.5, 0.5);
-  		sushi.scale.setTo(0.1, 0.1);
-  		sushi.fixedToCamera = true;
-  		this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
-  		this.sushi.fixedToCamera = true;
-
+	MainState.createFish = function() {
+		var afish = this.add.sprite(Math.random()*this.world.width, Math.random()*this.world.height, 'banc_poissons');
+		afish.scale.setTo(0.2, 0.2);
+		afish.addToAngle = Math.random()*3 - Math.random();
+		this.physics.arcade.enable(afish, Phaser.Physics.ARCADE);
+		this.fish.push(afish);
 	};
 
 	MainState.update = function() {
   		if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-    		this.chalutier.x -= 20;
+    		this.chalutier.angle -= 2;
   		} else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-    		this.chalutier.x += 20;
+    		this.chalutier.angle += 2;
   		} else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-    		this.chalutier.y -= 20;
+    		this.speed += 10 ;
   		} else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-    		this.chalutier.y += 20;
+    		this.speed -= 10;
   		}
+  		this.physics.arcade.velocityFromAngle(this.chalutier.angle, speed, this.chalutier.body.velocity);
+
 
   		if ( this.chalutier.x > this.world.width || this.chalutier.x < 0 || this.chalutier.y > this.world.height || this.chalutier.y < 0 ){
     		this.game.state.start('boot'); 
@@ -106,6 +105,7 @@ var GameState = GameState || {};
 		if ( !this.filetUp){
   			obj2.kill();
   			this.sushi.text = ''+(parseInt(this.sushi.text)+1+Math.floor(Math.random()*2));
+  			this.createFish();
   		}
   	};
 
