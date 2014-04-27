@@ -69,11 +69,9 @@ var GameState = GameState || {};
       scale : 0.3
     });
 
+
+    this.camera.follow( chalutier.sprite );
     components.PathEditable.attach( chalutier )
-
-    //this.camera.follow( chalutier.sprite );
-
-    this.camera.setPosition( this.world.width/2 - 200 , this.world.height/2 -200 )
 
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
