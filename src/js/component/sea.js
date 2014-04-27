@@ -21,12 +21,7 @@ var components = components || {};
 
 		
 
-		// displacement filter
-		group.filters = [ displacementFilter ];
-
-
-		displacementFilter.scale.x = 40;
-		displacementFilter.scale.y = 40;
+		
 
 
 		// add background rockies
@@ -41,6 +36,8 @@ var components = components || {};
 		// where animals goes
 		seaGroup = new Phaser.Group( game );
 		seaGroup.z = 1;
+
+		seaGroup.filters = [ displacementFilter ];
 
 		group.addChild( seaGroup );
 
@@ -60,15 +57,12 @@ var components = components || {};
 		seaGroup.addChild( shadowLayer );
 
 
-		overlay = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_ecume');
-		overlay.name = 'overlay'
-		overlay.alpha = 1
-		overlay.width = 5000;
-		overlay.height = 5000;
+		// displacement filter
+		group.filters = [ displacementFilter ];
 
-		overlay.z = 3;
-		
-		group.addChild( overlay );
+
+		displacementFilter.scale.x = 40;
+		displacementFilter.scale.y = 40;
 	}
 
 	var update = function(){

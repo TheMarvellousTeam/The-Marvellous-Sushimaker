@@ -108,6 +108,18 @@ var GameState = GameState || {};
     components.PathEditable.attach( chalutier )
     components.EcumeEmiter.attach( chalutier , components.underSea.layer() )
 
+
+    var overlay = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_ecume');
+    overlay.name = 'overlay'
+    overlay.alpha = 1
+    overlay.width = 5000;
+    overlay.height = 5000;
+
+    overlay.z = 3;
+    
+    components.underSea.layer().addChild( overlay );
+
+
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
   	sushi.scale.setTo(0.1, 0.1);

@@ -66,8 +66,8 @@ var components = components || {};
 				var n = i==0 ? new Phaser.Point( dir.y , -dir.x ) : new Phaser.Point( -dir.y , dir.x );
 
 
-				this.ems[i].emitX = p.x - dir.x*80 + n.x *30;
-				this.ems[i].emitY = p.y - dir.y*80 + n.y *30;
+				this.ems[i].emitX = p.x - dir.x*50 + n.x *30;
+				this.ems[i].emitY = p.y - dir.y*50 + n.y *30;
 
 				this.ems[i].minParticleSpeed.setTo( n.x * 50 , n.y * 50 );
 	    		this.ems[i].maxParticleSpeed.setTo( n.x * 60 , n.y * 60 );
