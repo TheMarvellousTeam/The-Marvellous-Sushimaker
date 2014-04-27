@@ -103,6 +103,47 @@ var components = components || {};
 			return resultat ? resultat.set(x,y) : new Point(x,y);
 		},
 
+		getPointAtFixedDistance : function( distance , from , segment ){
+
+			var l = this.getLength();
+
+			var a = from || 0;
+			
+			var A = this.getPoint( a );
+			var E = new Point();
+
+			var pas = 1/l;
+
+			var s = 0;
+			var t = 0;
+
+			while( pas > 1/l/8 ){
+
+				this.getPoint( a+t+pas , E );
+
+				var d = A.distance( E );
+
+				if( s+d < distance ){
+					A.set(E.x,E.y);
+					t += pas;
+					s+= d;
+
+					if( t > 1 && segment )
+						return null;
+
+				}else{
+					pas = pas / 2;
+				}
+			}
+
+			t += pas/2;
+
+			if( segment && t>1 )
+				t = 1;
+
+			return t;
+		},
+
 		getTangent:function( t , resultat ){
 
 			var pas = 0.001;
@@ -330,6 +371,30 @@ var components = components || {};
 			return null;
 		},
 
+		getTangent : function( t ){
+			var a = this._toAtomic( t );
+			return this._atomic[ a.i ].getTangent( a.t );
+		},
+
+		getPointAtFixedDistance : function( distance , from , segment ){
+
+			var a = this._toAtomic( from || 0 );
+			var l = this.getLength();
+			for( var i=a.i ; i<this._atomic.length ; i++ ){
+
+				var t_ = ( from - a.i ) * l / this._atomic[i];
+
+				var t = this._atomic[i].getPointAtFixedDistance( distance , t_ , true )
+
+				if( t == null )
+					continue;
+
+				return t;
+			}
+
+			return null;
+		},
+
 		dispose: function(){
 			for( var i=this._atomic.length;i--;)
 				this._atomic[i].dispose();
@@ -419,6 +484,32 @@ var components = components || {};
 
 
 			return this.bc.collide( x , y );
+		},
+
+		marching : function( distance ){
+
+			if( this.bc.getLength() > 0 ){
+
+				var t = this.bc.getPointAtFixedDistance( distance );
+
+				if( t != null ){
+
+					this.bc = this.bc.subCurve( t , 1 );
+
+					this.firstTangent = this.bc.getTangent( 0 ).normalize();
+
+					this.ctrlPoints[0].x = this.bc._atomic[0].pts[0].x;
+					this.ctrlPoints[0].y = this.bc._atomic[0].pts[0].y;
+
+					return this.ctrlPoints[0];
+				}
+
+			}
+
+			this.ctrlPoints[0].x += this.firstTangent.x * distance;
+			this.ctrlPoints[0].y += this.firstTangent.y * distance;
+
+			return this.ctrlPoints[0];
 		},
 	}
 
@@ -538,6 +629,18 @@ var components = components || {};
 
 			this.drawPath( this.rm , game.camera );
 
+			var p = this.rm.marching( 1 );
+
+			var p = p.clone();
+
+			/*
+			p.x -= game.camera.x;
+			p.y -= game.camera.y;
+			*/
+
+			this.target.setPosition( p );
+
+			this.drawPath( this.rm , game.camera );
 		},
 
 		onMouseMove:function(){
