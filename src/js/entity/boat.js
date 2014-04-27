@@ -3,7 +3,7 @@ var entities = entities || {};
 (function( exposure ){
 
 
-	var E = function Boat () {}
+	var E = function Boat () {};
 	E.prototype = {
 
 
@@ -97,10 +97,44 @@ var entities = entities || {};
 
 		/// internal stuff
 
-
-
 	};
 
-	exposure.Boat = E;
+	var F = function SeaShepherd() { };
+	F.prototype = function() {
+		sprite : null,
+
+		init : function( params ){
+
+			params = params || {};
+
+			this.sprite =  params.sprite;
+
+			if( this.sprite == null ){
+
+				this.sprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , params.texture );
+
+				this.sprite.anchor.setTo(0.5, 0.5);
+
+				this.sprite.scale.setTo( params.scale || 1 , params.scale || 1 );
+			}
+
+			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
+
+			this.layer = params.layer || game.world;
+
+			this.layer.addChild( this.sprite );
+		},
+
+		update: function() {
+
+		},
+
+		dispose: function() {
+
+		},
+	}
+
+	exposure.Chalutier = E;
+	exposure.SeaShepherd = F;
 
 })( entities );

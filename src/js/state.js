@@ -24,7 +24,7 @@ var GameState = GameState || {};
   	});
 	};
 
-  var chalutier = new entities.Boat();
+  var chalutier = new entities.Chalutier();
   var fishes = new entities.Animal();
   var whales = new entities.Animal();
   var dolphins = new entities.Animal();
