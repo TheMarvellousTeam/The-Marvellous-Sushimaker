@@ -7,7 +7,7 @@ var components = components || {};
 	var preload = function(){
 		
 		game.load.image('displacement', 'src/assets/displacement_map.jpg');
-		game.load.image('sea_background', 'src/assets/displacement_BG.jpg');
+		game.load.image('sea_background', 'src/assets/sand.jpg');
 		game.load.image('sea_ecume', 'src/assets/zeldaWaves.png');
 		
 		
@@ -24,22 +24,27 @@ var components = components || {};
 		group.filters = [ displacementFilter ];
 
 
-		displacementFilter.scale.x = 20;
-		displacementFilter.scale.y = 20;
+		displacementFilter.scale.x = 40;
+		displacementFilter.scale.y = 40;
 
-		/*
-		//overlay = new Phaser.TileSprite( 0, 0 , 128 , 128 , 'sea_ecume');
-		overlay = new Phaser.Sprite( 128 , 128 , 'sea_ecume');
+
+		bg = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_background');
+		bg.width = 5000;
+		bg.height = 5000;
+
+		// add background rockies
+		group.addChild( bg );
+
 		
+		
+		overlay = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_ecume');
+		overlay.alpha = 0.5
 		overlay.width = 5000;
 		overlay.height = 5000;
-	
-		// add background rockies
-		//group.addChild( bg );
-
+		
 		//add water volution
 		group.addChild( overlay );
-		*/
+		
 		
 		
 
