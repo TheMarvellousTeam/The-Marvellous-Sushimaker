@@ -39,7 +39,7 @@ var GameState = GameState || {};
 	var MainState = new Phaser.State();
 	MainState.create = function() {
 
-    this.stage.backgroundColor='#A5CEF2';
+    this.stage.backgroundColor='#33be9f';
 
     /*
     var sea = this.add.tileSprite(0,0, 128 , 128 , 'sea');
