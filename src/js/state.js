@@ -58,11 +58,14 @@ var GameState = GameState || {};
   	this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
   	this.sushi.fixedToCamera = true;
 
-    
   	var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
+    var timer = this.time.now ;
   	filetControl.onDown.add(function() {
-      var load = chalutier.actionFilet();
-      this.sushi.text = ''+(parseInt(this.sushi.text)+load);
+      if ( this.time.now > timer ) {
+        var load = chalutier.actionFilet();
+        this.sushi.text = ''+(parseInt(this.sushi.text)+load);
+        timer = this.time.now + 2500 ;
+      }
   	}, this);
     
 	};

@@ -73,10 +73,12 @@ var entities = entities || {};
 			};
 		},
 
+		timer : null,
+
 		actionFilet : function() {
 			var load = 0 ;
 			if (this.filetUp){
-      			this.sprite.loadTexture('chalutier_down');
+				this.sprite.loadTexture('chalutier_down');
 			} else {
         		load = this.filetLoad;
         		this.filetLoad = 0 ;
