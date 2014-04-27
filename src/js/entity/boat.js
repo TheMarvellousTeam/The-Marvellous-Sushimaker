@@ -123,6 +123,7 @@ var entities = entities || {};
 		},
 
 		collideSeaShepherd : function(boat, seaShepherd) {
+			game.state.destroy('game');
 			game.state.start('boot');
 		}
 

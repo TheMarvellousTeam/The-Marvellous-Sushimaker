@@ -25,6 +25,7 @@ var GameState = GameState || {};
   	logo.inputEnabled = true ;
   	logo.input.useHandCurse = true;
   	logo.events.onInputDown.add(function(){
+      this.game.state.destroy('boot');
     	this.game.state.start('game');
   	});
 	};
@@ -34,6 +35,7 @@ var GameState = GameState || {};
   var fishes = new entities.Animal();
   var whales = new entities.Animal();
   var dolphins = new entities.Animal();
+  var icebergs = new entities.Iceberg();
 
 
 	var MainState = new Phaser.State();
@@ -95,6 +97,7 @@ var GameState = GameState || {};
       scale : 0.3
     });
 
+    icebergs.init();
 
     this.camera.follow( chalutier.sprite );
     components.PathEditable.attach( chalutier )
@@ -116,7 +119,8 @@ var GameState = GameState || {};
       }
   	}, this);
 
-    this.timer = this.time.now ;
+    this.timer1 = this.time.now ;
+    this.timer2 = this.time.now ;
 	};
 
 	MainState.update = function() {
@@ -124,11 +128,12 @@ var GameState = GameState || {};
     components.underSea.update();
 
     this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
+
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
     
-    if ( this.timer + 6000 < game.time.now ){
+    if ( this.timer1 < game.time.now - 6000 ){
       var x = chalutier.sprite.x - seaShepherd.sprite.x;
       var y = chalutier.sprite.y - seaShepherd.sprite.y;
 
@@ -136,14 +141,24 @@ var GameState = GameState || {};
               .to({angle:Math.atan2(y, x)*180/Math.PI}, 4500, Phaser.Easing.Linear.None)
               .start();
 
-      this.timer = game.time.now ;
-    };
+      this.timer1 = game.time.now  ;
+    }
+    if ( this.timer2 < game.time.now - 10000 ) {
+      icebergs.add();
+      icebergs.move();
+      dolphins.move();
+      fishes.move();
+      whales.move();
+      this.timer2 = game.time.now;
+    }
+
 
     seaShepherd.update();
     chalutier.update(); 
     fishes.update();
-    whales.update();
     dolphins.update();
+    whales.update();
+    icebergs.update();
 	};
 
 	exposure.BootState = BootState;

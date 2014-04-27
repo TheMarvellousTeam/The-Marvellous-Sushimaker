@@ -28,6 +28,7 @@ var components = components || {};
 		displacementFilter.scale.y = 40;
 
 
+
 		bg = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_background');
 		bg.width = 5000;
 		bg.height = 5000;
@@ -36,18 +37,14 @@ var components = components || {};
 		group.addChild( bg );
 
 		
-		
 		overlay = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_ecume');
 		overlay.alpha = 0.5
 		overlay.width = 5000;
 		overlay.height = 5000;
+
 		
 		//add water volution
 		group.addChild( overlay );
-		
-		
-		
-
 	}
 
 	var update = function(){
