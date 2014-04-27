@@ -37,7 +37,6 @@ var entities = entities || {};
 
 		update : function(){
 			this.group.forEachAlive(function(fish){
-				//this.speed+Math.floor(Math.random()*this.speed/2)
 				game.physics.arcade.velocityFromAngle(fish.angle, this.speed , fish.body.velocity);
 			});
 			this.group.forEachDead(function(fish){

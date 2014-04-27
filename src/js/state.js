@@ -14,7 +14,8 @@ var GameState = GameState || {};
   	this.load.image('mine', 'src/assets/mine.png');
   	this.load.image('sea_shepher', 'src/assets/sea_shepherd.png');
   	this.load.image('sushi', 'src/assets/sushi.png');
-    this.load.image('sea', 'src/assets/sea.jpg')
+    this.load.image('sea', 'src/assets/sea.jpg');
+    this.load.image('particle', 'src/assets/particle.png');
 	};
 	BootState.create = function() {
   	var logo = this.add.sprite(0,0,'logo');
@@ -42,21 +43,21 @@ var GameState = GameState || {};
 
 
     fishes.init({
-      count: 25,
+      count: 50,
       texture: 'banc_poissons',
       scale: 0.1,
       speed: 100
     });
 
     whales.init({
-      count: 10,
+      count: 5,
       texture: 'baleine',
       scale:0.25,
       speed: 200
     });
 
     dolphins.init({
-      count: 15,
+      count: 10,
       texture: 'dauphin',
       scale:0.1,
       speed: 300
