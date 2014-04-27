@@ -41,6 +41,7 @@ var GameState = GameState || {};
   	this.physics.enable(this.chalutier, Phaser.Physics.ARCADE);
   	this.filetUp = true ;
   	this.speed = 0 ;
+    this.filetLoad = 0 ;
 		this.camera.follow(this.chalutier);
 
 		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
@@ -55,6 +56,8 @@ var GameState = GameState || {};
       if (this.filetUp){
       	this.chalutier.loadTexture('chalutier_down');
       } else {
+        this.sushi.text = ''+(parseInt(this.sushi.text)+this.filetLoad);
+        this.filetLoad = 0 ;
       	this.chalutier.loadTexture('chalutier_up');
       }
       this.filetUp = !this.filetUp;
@@ -105,7 +108,8 @@ var GameState = GameState || {};
 	var onCollideFish = function(obj1, obj2) {
 		if ( !this.filetUp){
   			obj2.kill();
-  			this.sushi.text = ''+(parseInt(this.sushi.text)+1+Math.floor(Math.random()*2));
+  			
+        this.filetLoad += 1+Math.floor(Math.random()*2);
   		}
   	};
 
