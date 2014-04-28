@@ -41,6 +41,29 @@ var entities = entities || {};
 
 	};
 
+	var G = function Mine () {};
+	G.prototype = {
+
+		group: null,
+
+		init : function(params){
+			params = params || {};
+				
+			this.group = new Phaser.Group( game );
+			this.group.enableBody = true;
+			this.group.physicsBodyType = Phaser.Physics.ARCADES ;
+
+			( params.layer || game.world ).addChild( this.group );
+		},
+
+		add : function(){
+			var mine = this.group.create(game.world.randomX, game.world.randomY, 'mine');
+			mine.scale.setTo(0.3, 0.3);
+		}
+
+	};
+
 	exposure.Iceberg = F;
+	exposure.Mine = G;
 
 })( entities );

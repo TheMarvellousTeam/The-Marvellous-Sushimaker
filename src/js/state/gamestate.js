@@ -8,6 +8,7 @@ var GameState = GameState || {};
   var whales = new entities.Animal();
   var dolphins = new entities.Animal();
   var icebergs = new entities.Iceberg();
+  var mines = new entities.Mine();
 
 
 	var MainState = new Phaser.State();
@@ -58,6 +59,10 @@ var GameState = GameState || {};
       layer: components.underSea.layer(),
       shadowLayer : components.underSea.shadowLayer(),
     });
+
+    mines.init({
+      layer:components.underSea.layer()
+    });
     
     chalutier.init({
       x: this.world.width/2,
@@ -94,11 +99,11 @@ var GameState = GameState || {};
     components.underSea.layer().addChild( overlay );
 
 
-		var sushi = this.add.sprite(35, this.game.height - 35, 'sushi');
+		var sushi = this.add.sprite(this.game.width/2 - 25, 45, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
-  	sushi.scale.setTo(0.1, 0.1);
+  	sushi.scale.setTo(0.15, 0.15);
   	sushi.fixedToCamera = true;
-  	this.sushi = this.add.text(65, this.game.height - 47, '0', {fontSize: 14, fill:"#000000"});
+  	this.sushi = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
   	this.sushi.fixedToCamera = true;
 
   	var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -116,17 +121,13 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
-    
-    components.underSea.update();
-
-    this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
-    this.physics.arcade.collide(icebergs.group, icebergs.group);
     this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideMortel, null, chalutier);
     this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideMortel, null, chalutier);
-
-    this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
-    this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
+    this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
+    this.physics.arcade.collide(icebergs.group, icebergs.group);
     this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
+    this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
+    this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
     
     if ( this.timer1 < game.time.now - 5000 ){
       var x = chalutier.sprite.x - seaShepherd.sprite.x;
@@ -139,8 +140,11 @@ var GameState = GameState || {};
       this.timer1 = game.time.now  ;
     };
     if ( this.timer2 < game.time.now - 3000 ) {
-      for(var i=0; i<3; i++)
+      for(var i=0; i<Math.random()*3; i++)
         icebergs.add();
+      for(var i=0; i<Math.random()*3; i++)
+        mines.add();
+      
       this.timer2 = game.time.now;
     };
 
@@ -150,6 +154,8 @@ var GameState = GameState || {};
     dolphins.update();
     whales.update();
     icebergs.update();
+
+    components.underSea.update();
 	};
 
 	exposure.MainState = MainState;
