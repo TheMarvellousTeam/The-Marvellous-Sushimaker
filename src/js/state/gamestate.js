@@ -123,7 +123,7 @@ var GameState = GameState || {};
   	sushi.scale.setTo(0.15, 0.15);
   	sushi.fixedToCamera = true;
 
-  	this.sushiScore = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
+  	this.sushiScore = this.add.text(this.game.width/2 + 25, 50, '0', { fill:"#000000"});
   	this.sushiScore.fixedToCamera = true;
 
     this.cdFilet = this.time.now ;
