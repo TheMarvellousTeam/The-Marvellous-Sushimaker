@@ -17,9 +17,7 @@ var entities = entities || {};
 			( params.layer || game.world ).addChild( this.group );
 		},
 
-		add : function(){
-			var x = game.world.randomX;
-			var y = game.world.randomY;
+		add : function(x, y){
 			var iceberg = this.group.create(x, y, 'iceberg');
 			var scale = Math.random()/3+0.15;
 			iceberg.scale.setTo(scale, scale);
@@ -70,10 +68,7 @@ var entities = entities || {};
 			( params.layer || game.world ).addChild( this.group );
 		},
 
-		add : function(){
-			var x = game.world.randomX;
-			var y = game.world.randomY;
-
+		add : function(x, y){
 			var mine = this.group.create(x, y, 'mine');
 			mine.scale.setTo(0.2, 0.2);
 			mine.anchor.setTo(0.5, 0.5);

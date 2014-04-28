@@ -64,9 +64,17 @@ var GameState = GameState || {};
       filetLayer : components.underSea.layer(),
     });
 
+    do{
+      var randx = this.world.randomX ;
+      var randy = this.world.randomY ;
+    } while( x < chalutier.sprite.x + 512 
+          && x > chalutier.sprite.x - 512 
+          && y < chalutier.sprite.y + 384
+          && y > chalutier.sprite.Y - 384);
+
     seaShepherd. init({
-      x: this.world.randomX,
-      y: this.world.randomY,
+      x: randx,
+      y: randy,
       texture : 'sea_shepherd',
       scale : 0.3,
       shadowLayer : components.underSea.shadowLayer(),
@@ -138,10 +146,26 @@ var GameState = GameState || {};
     };
 
     if ( this.timer2 < game.time.now - 3000 ) {
-      for(var i=0; i<Math.random()*3; i++)
-        icebergs.add();
-      for(var i=0; i<Math.random()*3; i++)
-        mines.add();
+      for(var i=0; i<Math.random()*3; i++) {
+        do{
+          var randx = this.world.randomX ;
+          var randy = this.world.randomY ;
+        } while( x < chalutier.sprite.x + 512 
+              && x > chalutier.sprite.x - 512 
+              && y < chalutier.sprite.y + 384
+              && y > chalutier.sprite.Y - 384);
+        icebergs.add(randx, randy);
+      }
+      for(var i=0; i<Math.random()*3; i++) {
+        do{
+          var randx = this.world.randomX ;
+          var randy = this.world.randomY ;
+        } while( x < chalutier.sprite.x + 512 
+              && x > chalutier.sprite.x - 512 
+              && y < chalutier.sprite.y + 384
+              && y > chalutier.sprite.Y - 384);
+        mines.add(randx, randy);
+      }
 
       icebergs.move();
       this.timer2 = game.time.now;

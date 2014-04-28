@@ -33,13 +33,22 @@ var entities = entities || {};
 				var shadow = ( params.shadowLayer || this.group ).create( fish.x , fish.y , params.texture);
 				shadow.anchor.set( 0.5, 0.5);
 				shadow.scale.setTo( params.scale || 1 , params.scale || 1 );
+				shadow.alpha = 0 ;
 				shadow.angle = fish.angle;
 
 				fish.shadowFish = shadow ;
 
+
+				game.add.tween(shadow)
+						.to({alpha:1}, 1500, Phaser.Easing.Linear.None)
+						.start();
 				game.add.tween(fish)
-						.to({angle:fish.angle+Math.floor(Math.random()*360)}, 8000, Phaser.Easing.Linear.None)
-						.to({angle:fish.angle+Math.floor(Math.random()*360)}, 8000, Phaser.Easing.Linear.None)
+						.to({alpha:1}, 1500, Phaser.Easing.Linear.None)
+						.start();
+
+				game.add.tween(fish)
+						.to({angle:fish.angle+Math.floor(Math.random()*180)}, 8000, Phaser.Easing.Linear.None)
+						.to({angle:fish.angle+Math.floor(Math.random()*180)}, 8000, Phaser.Easing.Linear.None)
 						.loop()
 						.start();
 			}
