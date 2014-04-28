@@ -47,7 +47,7 @@ var bezier = {};
 		if( segment && ( s<-r || l+r<s ) )
 			return null;
 
-		return AB.dot( new Point( AM.y , -AM.x ) ) < r;
+		return Math.abs( AB.dot( new Point( AM.y , -AM.x ) ) ) < r;
 	}
 
 	Point.prototype.dot = function( A ){
@@ -78,7 +78,7 @@ var bezier = {};
 			var l = Math.sqrt( 
 				(this.pts[0].x-this.pts[1].x)*(this.pts[0].x-this.pts[1].x) + (this.pts[0].y-this.pts[1].y)*(this.pts[0].y-this.pts[1].y) ) + Math.sqrt( (this.pts[0].x-this.pts[2].x)*(this.pts[0].x-this.pts[2].x) + (this.pts[0].y-this.pts[2].y)*(this.pts[0].y-this.pts[2].y) );
 
-			var k = Math.ceil(l*0.05)+1;
+			var k = Math.ceil(l*0.02)+1;
 
 			var A = new Point(0,0),
 				B = new Point(this.pts[0].x,this.pts[0].y)
@@ -113,8 +113,8 @@ var bezier = {};
 			var A = this.getPoint( a );
 			var E = new Point();
 
-			var pas = Math.min( 0.1, 2/l );
-			var target = pas /10
+			var pas = Math.min( 0.1, 5/l );
+			var target = pas /8
 
 			var s = 0;
 			var t = 0;
@@ -209,7 +209,7 @@ var bezier = {};
 
 		collide:function(x,y,marge){
 
-			marge = marge || 50;
+			marge = marge || 10;
 
 			var bb = this.getBoundingBox();
 
@@ -372,10 +372,10 @@ var bezier = {};
 			return n;
 		},
 
-		collide:function( x , y ){
+		collide:function( x , y , marge ){
 			var collideInfo;
 			for( var i=this._atomic.length;i--;)
-				if( ( collideInfo = this._atomic[i].collide(x,y) ) ){
+				if( ( collideInfo = this._atomic[i].collide(x,y , marge) ) ){
 					collideInfo.t = this.tToGlobal( collideInfo.atomic_t , i );
 					return collideInfo
 				}

@@ -18,9 +18,15 @@ var components = components || {};
 
 		lastTangent : null,
 
-		init : function( ){
+		init : function( B , firstTangent ){
 
 			this.bc = new bezier.BezierCurve().init();
+
+			this.firstTangent = firstTangent || new Point( 1 , 0 );
+
+			this.lastTangent = this.firstTangent.clone();
+
+			this.ctrlPoints = [ B || new Point( 0 , 0 ) ];
 
 			return this;
 		},
@@ -33,7 +39,7 @@ var components = components || {};
 		acceptControlPoint : function( B , tangent , M ){
 
 			// not too close
-			if( B.squareDistance( M ) < 1000 )
+			if( B.squareDistance( M ) < 100 )
 				return null;
 
 			var BM = new Point( M.x - B.x , M.y - B.y );
@@ -41,10 +47,10 @@ var components = components || {};
 			var BMn = BM.clone().normalize();
 
 			//  not behind
-			if( BMn.dot( tangent ) < 0.2 )
+			if( BMn.dot( tangent ) < 0 )
 				return null;
 
-			var ballsR = 300;
+			var ballsR = 100;
 
 			var n = new Point( tangent.y , -tangent.x )
 
@@ -71,63 +77,21 @@ var components = components || {};
 			return M;
 		},
 
-		setControlPoints : function( firstTangent , pts ){
-
-			this.ctrlPoints = pts ;
-
-			this.firstTangent = firstTangent;
-
-			this.bc.dispose();
-
-			var tangent = new Point( this.firstTangent.x , this.firstTangent.y );
-
-			var atomic = [];
-
-			for( var i=1;i<pts.length;i++){
-
-				var A = pts[i-1].clone(),
-					B = pts[i].clone();
-
-				var E = new Point( (A.x+B.x)/2 , (A.y+B.y)/2 );
-
-				var N = tmp2.set( B.y-A.y , A.x-B.x );
-
-				var l1 = new Phaser.Line( A.x - tangent.x*900 , A.y - tangent.y*900 , A.x + tangent.x*900 , A.y + tangent.y*900 )
-				var l2 = new Phaser.Line( E.x - N.x*900 , E.y - N.y*900 , E.x + N.x*900 , E.y + N.y*900 )
-				
-				E = l1.intersects( l2 , false );
-
-				if( !E )
-					continue;
-
-				atomic.push( bezier.AtomicBezierCurve.Create( A.clone() , E.clone() , B.clone() )  )
-
-				tangent.set( B.x - E.x , B.y - E.y ).normalize();
-			}
-
-			this.bc._atomic = atomic;
-
-			this.lastTangent = tangent.normalize();
-
-			return this;
-		},
-
-		alterControlPoints : function( M , t ){
-
+		getLastCommon : function( t ){
 
 			// where is the last atomic curve common to the actual and the wanabe curve
 			var lastCommon = 0;
 			if( t > 1 )
-				lastCommon = this.bc._atomic.length;
+				lastCommon = this.bc._atomic.length-1;
 			else{
 
-				var l=this.rm.bc.getLength();
+				var l=this.bc.getLength();
 				var s=0;
-				for(  ; lastCommon < this.rm.bc._atomic.length ; lastCommon++ ){
+				for(  ; lastCommon < this.bc._atomic.length ; lastCommon++ ){
 					
-					var ll = this.rm.bc._atomic[ lastCommon ].getLength();
+					var ll = this.bc._atomic[ lastCommon ].getLength();
 
-					if( c.t*l < s+ll )
+					if( t*l < s+ll )
 						break
 
 					s += ll;
@@ -135,15 +99,30 @@ var components = components || {};
 				lastCommon--;
 			}
 
+			return lastCommon >= 0 ? this.bc._atomic[ lastCommon ] : lastCommon;
+		},
+
+		alterControlPoints : function( M , lastCommon ){
+
+
+			//lastCommon is a Atomic Object
+			var el = lastCommon == null ? this.bc._atomic[ this.bc._atomic.length-1 ] : lastCommon
+			
+			// find the index of this Object
+			if( el != -1 )
+
+				for( lastCommon = this.bc._atomic.length ; lastCommon -- && this.bc._atomic[ lastCommon ] != el ; );
+			
+
 			// compute the last tangent
 
-			var B = lastCommon >= 0 ? this.rm.bc._atomic[ lastCommon ].pts[2] : this.ctrlPoints[0];
+			var B = lastCommon >= 0 ? this.bc._atomic[ lastCommon ].pts[2] : this.ctrlPoints[0];
 
-			var tangent =  lastCommon >= 0 ? new Point( this.rm.bc._atomic[ lastCommon ].pts[1].x - B.x , this.rm.bc._atomic[ lastCommon ].pts[1].y - B.y ).normalize() : this.firstTangent;
+			var tangent =  lastCommon >= 0 ? new Point( B.x - this.bc._atomic[ lastCommon ].pts[1].x , B.y - this.bc._atomic[ lastCommon ].pts[1].y ).normalize() : this.firstTangent;
 
 
 			// accept the new point
-			if( !(M = acceptControlPoint( B, tangent, M ) ) )
+			if( !(M = this.acceptControlPoint( B, tangent, M ) ) )
 				// return the roadMap without modification
 				return this;
 
@@ -155,11 +134,10 @@ var components = components || {};
 
 			var N = new Point( B.y-M.y , M.x-B.x ).normalize();
 
-			if( tangent.dot( N ) < 0.1 )
-				return this;
+			var axis = new Point( N.y , -N.x );
 
 
-			if( tangent.dot( N ) < 0.5 ){
+			if( tangent.dot( axis ) < 0.5 ){
 				// case 1
 
 				var l = M.distance( B )
@@ -181,7 +159,7 @@ var components = components || {};
 
 			this.lastTangent = new Point( M.x-E.x , M.y-E.y ).normalize();
 
-			for( var i=lastCommon+1 ; i<this.bc._atomic.length; i++ ){
+			while( this.bc._atomic.length > lastCommon+1 ){
 				this.bc._atomic.splice( this.bc._atomic.length-1 , 1 )[0].dispose();
 				this.ctrlPoints.splice( this.ctrlPoints.length-1 , 1 );
 			}
@@ -204,12 +182,18 @@ var components = components || {};
 			}
 		},
 
-		collide : function( x , y ){
+		collide : function( x , y , marge ){
+
+			marge = marge || 50;
+
+			var collidInfo;
+			if( (collidInfo = this.bc.collide( x , y ))  )
+				return collidInfo;
 
 			var B = this.ctrlPoints[ this.ctrlPoints.length-1 ];
 			var ray = new Phaser.Line( B.x , B.y , B.x + this.lastTangent.x * 9000 , B.y + this.lastTangent.y * 9000 )
 
-			if( ray.intersectsCircle( x,y  , 50 , true ) )
+			if( ray.intersectsCircle( x,y  , marge , true ) )
 				return {
 					p : new Point(
 						B.x + this.lastTangent.x*10,
@@ -218,8 +202,7 @@ var components = components || {};
 					t : 1.2,
 				}
 
-
-			return this.bc.collide( x , y );
+			return null;
 		},
 
 		getPointAtFixedDistance : function( distance , from , segment ){
@@ -254,7 +237,10 @@ var components = components || {};
 					this.bc = this.bc.subCurve( t , 1 );
 
 					this.firstTangent = this.bc.getTangent( 0 ).normalize();
-
+					/*
+					while( this.ctrlPoints.length > this.bc._atomic.length+1 )
+						this.ctrlPoints.shift();
+					*/
 					this.ctrlPoints[0].x = this.bc._atomic[0].pts[0].x;
 					this.ctrlPoints[0].y = this.bc._atomic[0].pts[0].y;
 
@@ -289,13 +275,10 @@ var components = components || {};
 			game.stage.addChild( this._graphic );
 
 
-			this.rm = new RoadMap().init().setControlPoints( 
-				target.getDirection().clone() ,
-			[
-				target.getPosition().clone()
-			])
-
-			//this.rm.bc = this.rm.bc.subCurve( 0.2 , 1 )
+			this.rm = new RoadMap().init(
+				target.getPosition().clone() ,
+				target.getDirection().clone()
+			)
 			
 			this.drawPath( this.rm , game.camera );
 
@@ -343,10 +326,10 @@ var components = components || {};
 				return p;
 			}
 
-			var max_d = 1800;
+			var max_d = 1200;
 
-			var hash_l = 18,
-				hash_L = 18
+			var hash_l = 50,
+				hash_L = 38
 
 			var t=0;
 			var l=0;
@@ -369,13 +352,24 @@ var components = components || {};
 				toWorld( C );
 				toWorld( B );
 
-				this._graphic.lineStyle( 5 , 0x888888, 1-l/max_d );
+				this._graphic.lineStyle( 6 , 0xf24d1b, 1-l/max_d );
 				this._graphic.moveTo( A.x , A.y );
 				this._graphic.lineTo( B.x , B.y );
 
     		}
 
-    		if( !(debug = false) )
+    		var p = A;
+    		for( var k=0;k<c.ctrlPoints.length;k++ ){
+
+    			p.set( c.ctrlPoints[k].x , c.ctrlPoints[k].y )
+				p = toWorld( p );
+
+				this._graphic.beginFill( 0xf24d1b , 1);
+    			this._graphic.drawCircle( p.x , p.y , 10 );
+    			this._graphic.endFill();
+    		}
+
+    		if( !(debug = !false) )
     			return
 
     		var p = A;
@@ -413,34 +407,19 @@ var components = components || {};
 
 
     		}
-
-
-    		var ballsR = 300;
-
-			var n = new Point( c.lastTangent.y , -c.lastTangent.x )
-			var B = c.ctrlPoints[ c.ctrlPoints.length-1 ]
-			if( this._begining && this._begining.length )
-				B = this._begining[ this._begining.length-1 ]
-
-			var ballsCenter = new Point( B.x + n.x * ballsR , B.y + n.y * ballsR );
-
-			toWorld( ballsCenter );
-
-    		this._graphic.lineStyle(4, 0x00FF00, 1);
-    		this._graphic.drawCircle( ballsCenter.x , ballsCenter.y , 300 );
 		},
 
 		update:function(){
 
 			this.onMouseMove();
-
-			var p = this.rm.marching( 3 );
+			
+			var p = this.rm.marching( .2 );
 
 			var p = p.clone();
 
 			this.target.setPosition( p.x , p.y );
 			this.target.setDirection( this.rm.firstTangent.x , this.rm.firstTangent.y );
-
+			
 			this.drawPath( this.rm , game.camera );
 		},
 
@@ -452,16 +431,9 @@ var components = components || {};
 
 			var cursor = new Point( game.input.worldX , game.input.worldY ) 
 
-			//cursor = this.rm.acceptControlPoint( this._begining[ this._begining.length-1 ] , this.rm.lastTangent , cursor )
-
-			if( !cursor )
-				return;
-
-			this.rm = new RoadMap().init().setControlPoints( 
-				this.rm.firstTangent,
-
-				this._begining
-				.concat( cursor )
+			this.rm.alterControlPoints( 
+				cursor ,
+				this._lastCommon
 			) 
 
 			this.drawPath( this.rm , game.camera );
@@ -475,23 +447,8 @@ var components = components || {};
 			var c
 			if( (c=this.rm.collide( game.input.worldX , game.input.worldY ) ) ){
 				this.picked = c.p;
-
-				
-
-				this._begining = [ this.rm.ctrlPoints[0] ];
-
-				var l=this.rm.bc.getLength();
-				var s=0;
-				for(var k=0 ; k<this.rm.bc._atomic.length ; k++ ){
-					
-					var ll = this.rm.bc._atomic[k].getLength();
-
-					if( c.t*l < s+ll )
-						break
-
-					this._begining.push( this.rm.ctrlPoints[k+1] )
-					s += ll;
-				}
+				this._lastCommon = this.rm.getLastCommon( c.t );
+				//this._lastCommon = -1;
 			}
 		},
 	}
