@@ -162,15 +162,9 @@ var entities = entities || {};
 		game.state.start('boot');
 	};
 
-	G.prototype.collideIceberg = function(boat, iceberg) {
+	G.prototype.collideObstacle = function(boat, iceberg) {
 		dead.call(this);
 	};
-
-	G.prototype.collideMine = function(boat, mine) {
-		dead.call(this);
-	};
-
-
 
 
 

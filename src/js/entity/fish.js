@@ -40,7 +40,7 @@ var entities = entities || {};
 
 				fish.award = ( params.award || 0 ) + Math.floor(Math.random()*(params.award||0));
 
-				game.add.tween(shadow)
+				game.add.tween(fish.shadowFish)
 						.to({alpha:1}, 1500, Phaser.Easing.Linear.None)
 						.start();
 				game.add.tween(fish)
@@ -66,6 +66,12 @@ var entities = entities || {};
 			});
 			this.group.forEachDead(function(fish){
 				fish.reset(game.world.randomX, game.world.randomY, 1);
+				game.add.tween(fish.shadowFish)
+						.to({alpha:1}, 1500, Phaser.Easing.Linear.None)
+						.start();
+				game.add.tween(fish)
+						.to({alpha:1}, 1500, Phaser.Easing.Linear.None)
+						.start();
 			});
 		},
 
