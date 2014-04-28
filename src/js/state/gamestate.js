@@ -41,7 +41,7 @@ var GameState = GameState || {};
       award:1,
       texture: 'banc_poissons',
       scale: 0.1,
-      speed: 100,
+      speed: 75,
       layer: components.underSea.layer(),
       shadowLayer : components.underSea.shadowLayer(),
     });
@@ -51,7 +51,7 @@ var GameState = GameState || {};
       award:50,
       texture: 'baleine',
       scale:0.25,
-      speed: 200,
+      speed: 150,
       layer: components.underSea.layer(),
       shadowLayer : components.underSea.shadowLayer(),
     });
@@ -113,6 +113,10 @@ var GameState = GameState || {};
     
     components.underSea.layer().addChild( overlay );
 
+    var sushiTable = this.add.sprite( this.game.width/2 + 5, 80, 'sushiTable');
+    sushiTable.anchor.setTo(0.5, 0.5);
+    sushiTable.scale.setTo(0.6, 0.8);
+    sushiTable.fixedToCamera = true;
 
 		var sushi = this.add.sprite(this.game.width/2 - 25, 45, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
@@ -121,17 +125,6 @@ var GameState = GameState || {};
 
   	this.sushiScore = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
   	this.sushiScore.fixedToCamera = true;
-
-  	// var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-   //  var timer = this.time.now ;
-  	// filetControl.onDown.add(function() {
-   //    console.log("Coucou "+this.time.now);
-   //    if ( this.time.now > timer ) {
-   //      chalutier.actionFilet();
-   //      sushiScore.text = ''+chalutier.fishLoad;
-   //      timer = this.time.now + 3500 ;
-   //    }
-  	// }, this);
 
     this.cdFilet = this.time.now ;
     this.timer1 = this.time.now ;
@@ -143,21 +136,14 @@ var GameState = GameState || {};
     stats.end();
     stats.begin();
 
-
-
     this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
     this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideObstacle, null, chalutier);
-    // this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
     this.physics.arcade.collide([icebergs.group, seaShepherd.sprite], icebergs.group);
 
     if( !chalutier.filetUp ){
       this.physics.arcade.overlap(chalutier.filetSprite, mines.group, chalutier.collideObstacle, null, chalutier);
       this.physics.arcade.overlap(chalutier.filetSprite, [whales.group, dolphins.group, fishes.group], chalutier.collideAnimal, null, chalutier);
-      // this.physics.arcade.overlap(chalutier.filetSprite, whales.group, chalutier.collideAnimal, null, chalutier);
-      // this.physics.arcade.overlap(chalutier.filetSprite, dolphins.group, chalutier.collideAnimal, null, chalutier);
-      // this.physics.arcade.overlap(chalutier.filetSprite, fishes.group, chalutier.collideAnimal, null, chalutier);
     }
-    
 
     if ( this.timer1 < game.time.now - 7000 ){
       var x = chalutier.filetSprite.x - seaShepherd.sprite.x;

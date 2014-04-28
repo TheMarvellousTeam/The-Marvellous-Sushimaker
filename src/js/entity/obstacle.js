@@ -23,7 +23,7 @@ var entities = entities || {};
 			iceberg.scale.setTo(scale, scale);
 			iceberg.anchor.setTo(0.5, 0.5);
 			iceberg.angle = Math.floor(360 * Math.random());
-			iceberg.speed = Math.floor(25 + Math.random()*100);
+			iceberg.speed = Math.floor(25 + Math.random()*50);
 
 			var shadowSprite = new Phaser.Sprite( game , x , y , 'iceberg' );
 			shadowSprite.anchor.setTo(0.5, 0.5);
