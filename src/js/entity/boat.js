@@ -131,7 +131,6 @@ var entities = entities || {};
 			up.to({x: 0, y: 0}, 3500, Phaser.Easing.Linear.None);
 			up.onComplete.addOnce(filetJustUp, this);
 			up.start();
-       		
     	}
 	};
 
