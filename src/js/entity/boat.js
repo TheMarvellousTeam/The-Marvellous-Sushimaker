@@ -34,7 +34,7 @@ var entities = entities || {};
 			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
 
 			( params.layer || game.world ).addChild( this.sprite );
-			
+
 
 			this.shadowSprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , params.texture );
 			this.shadowSprite.anchor.setTo(0.5, 0.5);
@@ -90,11 +90,12 @@ var entities = entities || {};
 	for (var i in E.prototype)
 		G.prototype[i] = E.prototype[i];
 
-	G.prototype.filetUp = true;
-
-	G.prototype.filetLoad =0;
-
-	G.prototype.fishLoad = 0 ;
+	G.prototype.init = function(params) {
+		E.prototype.init.call(this, params );
+		this.filetUp = true;
+		this.filetLoad = 0;
+		this.fishLoad = 0 ;
+	};
 
 	G.prototype.actionFilet = function() {
 		if (this.filetUp){
