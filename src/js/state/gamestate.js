@@ -28,15 +28,6 @@ var GameState = GameState || {};
 
     this.stage.backgroundColor='#33be9f';
 
-    /*
-    var sea = this.add.tileSprite(0,0, 128 , 128 , 'sea');
-    sea.width = 5000;
-    sea.height = 5000;
-
-    components.underSea.create();
-  
-    */
-
     components.underSea.create();
 
     this.world.addChild( components.underSea.layer() );
@@ -147,10 +138,10 @@ var GameState = GameState || {};
     this.physics.arcade.collide(icebergs.group, icebergs.group);
 
     if( !chalutier.filetUp ){
-      this.physics.arcade.overlap(chalutier.sprite, mines.group, chalutier.collideMine, null, chalutier);
-      this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
-      this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
-      this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, mines.group, chalutier.collideMine, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, whales.group, chalutier.collideWhale, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, fishes.group, chalutier.collideFish, null, chalutier);
     }
     
     if ( this.timer1 < game.time.now - 7000 ){

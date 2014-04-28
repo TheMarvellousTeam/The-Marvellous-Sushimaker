@@ -6,10 +6,9 @@ var components = components || {};
 
 	var preload = function(){
 		
-		game.load.image('displacement', 'src/assets/displacement_map.jpg');
-		game.load.image('sea_background', 'src/assets/sand2.jpg');
+		//game.load.image('displacement', 'src/assets/displacement_map.jpg');
+		//game.load.image('sea_background', 'src/assets/sand2.jpg');
 		game.load.image('sea_ecume', 'src/assets/zeldaWaves.png');
-		
 
 		var displacementTexture = PIXI.Texture.fromImage("src/assets/displacement_map.jpg");
 		displacementFilter = new PIXI.DisplacementFilter(displacementTexture);
@@ -19,16 +18,11 @@ var components = components || {};
 		
 		group = new Phaser.Group( game );
 
-		
-
-		
-
-
 		// add background rockies
-		bg = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_background');
-		bg.z = 0;
-		bg.width = 5000;
-		bg.height = 5000;
+		// bg = new Phaser.TileSprite( game , 0, 0 , 256 , 256 , 'sea_background');
+		// bg.z = 0;
+		// bg.width = 5000;
+		// bg.height = 5000;
 
 		//group.addChild( bg );
 
