@@ -16,6 +16,11 @@ var GameState = GameState || {};
   	this.load.image('sushi', 'src/assets/sushi.png');
     this.load.image('sea', 'src/assets/sea.png');
     this.load.image('particle', 'src/assets/particle2.png');
+    this.load.image('filet0', 'src/assets/filet0.png');
+    this.load.image('filet1', 'src/assets/filet1.png');
+    this.load.image('filet2', 'src/assets/filet2.png');
+    this.load.image('filet3', 'src/assets/filet3.png');
+    this.load.image('filet4', 'src/assets/filet4.png');
 
     components.underSea.preload();
 

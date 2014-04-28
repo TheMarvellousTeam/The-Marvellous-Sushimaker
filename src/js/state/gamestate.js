@@ -70,6 +70,7 @@ var GameState = GameState || {};
       texture : 'chalutier_up',
       scale : 0.3,
       shadowLayer : components.underSea.shadowLayer(),
+      filetLayer : components.underSea.layer(),
     });
 
     seaShepherd. init({
@@ -127,14 +128,16 @@ var GameState = GameState || {};
     this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
     this.physics.arcade.collide(icebergs.group, icebergs.group);
 
-    this.physics.arcade.overlap(chalutier.sprite, mines.group, chalutier.collideMine, null, chalutier);
-    this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
-    this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
-    this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
+    if( !chalutier.filetUp ){
+      this.physics.arcade.overlap(chalutier.sprite, mines.group, chalutier.collideMine, null, chalutier);
+      this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
+      this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
+      this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
+    }
     
     if ( this.timer1 < game.time.now - 7000 ){
-      var x = chalutier.sprite.x - seaShepherd.sprite.x;
-      var y = chalutier.sprite.y - seaShepherd.sprite.y;
+      var x = chalutier.filetSprite.x - seaShepherd.sprite.x;
+      var y = chalutier.filetSprite.y - seaShepherd.sprite.y;
 
       game.add.tween(seaShepherd.sprite)
               .to({angle:(Math.atan2(y, x)*180)/Math.PI}, 4500, Phaser.Easing.Linear.None)

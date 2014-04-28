@@ -91,19 +91,44 @@ var entities = entities || {};
 		G.prototype[i] = E.prototype[i];
 
 	G.prototype.init = function(params) {
-		E.prototype.init.call(this, params );
+		E.prototype.init.call(this, params);
 		this.filetUp = true;
 		this.filetLoad = 0;
 		this.fishLoad = 0 ;
+
+		this.filetSprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , 'filet0' );
+		this.filetSprite.anchor.setTo(0.5, 0.5);
+		this.filetSprite.scale.setTo( 0.5 , 0.5 );
+		this.filetSprite.enableBody = true;
+		this.filetSprite.kill();
+
+		( params.filetLayer || params.layer || game.world ).addChild( this.filetSprite );
+	};
+
+	G.prototype.setPosition = function(x, y){
+		E.prototype.setPosition.call(this, x, y);
+		var dir = this.getDirection();
+		this.filetSprite.x = x - dir.x*200;
+		this.filetSprite.y = y - dir.y*200;
+	};
+
+	G.prototype.setDirection = function(x, y){
+		E.prototype.setDirection.call(this, x, y);
+		this.filetSprite.angle = Math.atan2( y , x )/Math.PI*180;
 	};
 
 	G.prototype.actionFilet = function() {
 		if (this.filetUp){
 			this.sprite.loadTexture('chalutier_down');
+			// game.tween(this.filetSprite)
+			// 	.to({scale:0.5}, 2000, Phaser.Easing.Linear.None)
+			// 	.start();
+			this.filetSprite.revive();
 		} else {
        		this.fishLoad += this.filetLoad;
        		this.filetLoad = 0 ;
     		this.sprite.loadTexture('chalutier_up');
+    		this.filetSprite.kill();
     	}
 		this.filetUp = !this.filetUp;
 	};
