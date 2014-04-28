@@ -4,7 +4,8 @@ var GameState = GameState || {};
 
 	var BootState = new Phaser.State();
 	BootState.preload = function() {
-  	this.load.image('logo', 'src/assets/logo.png');
+    this.load.image('logo', 'src/assets/logo.png');
+  	this.load.image('back', 'src/assets/back.png');
     this.load.image('baleine', 'src/assets/baleine.png');
     this.load.image('banc_poissons', 'src/assets/banc_poissons.png');
     this.load.image('chalutier_up', 'src/assets/chalutier_up.png');
@@ -21,6 +22,7 @@ var GameState = GameState || {};
     this.load.image('filet2', 'src/assets/filet2.png');
     this.load.image('filet3', 'src/assets/filet3.png');
     this.load.image('filet4', 'src/assets/filet4.png');
+    this.load.image('wasted', 'src/assets/wasted.png');
     components.underSea.preload();
 	};
 	BootState.create = function() {

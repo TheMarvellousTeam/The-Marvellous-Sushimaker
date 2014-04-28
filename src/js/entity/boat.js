@@ -145,6 +145,7 @@ var entities = entities || {};
 	}
 
 	G.prototype.collideAnimal = function(boat, animal) {
+		return components.deathEffect.start();
 		updateFilet.call(this, animal.award);
 		animal.kill();
 	};
@@ -155,6 +156,9 @@ var entities = entities || {};
 	};
 
 	var dead = function dead() {
+		
+		return components.deathEffect.start();
+
 		this.filetUp = true;
 		this.filetLoad = 0;
 		this.fishLoad = 0 ;
