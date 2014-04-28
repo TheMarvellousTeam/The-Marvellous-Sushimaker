@@ -8,3 +8,4 @@ function preload() {
 function create() {
   game.state.start('boot');
 };
+

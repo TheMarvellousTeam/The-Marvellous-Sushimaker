@@ -5,8 +5,6 @@ var components = components || {};
 	var C = function PathEditable(){};
 	C.prototype={
 
-		_graphic : null,
-
 		name : "ecumeEmiter",
 
 		init:function( target , layer ){

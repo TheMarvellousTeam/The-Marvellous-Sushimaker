@@ -11,8 +11,20 @@ var GameState = GameState || {};
   var mines = new entities.Mine();
 
 
+  var stats = new Stats();
+
+
 	var MainState = new Phaser.State();
 	MainState.create = function() {
+
+
+    stats.setMode( 1 );
+    document.body.appendChild( stats.domElement );
+    stats.domElement.style.position = "absolute"
+    stats.domElement.style.top = "10px";
+    stats.domElement.style.left = "10px";
+
+    stats.begin();
 
     this.stage.backgroundColor='#33be9f';
 
@@ -125,6 +137,12 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
+
+    stats.end();
+    stats.begin();
+
+
+
     this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
     this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideIceberg, null, chalutier);
     this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
