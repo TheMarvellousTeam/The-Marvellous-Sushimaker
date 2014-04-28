@@ -99,22 +99,28 @@ var components = components || {};
 				lastCommon--;
 			}
 
-			return lastCommon >= 0 ? this.bc._atomic[ lastCommon ] : lastCommon;
+			this._lastCommon = lastCommon;
+
+			return lastCommon ;
+			//return lastCommon >= 0 ? this.bc._atomic[ lastCommon ] : lastCommon;
 		},
 
 		alterControlPoints : function( M , lastCommon ){
 
 
 			//lastCommon is a Atomic Object
+			/*
 			var el = lastCommon == null ? this.bc._atomic[ this.bc._atomic.length-1 ] : lastCommon
 			
 			// find the index of this Object
 			if( el != -1 )
 
 				for( lastCommon = this.bc._atomic.length ; lastCommon -- && this.bc._atomic[ lastCommon ] != el ; );
-			
+			*/
 
 			// compute the last tangent
+
+			lastCommon = this._lastCommon;
 
 			var B = lastCommon >= 0 ? this.bc._atomic[ lastCommon ].pts[2] : this.ctrlPoints[0];
 
@@ -237,10 +243,12 @@ var components = components || {};
 					this.bc = this.bc.subCurve( t , 1 );
 
 					this.firstTangent = this.bc.getTangent( 0 ).normalize();
-					/*
-					while( this.ctrlPoints.length > this.bc._atomic.length+1 )
+					
+					while( this.ctrlPoints.length > this.bc._atomic.length+1 ){
 						this.ctrlPoints.shift();
-					*/
+						this._lastCommon --;
+					}
+					
 					this.ctrlPoints[0].x = this.bc._atomic[0].pts[0].x;
 					this.ctrlPoints[0].y = this.bc._atomic[0].pts[0].y;
 
@@ -326,10 +334,10 @@ var components = components || {};
 				return p;
 			}
 
-			var max_d = 1200;
+			var max_d = 1800;
 
-			var hash_l = 50,
-				hash_L = 38
+			var hash_l = 40,
+				hash_L = 60
 
 			var t=0;
 			var l=0;
@@ -369,7 +377,7 @@ var components = components || {};
     			this._graphic.endFill();
     		}
 
-    		if( !(debug = !false) )
+    		if( !(debug = false) )
     			return
 
     		var p = A;
@@ -413,7 +421,7 @@ var components = components || {};
 
 			this.onMouseMove();
 			
-			var p = this.rm.marching( .2 );
+			var p = this.rm.marching( 3 );
 
 			var p = p.clone();
 
@@ -437,7 +445,6 @@ var components = components || {};
 			) 
 
 			this.drawPath( this.rm , game.camera );
-
 		},
 
 		onMouseDown:function( ){
@@ -445,7 +452,7 @@ var components = components || {};
 			this.picked = null;
 
 			var c
-			if( (c=this.rm.collide( game.input.worldX , game.input.worldY ) ) ){
+			if( (c=this.rm.collide( game.input.worldX , game.input.worldY , 50 ) ) ){
 				this.picked = c.p;
 				this._lastCommon = this.rm.getLastCommon( c.t );
 				//this._lastCommon = -1;
