@@ -119,19 +119,21 @@ var GameState = GameState || {};
   	sushi.scale.setTo(0.15, 0.15);
   	sushi.fixedToCamera = true;
 
-  	var sushiScore = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
-  	sushiScore.fixedToCamera = true;
+  	this.sushiScore = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
+  	this.sushiScore.fixedToCamera = true;
 
-  	var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    var timer = this.time.now ;
-  	filetControl.onDown.add(function() {
-      if ( this.time.now > timer ) {
-        chalutier.actionFilet();
-        sushiScore.text = ''+chalutier.fishLoad;
-        timer = this.time.now + 3500 ;
-      }
-  	}, this);
+  	// var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+   //  var timer = this.time.now ;
+  	// filetControl.onDown.add(function() {
+   //    console.log("Coucou "+this.time.now);
+   //    if ( this.time.now > timer ) {
+   //      chalutier.actionFilet();
+   //      sushiScore.text = ''+chalutier.fishLoad;
+   //      timer = this.time.now + 3500 ;
+   //    }
+  	// }, this);
 
+    this.cdFilet = this.time.now ;
     this.timer1 = this.time.now ;
     this.timer2 = this.time.now ;
 	};
@@ -156,6 +158,7 @@ var GameState = GameState || {};
       // this.physics.arcade.overlap(chalutier.filetSprite, fishes.group, chalutier.collideAnimal, null, chalutier);
     }
     
+
     if ( this.timer1 < game.time.now - 7000 ){
       var x = chalutier.filetSprite.x - seaShepherd.sprite.x;
       var y = chalutier.filetSprite.y - seaShepherd.sprite.y;
@@ -166,6 +169,12 @@ var GameState = GameState || {};
 
       this.timer1 = game.time.now  ;
     };
+
+    if ( game.time.now > this.cdFilet && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ) {
+      chalutier.actionFilet();
+      this.sushiScore.text = ''+chalutier.fishLoad;
+      this.cdFilet = game.time.now + 3500 ;
+    }
 
     if ( this.timer2 < game.time.now - 3000 ) {
       for(var i=0; i<1+Math.random()*3; i++) {
