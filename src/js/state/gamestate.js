@@ -208,6 +208,15 @@ var GameState = GameState || {};
     components.underSea.update();
 	};
 
+  MainState.shutdown = function(){
+    if( chalutier.shutdown )chalutier.shutdown(); 
+    /*
+    fishes.shutdown();
+    dolphins.shutdown();
+    whales.shutdown();
+    icebergs.shutdown();*/
+  }
+
 	exposure.MainState = MainState;
 
 })(GameState);

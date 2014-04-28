@@ -163,7 +163,6 @@ var entities = entities || {};
 	}
 
 	G.prototype.collideAnimal = function(boat, animal) {
-		return components.deathEffect.start();
 		updateFilet.call(this, animal.award);
 		animal.kill();
 	};
@@ -175,6 +174,7 @@ var entities = entities || {};
 
 	var dead = function dead() {
 		
+		if( this.shutdown ) this.shutdown();
 		return components.deathEffect.start();
 
 		this.filetUp = true;
