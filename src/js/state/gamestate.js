@@ -144,7 +144,6 @@ var GameState = GameState || {};
       this.timer2 = game.time.now;
     };
 
-
     seaShepherd.update();
     chalutier.update(); 
     fishes.update();
