@@ -130,6 +130,8 @@ var entities = entities || {};
 	};
 
 	G.prototype.collideMortel = function(boat, seaShepherd) {
+		this.filetUp = true;
+		this.filetLoad = 0;
 		game.state.restart('game');
 		game.state.start('boot');
 	};
