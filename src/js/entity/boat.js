@@ -129,33 +129,38 @@ var entities = entities || {};
        		this.filetLoad = 0 ;
     		this.sprite.loadTexture('chalutier_up');
     		this.filetSprite.kill();
+    		this.filetSprite.loadTexture('filet0');
     	}
 		this.filetUp = !this.filetUp;
 	};
 
 	G.prototype.collideFish = function(boat, fish) {
-		if( !this.filetUp ){
-			this.filetLoad += 1;
-			fish.kill();
+		this.filetLoad += 1;
+		if( this.filetLoad >= 75 ){
+			this.filetSprite.loadTexture('filet4');
+		} else if ( this.filetLoad >= 50 ) {
+			this.filetSprite.loadTexture('filet3');
+		} else if ( this.filetLoad >= 25 ) {
+			this.filetSprite.loadTexture('filet2');
+		} else if (this.filetLoad >= 10 ) {
+			this.filetSprite.loadTexture('filet1');
 		}
+		fish.kill();
 	};
 
 	G.prototype.collideDolphin = function(boat, dolphin){
-		if( !this.filetUp ){
-			this.filetLoad += 10;
-			dolphin.kill();
-		}
+		this.filetLoad += 10;
+		dolphin.kill();
 	};
 
 	G.prototype.collideWhale = function(boat, whale){
-		if( !this.filetUp ){
-			this.filetLoad += 50;
-			whale.kill();
-		}
+		this.filetLoad += 50;
+		whale.kill();
 	};
 
 	G.prototype.collideSeaShepherd = function(boat, seaShepherd) {
 		this.filetLoad = 0;
+		this.filetSprite.loadTexture('filet0');
 	};
 
 	G.prototype.collideIceberg = function(boat, iceberg) {
@@ -163,9 +168,7 @@ var entities = entities || {};
 	};
 
 	G.prototype.collideMine = function(boat, mine) {
-		if( !this.filetUp ){
-			dead();
-		}
+		dead();
 	};
 
 	var dead = function dead() {
@@ -179,9 +182,9 @@ var entities = entities || {};
 	var F = function SeaShepherd() { };
 	for (var i in E.prototype)
 		F.prototype =  E.prototype;
-	F.prototype.update = function() {
+	F.prototype.update = function(speed) {
 		this.shadowSprite.angle = this.sprite.angle ;
-		game.physics.arcade.velocityFromAngle(this.sprite.angle, 50, this.sprite.body.velocity);
+		game.physics.arcade.velocityFromAngle(this.sprite.angle, speed, this.sprite.body.velocity);
 		this.shadowSprite.x=this.sprite.x + 20;
 		this.shadowSprite.y=this.sprite.y + 35;
 	};

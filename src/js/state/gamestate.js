@@ -156,7 +156,7 @@ var GameState = GameState || {};
       this.timer2 = game.time.now;
     };
 
-    seaShepherd.update();
+    seaShepherd.update(chalutier.filetLoad*2 + chalutier.fishLoad/2);
     chalutier.update(); 
     fishes.update();
     dolphins.update();
