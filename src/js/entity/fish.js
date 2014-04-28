@@ -38,7 +38,7 @@ var entities = entities || {};
 
 				fish.shadowFish = shadow ;
 
-				fish.award = ( params.award || 0 ) + Math.floor(Math.random()*(params.award||0));
+				fish.award = ( params.award || 0 ) + Math.floor(Math.random()*(params.award||0)/2);
 
 				game.add.tween(fish.shadowFish)
 						.to({alpha:1}, 1500, Phaser.Easing.Linear.None)

@@ -98,7 +98,7 @@ var entities = entities || {};
 
 		this.filetSprite = new Phaser.Sprite( game , params.x - 200 || 0 , params.y || 0 , 'filet0' );
 		this.filetSprite.anchor.setTo(0.5, 0.5);
-		this.filetSprite.scale.setTo( 0.5 , 0.5 );
+		this.filetSprite.scale.setTo( 0 , 0 );
 		this.filetSprite.kill();
 		game.physics.enable(this.filetSprite, Phaser.Physics.ARCADE);
 
@@ -121,14 +121,32 @@ var entities = entities || {};
 		if (this.filetUp){
 			this.sprite.loadTexture('chalutier_down');
 			this.filetSprite.revive();
+
+			var down = game.add.tween(this.filetSprite.scale);
+			down.to({x: 0.5, y: 0.5}, 3500, Phaser.Easing.Linear.None);
+			down.onComplete.addOnce(filetJustDown, this);
+			down.start();
 		} else {
-       		this.fishLoad += this.filetLoad;
-       		this.filetLoad = 0 ;
-    		this.sprite.loadTexture('chalutier_up');
-    		this.filetSprite.kill();
-    		this.filetSprite.loadTexture('filet0');
+			var up = game.add.tween(this.filetSprite.scale);
+			up.to({x: 0, y: 0}, 3500, Phaser.Easing.Linear.None);
+			up.onComplete.addOnce(filetJustUp, this);
+			up.start();
+       		
     	}
-		this.filetUp = !this.filetUp;
+	};
+
+	var filetJustUp = function filetJustUp() {
+		this.fishLoad += this.filetLoad;
+       	this.filetLoad = 0 ;
+    	this.sprite.loadTexture('chalutier_up');
+    	this.filetSprite.kill();
+    	this.filetSprite.scale.setTo(0,0);
+    	this.filetSprite.loadTexture('filet0');
+    	this.filetUp = true;
+	};
+
+	var filetJustDown = function filetJustDown() {
+		this.filetUp = false ;
 	};
 
 	var updateFilet = function updateFilet(load){
@@ -162,8 +180,7 @@ var entities = entities || {};
 		this.filetUp = true;
 		this.filetLoad = 0;
 		this.fishLoad = 0 ;
-		game.state.restart('game');
-		game.state.start('boot');
+		game.state.start('end');
 	};
 
 	G.prototype.collideObstacle = function(boat, iceberg) {
