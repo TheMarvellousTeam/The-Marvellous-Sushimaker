@@ -131,7 +131,7 @@ var entities = entities || {};
 		this.filetUp = !this.filetUp;
 	};
 
-	G.prototype.updateFilet = function(load){
+	var updateFilet = function updateFilet(load){
 		this.filetLoad += load ;
 		if( this.filetLoad >= 75 ){
 			this.filetSprite.loadTexture('filet4');
@@ -144,63 +144,13 @@ var entities = entities || {};
 		}
 	}
 
-	G.prototype.collideFish = function(boat, fish) {
-		// this.filetLoad += 1 + Math.floor(Math.random()*5);
-		// if( this.filetLoad >= 75 ){
-		// 	this.filetSprite.loadTexture('filet4');
-		// } else if ( this.filetLoad >= 50 ) {
-		// 	this.filetSprite.loadTexture('filet3');
-		// } else if ( this.filetLoad >= 25 ) {
-		// 	this.filetSprite.loadTexture('filet2');
-		// } else if (this.filetLoad >= 10 ) {
-		// 	this.filetSprite.loadTexture('filet1');
-		// }
-		this.updateFilet(1 + Math.floor(Math.random()*3))
-		fish.kill();
-	};
-
-	G.prototype.collideDolphin = function(boat, dolphin){
-		// this.filetLoad += 10 + Math.floor(Math.random()*5);
-		// if( this.filetLoad >= 75 ){
-		// 	this.filetSprite.loadTexture('filet4');
-		// } else if ( this.filetLoad >= 50 ) {
-		// 	this.filetSprite.loadTexture('filet3');
-		// } else if ( this.filetLoad >= 25 ) {
-		// 	this.filetSprite.loadTexture('filet2');
-		// } else if (this.filetLoad >= 10 ) {
-		// 	this.filetSprite.loadTexture('filet1');
-		// }
-		this.updateFilet(10 + Math.floor(Math.random()*5));
-		dolphin.kill();
-	};
-
-	G.prototype.collideWhale = function(boat, whale){
-		// this.filetLoad += 50 + Math.floor(Math.random()*25);
-		// if( this.filetLoad >= 75 ){
-		// 	this.filetSprite.loadTexture('filet4');
-		// } else if ( this.filetLoad >= 50 ) {
-		// 	this.filetSprite.loadTexture('filet3');
-		// } else if ( this.filetLoad >= 25 ) {
-		// 	this.filetSprite.loadTexture('filet2');
-		// } else if (this.filetLoad >= 10 ) {
-		// 	this.filetSprite.loadTexture('filet1');
-		// }
-		this.updateFilet(50 + Math.floor(Math.random()*25));
-		whale.kill();
+	G.prototype.collideAnimal = function(boat, animal) {
+		updateFilet.call(this, animal.award);
+		animal.kill();
 	};
 
 	G.prototype.collideSeaShepherd = function(boat, seaShepherd) {
-		// this.filetLoad -= 25 + Math.floor(Math.random()*15);
-		// if( this.filetLoad >= 75 ){
-		// 	this.filetSprite.loadTexture('filet4');
-		// } else if ( this.filetLoad >= 50 ) {
-		// 	this.filetSprite.loadTexture('filet3');
-		// } else if ( this.filetLoad >= 25 ) {
-		// 	this.filetSprite.loadTexture('filet2');
-		// } else if (this.filetLoad >= 10 ) {
-		// 	this.filetSprite.loadTexture('filet1');
-		// }
-		this.updateFilet(-25 - Math.floor(Math.random()*15));
+		updateFilet.call(this,-25 - Math.floor(Math.random()*15));
 		this.filetSprite.loadTexture('filet0');
 	};
 
@@ -213,11 +163,11 @@ var entities = entities || {};
 	};
 
 	G.prototype.collideIceberg = function(boat, iceberg) {
-		dead();
+		dead.call(this);
 	};
 
 	G.prototype.collideMine = function(boat, mine) {
-		dead();
+		dead.call(this);
 	};
 
 

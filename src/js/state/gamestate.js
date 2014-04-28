@@ -25,7 +25,8 @@ var GameState = GameState || {};
 
     
     fishes.init({
-      count: 50,
+      count: 75,
+      award:1,
       texture: 'banc_poissons',
       scale: 0.1,
       speed: 100,
@@ -35,6 +36,7 @@ var GameState = GameState || {};
 
     whales.init({
       count: 5,
+      award:50,
       texture: 'baleine',
       scale:0.25,
       speed: 200,
@@ -44,6 +46,7 @@ var GameState = GameState || {};
 
     dolphins.init({
       count: 10,
+      award:10,
       texture: 'dauphin',
       scale:0.1,
       speed: 300,
@@ -67,10 +70,10 @@ var GameState = GameState || {};
     do{
       var randx = this.world.randomX ;
       var randy = this.world.randomY ;
-    } while( x < chalutier.sprite.x + 512 
-          && x > chalutier.sprite.x - 512 
-          && y < chalutier.sprite.y + 384
-          && y > chalutier.sprite.Y - 384);
+    } while( randx > chalutier.sprite.x - 800 
+          && randx < chalutier.sprite.x + 800 
+          && randy > chalutier.sprite.y - 800
+          && randy < chalutier.sprite.y + 800);
 
     seaShepherd. init({
       x: randx,
@@ -129,9 +132,10 @@ var GameState = GameState || {};
 
     if( !chalutier.filetUp ){
       this.physics.arcade.overlap(chalutier.filetSprite, mines.group, chalutier.collideMine, null, chalutier);
-      this.physics.arcade.overlap(chalutier.filetSprite, whales.group, chalutier.collideWhale, null, chalutier);
-      this.physics.arcade.overlap(chalutier.filetSprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
-      this.physics.arcade.overlap(chalutier.filetSprite, fishes.group, chalutier.collideFish, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, [whales.group, dolphins.group, fishes.group], chalutier.collideAnimal, null, chalutier);
+      // this.physics.arcade.overlap(chalutier.filetSprite, whales.group, chalutier.collideAnimal, null, chalutier);
+      // this.physics.arcade.overlap(chalutier.filetSprite, dolphins.group, chalutier.collideAnimal, null, chalutier);
+      // this.physics.arcade.overlap(chalutier.filetSprite, fishes.group, chalutier.collideAnimal, null, chalutier);
     }
     
     if ( this.timer1 < game.time.now - 7000 ){
@@ -146,24 +150,24 @@ var GameState = GameState || {};
     };
 
     if ( this.timer2 < game.time.now - 3000 ) {
-      for(var i=0; i<Math.random()*3; i++) {
+      for(var i=0; i<1+Math.random()*3; i++) {
         do{
           var randx = this.world.randomX ;
           var randy = this.world.randomY ;
-        } while( x < chalutier.sprite.x + 512 
-              && x > chalutier.sprite.x - 512 
-              && y < chalutier.sprite.y + 384
-              && y > chalutier.sprite.Y - 384);
+        } while( randx > chalutier.sprite.x - 800 
+              && randx < chalutier.sprite.x + 800 
+              && randy > chalutier.sprite.y - 800
+              && randy < chalutier.sprite.y + 800);
         icebergs.add(randx, randy);
       }
-      for(var i=0; i<Math.random()*3; i++) {
+      for(var i=0; i<1+Math.random()*3; i++) {
         do{
           var randx = this.world.randomX ;
           var randy = this.world.randomY ;
-        } while( x < chalutier.sprite.x + 512 
-              && x > chalutier.sprite.x - 512 
-              && y < chalutier.sprite.y + 384
-              && y > chalutier.sprite.Y - 384);
+        } while( randx > chalutier.sprite.x - 800 
+              && randx < chalutier.sprite.x + 800 
+              && randy > chalutier.sprite.y - 800
+              && randy < chalutier.sprite.y + 800);
         mines.add(randx, randy);
       }
 
@@ -171,7 +175,7 @@ var GameState = GameState || {};
       this.timer2 = game.time.now;
     };
 
-    seaShepherd.update(chalutier.filetLoad*2 + chalutier.fishLoad/2);
+    seaShepherd.update(1 + chalutier.filetLoad*2 + Math.floor(chalutier.fishLoad/2));
     chalutier.update(); 
     fishes.update();
     dolphins.update();
