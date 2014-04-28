@@ -111,7 +111,7 @@ var GameState = GameState || {};
     var timer = this.time.now ;
   	filetControl.onDown.add(function() {
       if ( this.time.now > timer ) {
-        var load = chalutier.actionFilet();
+        chalutier.actionFilet();
         sushiScore.text = ''+chalutier.fishLoad;
         timer = this.time.now + 3500 ;
       }
@@ -124,9 +124,10 @@ var GameState = GameState || {};
 	MainState.update = function() {
     this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
     this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideIceberg, null, chalutier);
-    this.physics.arcade.collide(chalutier.sprite, mines.group, chalutier.collideMine, null, chalutier);
     this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
     this.physics.arcade.collide(icebergs.group, icebergs.group);
+
+    this.physics.arcade.overlap(chalutier.sprite, mines.group, chalutier.collideMine, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
@@ -141,6 +142,7 @@ var GameState = GameState || {};
 
       this.timer1 = game.time.now  ;
     };
+
     if ( this.timer2 < game.time.now - 3000 ) {
       for(var i=0; i<Math.random()*3; i++)
         icebergs.add();

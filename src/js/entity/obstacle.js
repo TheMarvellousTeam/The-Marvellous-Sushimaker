@@ -18,11 +18,22 @@ var entities = entities || {};
 		},
 
 		add : function(){
-			var iceberg = this.group.create(game.world.randomX, game.world.randomY, 'iceberg');
+			var x = game.world.randomX;
+			var y = game.world.randomY;
+			var iceberg = this.group.create(x, y, 'iceberg');
 			var scale = Math.random()/3+0.15;
 			iceberg.scale.setTo(scale, scale);
+			iceberg.anchor.setTo(0.5, 0.5);
 			iceberg.angle = Math.floor(360 * Math.random());
 			iceberg.speed = Math.floor(25 + Math.random()*100);
+
+			var shadowSprite = new Phaser.Sprite( game , x , y , 'iceberg' );
+			shadowSprite.anchor.setTo(0.5, 0.5);
+			shadowSprite.scale.setTo( scale , scale );
+
+			iceberg.shadowIceberg = shadowSprite;
+
+			components.underSea.shadowLayer().addChild( shadowSprite );
 		},
 
 		move : function() {
@@ -35,7 +46,10 @@ var entities = entities || {};
 
 		update : function(){
 			this.group.forEachAlive(function(iceberg){
+				iceberg.shadowIceberg.angle = iceberg.angle ;
 				game.physics.arcade.velocityFromAngle(iceberg.angle, iceberg.speed , iceberg.body.velocity);
+				iceberg.shadowIceberg.x = iceberg.x + 10;
+				iceberg.shadowIceberg.y = iceberg.y + 15;
 			});
 		},
 
@@ -57,8 +71,17 @@ var entities = entities || {};
 		},
 
 		add : function(){
-			var mine = this.group.create(game.world.randomX, game.world.randomY, 'mine');
-			mine.scale.setTo(0.3, 0.3);
+			var x = game.world.randomX;
+			var y = game.world.randomY;
+
+			var mine = this.group.create(x, y, 'mine');
+			mine.scale.setTo(0.2, 0.2);
+			mine.anchor.setTo(0.5, 0.5);
+
+			var shadowSprite = new Phaser.Sprite( game , x + 10 , y + 15, 'mine' );
+			shadowSprite.anchor.setTo(0.5, 0.5);
+			shadowSprite.scale.setTo(0.2, 0.2 );
+			components.underSea.shadowLayer().addChild( shadowSprite );
 		}
 
 	};

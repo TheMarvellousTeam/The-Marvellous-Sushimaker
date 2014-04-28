@@ -31,15 +31,14 @@ var entities = entities || {};
 				this.sprite.scale.setTo( params.scale || 1 , params.scale || 1 );
 			}
 
+			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
+
+			( params.layer || game.world ).addChild( this.sprite );
+			
+
 			this.shadowSprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , params.texture );
 			this.shadowSprite.anchor.setTo(0.5, 0.5);
 			this.shadowSprite.scale.setTo( params.scale || 1 , params.scale || 1 );
-
-			game.physics.enable(this.sprite, Phaser.Physics.ARCADES);
-
-
-
-			( params.layer || game.world ).addChild( this.sprite );
 
 			( params.shadowLayer || params.layer || game.world ).addChild( this.shadowSprite );
 		},
