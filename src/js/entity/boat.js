@@ -145,7 +145,7 @@ var entities = entities || {};
 	var dead = function dead() {
 		this.filetUp = true;
 		this.filetLoad = 0;
-		this.load = 0 ;
+		this.fishLoad = 0 ;
 		game.state.restart('game');
 		game.state.start('boot');
 	};
