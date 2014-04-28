@@ -99,7 +99,7 @@ var entities = entities || {};
 		this.filetSprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , 'filet0' );
 		this.filetSprite.anchor.setTo(0.5, 0.5);
 		this.filetSprite.scale.setTo( 0.5 , 0.5 );
-		this.filetSprite.enableBody = true;
+		game.physics.enable(this.filetSprite, Phaser.Physics.ARCADE);
 		this.filetSprite.kill();
 
 		( params.filetLayer || params.layer || game.world ).addChild( this.filetSprite );
@@ -120,9 +120,6 @@ var entities = entities || {};
 	G.prototype.actionFilet = function() {
 		if (this.filetUp){
 			this.sprite.loadTexture('chalutier_down');
-			// game.tween(this.filetSprite)
-			// 	.to({scale:0.5}, 2000, Phaser.Easing.Linear.None)
-			// 	.start();
 			this.filetSprite.revive();
 		} else {
        		this.fishLoad += this.filetLoad;

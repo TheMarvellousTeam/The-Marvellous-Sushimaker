@@ -129,10 +129,10 @@ var GameState = GameState || {};
     this.physics.arcade.collide(icebergs.group, icebergs.group);
 
     if( !chalutier.filetUp ){
-      this.physics.arcade.overlap(chalutier.sprite, mines.group, chalutier.collideMine, null, chalutier);
-      this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
-      this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
-      this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, mines.group, chalutier.collideMine, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, whales.group, chalutier.collideWhale, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
+      this.physics.arcade.overlap(chalutier.filetSprite, fishes.group, chalutier.collideFish, null, chalutier);
     }
     
     if ( this.timer1 < game.time.now - 7000 ){
