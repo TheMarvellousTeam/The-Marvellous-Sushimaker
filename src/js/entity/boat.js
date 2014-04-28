@@ -96,7 +96,7 @@ var entities = entities || {};
 		this.filetLoad = 0;
 		this.fishLoad = 0 ;
 
-		this.filetSprite = new Phaser.Sprite( game , params.x || 0 , params.y || 0 , 'filet0' );
+		this.filetSprite = new Phaser.Sprite( game , params.x - 200 || 0 , params.y || 0 , 'filet0' );
 		this.filetSprite.anchor.setTo(0.5, 0.5);
 		this.filetSprite.scale.setTo( 0.5 , 0.5 );
 		game.physics.enable(this.filetSprite, Phaser.Physics.ARCADE);
@@ -131,8 +131,21 @@ var entities = entities || {};
 		this.filetUp = !this.filetUp;
 	};
 
+	var updateFilet = function(load){
+		
+		if( this.filetLoad >= 75 ){
+			this.filetSprite.loadTexture('filet4');
+		} else if ( this.filetLoad >= 50 ) {
+			this.filetSprite.loadTexture('filet3');
+		} else if ( this.filetLoad >= 25 ) {
+			this.filetSprite.loadTexture('filet2');
+		} else if (this.filetLoad >= 10 ) {
+			this.filetSprite.loadTexture('filet1');
+		}
+	}
+
 	G.prototype.collideFish = function(boat, fish) {
-		this.filetLoad += 1;
+		this.filetLoad += 1 + Math.floor(Math.random()*5);
 		if( this.filetLoad >= 75 ){
 			this.filetSprite.loadTexture('filet4');
 		} else if ( this.filetLoad >= 50 ) {
@@ -146,18 +159,53 @@ var entities = entities || {};
 	};
 
 	G.prototype.collideDolphin = function(boat, dolphin){
-		this.filetLoad += 10;
+		this.filetLoad += 10 + Math.floor(Math.random()*5);
+		if( this.filetLoad >= 75 ){
+			this.filetSprite.loadTexture('filet4');
+		} else if ( this.filetLoad >= 50 ) {
+			this.filetSprite.loadTexture('filet3');
+		} else if ( this.filetLoad >= 25 ) {
+			this.filetSprite.loadTexture('filet2');
+		} else if (this.filetLoad >= 10 ) {
+			this.filetSprite.loadTexture('filet1');
+		}
 		dolphin.kill();
 	};
 
 	G.prototype.collideWhale = function(boat, whale){
-		this.filetLoad += 50;
+		this.filetLoad += 50 + Math.floor(Math.random()*25);
+		if( this.filetLoad >= 75 ){
+			this.filetSprite.loadTexture('filet4');
+		} else if ( this.filetLoad >= 50 ) {
+			this.filetSprite.loadTexture('filet3');
+		} else if ( this.filetLoad >= 25 ) {
+			this.filetSprite.loadTexture('filet2');
+		} else if (this.filetLoad >= 10 ) {
+			this.filetSprite.loadTexture('filet1');
+		}
 		whale.kill();
 	};
 
 	G.prototype.collideSeaShepherd = function(boat, seaShepherd) {
-		this.filetLoad = 0;
+		this.filetLoad -= 25 + Math.floor(Math.random()*15);
+		if( this.filetLoad >= 75 ){
+			this.filetSprite.loadTexture('filet4');
+		} else if ( this.filetLoad >= 50 ) {
+			this.filetSprite.loadTexture('filet3');
+		} else if ( this.filetLoad >= 25 ) {
+			this.filetSprite.loadTexture('filet2');
+		} else if (this.filetLoad >= 10 ) {
+			this.filetSprite.loadTexture('filet1');
+		}
 		this.filetSprite.loadTexture('filet0');
+	};
+
+	var dead = function dead() {
+		this.filetUp = true;
+		this.filetLoad = 0;
+		this.fishLoad = 0 ;
+		game.state.restart('game');
+		game.state.start('boot');
 	};
 
 	G.prototype.collideIceberg = function(boat, iceberg) {
@@ -168,13 +216,9 @@ var entities = entities || {};
 		dead();
 	};
 
-	var dead = function dead() {
-		this.filetUp = true;
-		this.filetLoad = 0;
-		this.fishLoad = 0 ;
-		game.state.restart('game');
-		game.state.start('boot');
-	};
+
+
+
 
 	var F = function SeaShepherd() { };
 	for (var i in E.prototype)
