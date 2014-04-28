@@ -113,13 +113,17 @@ var GameState = GameState || {};
     
     components.underSea.layer().addChild( overlay );
 
+    var sushiTable = this.add.sprite( this.game.width/2 + 5, 80, 'sushiTable');
+    sushiTable.anchor.setTo(0.5, 0.5);
+    sushiTable.scale.setTo(0.6, 0.8);
+    sushiTable.fixedToCamera = true;
 
 		var sushi = this.add.sprite(this.game.width/2 - 25, 45, 'sushi');
   	sushi.anchor.setTo(0.5, 0.5);
   	sushi.scale.setTo(0.15, 0.15);
   	sushi.fixedToCamera = true;
 
-  	var sushiScore = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
+  	var sushiScore = this.add.text(this.game.width/2 + 25, 45, 'x 0', {fontSize: '17px', fill:"#000000"});
   	sushiScore.fixedToCamera = true;
 
   	var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -127,7 +131,7 @@ var GameState = GameState || {};
   	filetControl.onDown.add(function() {
       if ( this.time.now > timer ) {
         chalutier.actionFilet();
-        sushiScore.text = ''+chalutier.fishLoad;
+        sushiScore.text = 'x '+chalutier.fishLoad;
         timer = this.time.now + 3500 ;
       }
   	}, this);

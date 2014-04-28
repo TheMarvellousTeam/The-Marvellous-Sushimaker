@@ -14,6 +14,7 @@ var GameState = GameState || {};
     this.load.image('mine', 'src/assets/mine.png');
     this.load.image('sea_shepherd', 'src/assets/sea_shepherd.png');
     this.load.image('sushi', 'src/assets/sushi.png');
+    this.load.image('sushiTable', 'src/assets/sushi table.png');
     this.load.image('particle', 'src/assets/particle2.png');
     this.load.image('filet0', 'src/assets/filet0.png');
     this.load.image('filet1', 'src/assets/filet1.png');
