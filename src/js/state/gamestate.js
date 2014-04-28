@@ -103,16 +103,17 @@ var GameState = GameState || {};
   	sushi.anchor.setTo(0.5, 0.5);
   	sushi.scale.setTo(0.15, 0.15);
   	sushi.fixedToCamera = true;
-  	this.sushi = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
-  	this.sushi.fixedToCamera = true;
+
+  	var sushiScore = this.add.text(this.game.width/2 + 25, 30, '0', {fontSize: '17px', fill:"#000000"});
+  	sushiScore.fixedToCamera = true;
 
   	var filetControl = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     var timer = this.time.now ;
   	filetControl.onDown.add(function() {
       if ( this.time.now > timer ) {
         var load = chalutier.actionFilet();
-        this.sushi.text = ''+(parseInt(this.sushi.text)+load);
-        timer = this.time.now + 5000 ;
+        sushiScore.text = ''+chalutier.fishLoad;
+        timer = this.time.now + 3500 ;
       }
   	}, this);
 
@@ -121,20 +122,21 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
-    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideMortel, null, chalutier);
-    this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideMortel, null, chalutier);
+    this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
+    this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideIceberg, null, chalutier);
+    this.physics.arcade.collide(chalutier.sprite, mines.group, chalutier.collideMine, null, chalutier);
     this.physics.arcade.collide(seaShepherd.sprite, icebergs.group);
     this.physics.arcade.collide(icebergs.group, icebergs.group);
     this.physics.arcade.overlap(chalutier.sprite, whales.group, chalutier.collideWhale, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, dolphins.group, chalutier.collideDolphin, null, chalutier);
     this.physics.arcade.overlap(chalutier.sprite, fishes.group, chalutier.collideFish, null, chalutier);
     
-    if ( this.timer1 < game.time.now - 5000 ){
+    if ( this.timer1 < game.time.now - 7000 ){
       var x = chalutier.sprite.x - seaShepherd.sprite.x;
       var y = chalutier.sprite.y - seaShepherd.sprite.y;
 
       game.add.tween(seaShepherd.sprite)
-              .to({angle:Math.atan2(y, x)*180/Math.PI}, 4500, Phaser.Easing.Linear.None)
+              .to({angle:(Math.atan2(y, x)*180)/Math.PI}, 4500, Phaser.Easing.Linear.None)
               .start();
 
       this.timer1 = game.time.now  ;
@@ -144,7 +146,8 @@ var GameState = GameState || {};
         icebergs.add();
       for(var i=0; i<Math.random()*3; i++)
         mines.add();
-      
+
+      icebergs.move();
       this.timer2 = game.time.now;
     };
 

@@ -28,7 +28,7 @@ var entities = entities || {};
 		move : function() {
 			this.group.forEachAlive(function(iceberg){
 				game.add.tween(iceberg)
-						.to({angle: Math.floor(360*Math.random())}, 3000 + Math.floor(Math.random()*5000), Phaser.Easing.Linear.None)
+						.to({angle: Math.floor(360*Math.random())}, 5000 + Math.floor(Math.random()*5000), Phaser.Easing.Linear.None)
 						.start();
 			});
 		},

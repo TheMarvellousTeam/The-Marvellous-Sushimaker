@@ -95,17 +95,17 @@ var entities = entities || {};
 
 	G.prototype.filetLoad =0;
 
+	G.prototype.fishLoad = 0 ;
+
 	G.prototype.actionFilet = function() {
-		var load = 0 ;
 		if (this.filetUp){
 			this.sprite.loadTexture('chalutier_down');
 		} else {
-       		load = this.filetLoad;
+       		this.fishLoad += this.filetLoad;
        		this.filetLoad = 0 ;
     		this.sprite.loadTexture('chalutier_up');
     	}
 		this.filetUp = !this.filetUp;
-		return load ;
 	};
 
 	G.prototype.collideFish = function(boat, fish) {
@@ -129,13 +129,27 @@ var entities = entities || {};
 		}
 	};
 
-	G.prototype.collideMortel = function(boat, seaShepherd) {
+	G.prototype.collideSeaShepherd = function(boat, seaShepherd) {
+		this.filetLoad = 0;
+	};
+
+	G.prototype.collideIceberg = function(boat, iceberg) {
+		dead();
+	};
+
+	G.prototype.collideMine = function(boat, mine) {
+		if( !this.filetUp ){
+			dead();
+		}
+	};
+
+	var dead = function dead() {
 		this.filetUp = true;
 		this.filetLoad = 0;
+		this.load = 0 ;
 		game.state.restart('game');
 		game.state.start('boot');
 	};
-
 
 	var F = function SeaShepherd() { };
 	for (var i in E.prototype)
