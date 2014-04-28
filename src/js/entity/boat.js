@@ -135,7 +135,7 @@ var entities = entities || {};
     	}
 	};
 
-	var filetJustUp = function() {
+	var filetJustUp = function filetJustUp() {
 		this.fishLoad += this.filetLoad;
        	this.filetLoad = 0 ;
     	this.sprite.loadTexture('chalutier_up');
@@ -145,7 +145,7 @@ var entities = entities || {};
     	this.filetUp = true;
 	};
 
-	var filetJustDown = function() {
+	var filetJustDown = function filetJustDown() {
 		this.filetUp = false ;
 	};
 
@@ -176,8 +176,7 @@ var entities = entities || {};
 		this.filetUp = true;
 		this.filetLoad = 0;
 		this.fishLoad = 0 ;
-		game.state.restart('game');
-		game.state.start('boot');
+		game.state.start('end');
 	};
 
 	G.prototype.collideObstacle = function(boat, iceberg) {

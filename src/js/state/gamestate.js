@@ -157,8 +157,7 @@ var GameState = GameState || {};
     };
 
     if ( game.time.now > this.cdFilet && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ) {
-      chalutier.actionFilet();
-      this.sushiScore.text = ''+chalutier.fishLoad;
+      chalutier.actionFilet(this.sushiScore);
       this.cdFilet = game.time.now + 3500 ;
     }
 
@@ -186,6 +185,8 @@ var GameState = GameState || {};
 
       icebergs.move();
       this.timer2 = game.time.now;
+
+      this.sushiScore.text = ''+chalutier.fishLoad;
     };
 
     seaShepherd.update(1 + chalutier.filetLoad*2 + Math.floor(chalutier.fishLoad/2));
