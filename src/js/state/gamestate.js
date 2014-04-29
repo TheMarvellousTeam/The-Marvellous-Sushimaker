@@ -11,9 +11,6 @@ var GameState = GameState || {};
   var mines = new entities.Mine();
 
 
-  var stats = new Stats();
-
-
 	var MainState = new Phaser.State();
 	MainState.create = function() {
 
