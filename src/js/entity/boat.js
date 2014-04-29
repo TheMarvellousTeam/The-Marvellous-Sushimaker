@@ -171,15 +171,13 @@ var entities = entities || {};
 		this.filetSprite.loadTexture('filet0');
 	};
 
-	var dead = function dead() {
-		
+	var dead = function dead() {	
 		if( this.shutdown ) this.shutdown();
 		return components.deathEffect.start();
 
 		this.filetUp = true;
 		this.filetLoad = 0;
 		this.fishLoad = 0 ;
-		game.state.start('end');
 	};
 
 	G.prototype.collideObstacle = function(boat, iceberg) {

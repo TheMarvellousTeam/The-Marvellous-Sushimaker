@@ -5,8 +5,8 @@ var GameState = GameState || {};
 	var EndState = new Phaser.State();
 
 	EndState.create = function() {
-    game.state.destroy();
     game.add.sprite(0,0,'end');
+    //game.state.shutdown();
 	};
 
   EndState.update = function(){

@@ -31,8 +31,8 @@ var GameState = GameState || {};
   	logo.inputEnabled = true ;
   	logo.input.useHandCurse = true;
   	logo.events.onInputDown.add(function(){
+      //logo.kill();
       this.game.state.start('game');
-      logo.kill();
   	});
 	};
 

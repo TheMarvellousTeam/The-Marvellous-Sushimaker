@@ -73,8 +73,8 @@ var components = components || {};
 			}
 			recFilter( layer );
 
-			game.state.restart('game');
-			game.state.start('boot');
+			// game.state.restart('game');
+			game.state.start('end');
 		},3000);
 
 		recFilter( layer );
