@@ -15,14 +15,15 @@ var GameState = GameState || {};
 	MainState.create = function() {
 
 
+    if( (debug=false) ){
+      stats.setMode( 1 );
+      document.body.appendChild( stats.domElement );
+      stats.domElement.style.position = "absolute"
+      stats.domElement.style.top = "10px";
+      stats.domElement.style.left = "10px";
 
-    stats.setMode( 1 );
-    document.body.appendChild( stats.domElement );
-    stats.domElement.style.position = "absolute"
-    stats.domElement.style.top = "10px";
-    stats.domElement.style.left = "10px";
-
-    stats.begin();
+      stats.begin();
+    }
 
     this.stage.backgroundColor='#888888';
 
