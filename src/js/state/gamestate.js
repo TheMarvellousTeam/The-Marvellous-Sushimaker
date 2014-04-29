@@ -10,7 +10,6 @@ var GameState = GameState || {};
   var icebergs = new entities.Iceberg();
   var mines = new entities.Mine();
 
-
 	var MainState = new Phaser.State();
 	MainState.create = function() {
 
@@ -139,10 +138,6 @@ var GameState = GameState || {};
 	};
 
 	MainState.update = function() {
-
-    stats.end();
-    stats.begin();
-
     this.physics.arcade.collide(chalutier.sprite, seaShepherd.sprite, chalutier.collideSeaShepherd, null, chalutier);
     this.physics.arcade.collide(chalutier.sprite, icebergs.group, chalutier.collideObstacle, null, chalutier);
     this.physics.arcade.collide([icebergs.group, seaShepherd.sprite], icebergs.group);
