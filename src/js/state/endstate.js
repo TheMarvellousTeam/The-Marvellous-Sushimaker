@@ -6,12 +6,7 @@ var GameState = GameState || {};
 
 	EndState.create = function() {
     game.add.sprite(0,0,'end');
-    //game.state.shutdown();
 	};
-
-  EndState.update = function(){
-    // Besoin d'un update ??
-  };
 
 	exposure.EndState = EndState;
 
