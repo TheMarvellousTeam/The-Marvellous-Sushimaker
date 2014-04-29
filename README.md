@@ -25,7 +25,7 @@ Guide your fishing boat, adjusting its trajectory by dragging it.
 
 Deploy fishing net with the space bar.
 
-Avoid collision with iceberg, and with mine when your fishing net is deployed.
+Avoid collision with iceberg, and don't try to fish submarine mine.
 
 Collect small and big fishs to increase your sushi account.
 
