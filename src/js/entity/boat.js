@@ -150,6 +150,7 @@ var entities = entities || {};
 
 	var updateFilet = function updateFilet(load){
 		this.filetLoad += load ;
+		if( this.filetLoad < 0 ) this.filetLoad = 0 ;
 		if( this.filetLoad >= 75 ){
 			this.filetSprite.loadTexture('filet4');
 		} else if ( this.filetLoad >= 50 ) {
