@@ -32,9 +32,9 @@ Collect small and big fishs to increase your sushi account.
 Authors
 ======
 
- * [@NiZil](https://github.com/nizil) as dirty Js game developper
- * [@Platane](https://github.com/Platane) as mecanic developper
- * .. as awesome art designer
+ * [NiZiL](https://github.com/nizil) as game developper
+ * [Platane](https://github.com/Platane) as mecanic developper
+ * [Rexxard's mother](http://rexxardisalive.tumblr.com) as awesome art designer
 
 
 Technologies
