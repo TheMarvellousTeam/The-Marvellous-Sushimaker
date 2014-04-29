@@ -21,6 +21,7 @@ var GameState = GameState || {};
     this.load.image('filet2', 'src/assets/filet2.png');
     this.load.image('filet3', 'src/assets/filet3.png');
     this.load.image('filet4', 'src/assets/filet4.png');
+    this.load.image('end', 'src/assets/end_game.png');
     components.underSea.preload();
 	};
 	BootState.create = function() {

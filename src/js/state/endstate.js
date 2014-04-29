@@ -5,7 +5,7 @@ var GameState = GameState || {};
 	var EndState = new Phaser.State();
 
 	EndState.create = function() {
-    //TODO AFFICHER LOGO ICI
+    game.add.sprite(0,0,'end');
 	};
 
   EndState.update = function(){
