@@ -18,6 +18,7 @@ var GameState = GameState || {};
 	MainState.create = function() {
 
 
+
     stats.setMode( 1 );
     document.body.appendChild( stats.domElement );
     stats.domElement.style.position = "absolute"
@@ -26,9 +27,17 @@ var GameState = GameState || {};
 
     stats.begin();
 
-    this.stage.backgroundColor='#33be9f';
+    this.stage.backgroundColor='#888888';
+
+
+    var back = new Phaser.TileSprite( game , 0, 0 , 1 , 1 , 'back');
+    back.width = 5000;
+    back.height = 5000;
+    game.world.addChild( back );
+
 
     components.underSea.create();
+    components.deathEffect.create( game.world );
 
     this.world.addChild( components.underSea.layer() );
 
@@ -198,6 +207,15 @@ var GameState = GameState || {};
 
     components.underSea.update();
 	};
+
+  MainState.shutdown = function(){
+    if( chalutier.shutdown )chalutier.shutdown(); 
+    /*
+    fishes.shutdown();
+    dolphins.shutdown();
+    whales.shutdown();
+    icebergs.shutdown();*/
+  }
 
 	exposure.MainState = MainState;
 

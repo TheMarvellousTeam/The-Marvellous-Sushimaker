@@ -24,16 +24,12 @@ Phaser.Filter.Gray = function (game) {
 
         "void main(void) {",
             "gl_FragColor = texture2D(uSampler, vTextureCoord);",
-            "gl_FragColor.r = 0.;",
-            "gl_FragColor.g = 0.;",
-            "gl_FragColor.b = 0.;",
-            "gl_FragColor.a = gl_FragColor.a * 0.5;",
+            "gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.2126 * gl_FragColor.r + 0.7152 * gl_FragColor.g + 0.0722 * gl_FragColor.b), gray);",
         "}"
     ];
 
 };
 
-//"gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.2126 * gl_FragColor.r + 0.7152 * gl_FragColor.g + 0.0722 * gl_FragColor.b), gray);",
 
 Phaser.Filter.Gray.prototype = Object.create(Phaser.Filter.prototype);
 Phaser.Filter.Gray.prototype.constructor = Phaser.Filter.Gray;

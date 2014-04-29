@@ -300,13 +300,20 @@ var components = components || {};
 			var that = this
 			var target = this.target
 
-			var update = target.update;
-
+			var update = target.update ||function(){};
 			target.update = function(){
 
 				update.call( target );
 
 				that.update.call( that );
+			};
+
+			var shutdown = target.shutdown ||function(){};
+			target.shutdown = function(){
+
+				shutdown.call( target );
+
+				that.shutdown.call( that );
 			};
 
 			return this;
@@ -326,6 +333,9 @@ var components = components || {};
 
 		drawPath:function( c , camera ){
 
+			if( !this._graphic )
+				return;
+			
 			this._graphic.clear();
 
 			var toWorld = function( p ){
@@ -429,6 +439,17 @@ var components = components || {};
 			this.target.setDirection( this.rm.firstTangent.x , this.rm.firstTangent.y );
 			
 			this.drawPath( this.rm , game.camera );
+		},
+
+		shutdown : function(){
+
+			this.listen( false );
+
+			if( !this._graphic )
+				return;
+
+			game.stage.removeChild( this._graphic );
+			this._graphic=null;
 		},
 
 		onMouseMove:function(){

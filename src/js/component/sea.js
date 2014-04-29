@@ -42,7 +42,7 @@ var components = components || {};
 
 		var blurX = game.add.filter('BlurX');
 		var blurY = game.add.filter('BlurY');
-		var gray = game.add.filter('Gray');
+		var gray = game.add.filter('Black');
 
 		blurX.blur = blurY.blur = 25
 

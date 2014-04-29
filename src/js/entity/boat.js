@@ -172,6 +172,10 @@ var entities = entities || {};
 	};
 
 	var dead = function dead() {
+		
+		if( this.shutdown ) this.shutdown();
+		return components.deathEffect.start();
+
 		this.filetUp = true;
 		this.filetLoad = 0;
 		this.fishLoad = 0 ;

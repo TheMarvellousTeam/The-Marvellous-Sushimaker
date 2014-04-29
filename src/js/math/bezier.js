@@ -114,7 +114,7 @@ var bezier = {};
 			var E = new Point();
 
 			var pas = Math.min( 0.1, 5/l );
-			var target = pas /8
+			var target = pas /32
 
 			var s = 0;
 			var t = 0;
