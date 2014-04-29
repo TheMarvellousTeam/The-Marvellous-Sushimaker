@@ -34,7 +34,7 @@ Authors
 
  * [NiZiL](https://github.com/nizil) as game developper
  * [Platane](https://github.com/Platane) as mecanic developper
- * [Rexxard's mother](http://rexxardisalive.tumblr.com) as awesome art designer
+ * [Angel](http://raiseyourchickenwing.deviantart.com/) as awesome art designer (really guy, you need to click on this link)
 
 
 Technologies
