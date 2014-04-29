@@ -370,9 +370,11 @@ var components = components || {};
 				toWorld( C );
 				toWorld( B );
 
-				this._graphic.lineStyle( 6 , 0xf24d1b, 1-l/max_d );
-				this._graphic.moveTo( A.x , A.y );
-				this._graphic.lineTo( B.x , B.y );
+				if( ! (A.x < camera.x + 150 && A.x > camera.x - 150 && A.y < camera.y + 150 && A.y > camera.y - 150 ) ){
+					this._graphic.lineStyle( 6 , 0xf24d1b, 1-l/max_d );
+					this._graphic.moveTo( A.x , A.y );
+					this._graphic.lineTo( B.x , B.y );
+				}
 
     		}
 
