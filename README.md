@@ -29,12 +29,13 @@ Avoid collision with iceberg, and don't try to fish submarine mine.
 
 Collect small and big fishs to increase your sushi account.
 
+
 Authors
 ======
 
  * [NiZiL](https://github.com/nizil) as game developper
- * [Platane](https://github.com/Platane) as graphic developper
- * [Angel](http://raiseyourchickenwing.deviantart.com/) as awesome art designer (really guy, you need to click on this link)
+ * [Platane](https://github.com/Platane) as mecanic developper
+ * [Angel](http://raiseyourchickenwing.deviantart.com/) as art designer
 
 
 Technologies
