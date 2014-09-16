@@ -1,7 +1,7 @@
 The Marvellous Sushimaker
 =========================
 
-![irrelevant illustration](http://themarvellousteam.github.io/The-Marvellous-Sushimaker/screenshots/assiette_sashimis.png "")
+![irrelevant illustration](https://raw.githubusercontent.com/TheMarvellousTeam/The-Marvellous-Sushimaker/master/src/assets/assiette_sashimis.png "")
 
 The Marvellous team proudly present its new game, developed for the [Ludum Dare #29](http://www.ludumdare.com/compo/2014/04/23/welcome-to-ludum-dare-29er/) challenge in 72 hours.
 
