@@ -19,7 +19,7 @@ Thought, that may upset some guys, they may want to bump into you. If you pissed
 Gameplay
 =======
 
-![game scene](http://themarvellousteam.github.io/The-Marvellous-Sushimaker/screenshots/scene.png "game")
+![game scene](http://www.ludumdare.com/compo/wp-content/compo2/342546/35118-shot2.png "game")
 
 Guide your fishing boat, adjusting its trajectory by dragging it.
 
